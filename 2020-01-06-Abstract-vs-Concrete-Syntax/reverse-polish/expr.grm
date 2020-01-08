@@ -14,11 +14,15 @@ it is empty *)
     | MINUS
     | MUL
     | DIV
+    | LEFT_B
+    | RIGHT_B
     | EOF
     | NEWLINE
 
 (* The nonterminals of the language *)
-%nonterm EXP     of Ast.Expr
+%nonterm F of Ast.Expr
+        | T of Ast.Expr
+        | EXP     of Ast.Expr
        | EXPS    of Ast.Expr list
        | PROGRAM of Ast.Expr list
 
@@ -44,8 +48,13 @@ PROGRAM : EXPS                 ( EXPS )
 EXPS    : (* empty *)          ( []                  )
 	| EXP NEWLINE EXPS     ( EXP :: EXPS         )
 
-EXP     : CONST                ( Ast.Const CONST     )
-        | EXP PLUS EXP         ( Ast.plus  EXP1 EXP2 )
-	| EXP MINUS EXP        ( Ast.minus EXP1 EXP2 )
-	| EXP MUL EXP        ( Ast.mul   EXP1 EXP2 )
-    | EXP DIV EXP       (Ast.divide EXP1 EXP2)
+EXP     : T                    ( T )
+        | EXP PLUS T           ( Ast.plus EXP1 T1 )
+        | EXP MINUS T          ( Ast.minus EXP1 T1 )
+
+T       : F                    ( F )
+        | T MUL F              ( Ast.mul T1 F1 )
+        | T DIV F              ( Ast.divide T1 F1 )
+
+F       : CONST                ( Ast.Const CONST)
+        | LEFT_B EXP RIGHT_B   ( EXP )
