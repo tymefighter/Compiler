@@ -43,53 +43,20 @@ The executable `rp` that this repository provides can be used to run a
 _reverse polish script_. For example, here is a "machine language
 program" for `rp` that illustrates its syntax.
 
+## Testing
 
-```
-# This is a sample script for rpn
-# We compute the answer to life universe and everything
+To test if the compiler as well as the rpn machine is working correctly,
+we may add test cases to the `test_cases` file and the corresponding 
+value of the expression to `test_actual` file. Then we may test the
+system by running the following commands on the terminal: -
 
-2 40 +ps
+`
+    ./ec < test_cases | ./rp > test_output
+    diff test_output test_actual
+`
+If there is a difference, then there is an error in the code
 
-```
-
-Save the above script into a file say `test.inp` and run it using the
-command
-
-```
-./rp test.inp
-
-```
-
-The above program prints 42 (because of the `p`) followed by `[42]`
-(because of the `s`).
-
-## How to read the source code ?
-
-A compiler is just a translator from a source language, the
-_expression language_ in our case, to a target language, the "machine
-language" associated with the _reverse polish_ machine. We recommend
-the following design for the compiler:
-
-1. Capture the source and target language using their respective
-   _abstract syntax tree_ (AST for short). In our case the
-   [`Ast.Expr`][ast] and the [Machine.Program][machine] types
-   available inside the files [ast.sml][ast] and
-   [machine.sml][machine] captures them respectively.
-
-2. The core of the compiler is then written as a function form the
-   source AST to the target AST. In our case this is available in the
-   [translate.sml][translate] file.
-
-3. For the actual parser, which just parses the source program and
-   builds the AST, use tools like [`mlyacc`][mlyacc] and
-   [`mllex`][mllex].
-
-The suggested reading order is therefore [`ast.sml`][ast],
-[`machine.sml`][machine], and [`translate.sml`][translate]. The actual
-input to the [`mlyacc`][mlyacc] and [`mllex`][mllex] tool is files
-[`expr.grm`][expr.grm] and [`expr.lex`][expr.lex], which you can skip
-in the first reading.
-
+# Reference
 
 [ast]: <ast.sml>
 [machine]: <machine.sml>
