@@ -50,10 +50,11 @@ we may add test cases to the `test_cases` file and the corresponding
 value of the expression to `test_actual` file. Then we may test the
 system by running the following commands on the terminal: -
 
-`
+```
     ./ec < test_cases | ./rp > test_output
     diff test_output test_actual
-`
+```
+
 If there is a difference, then there is an error in the code
 
 # Reference
