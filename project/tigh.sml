@@ -26,18 +26,25 @@ end
 structure Kset = BinarySetFn(StringKey)
 val key_list = Kset.addList (Kset.empty, keywords_arr) (* Get the keywords array in the form of a list for efficient lookup *)
 
-fun printSpaces s 0 = s
+fun printSpaces s 0 = print s
     | printSpaces s n = printSpaces (s ^ " ") (n - 1) 
+
+fun printNewLines 0 = ""
+    | printNewLines n = let
+        val _ = print "\n"
+    in
+        printNewLines (n - 1)
+    end
 
 fun printSpaceAndLine line_no pos_from_prev prev_line = let
 
         val upd_prev_line = if(line_no <> prev_line) then (let
-                    val _ = print "\n"
+                    val _ = printNewLines (line_no - prev_line)
                 in
-                    prev_line + 1
+                    line_no
                 end)
                 else
-                    prev_line
+                    line_no
 
         val _ = printSpaces "" pos_from_prev 
     in

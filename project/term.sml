@@ -7,7 +7,7 @@ structure TermCol = struct
     val yellow = esc ^ "[33m"
     val magenta = esc ^ "[35m"
     val cyan = esc ^ "[36m"
-    val noColorEnd = esc ^ "[0m" ^ " "
+    val noColorEnd = esc ^ "[0m"
 
     datatype term = keyword | symb | id | num | comment | string
 
