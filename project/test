@@ -1,0 +1,14 @@
+array a = [4, 5, 7];
+
+class Abc
+{
+    var u = 500;
+    var v = 1000;
+    var x;
+    Abc(100)
+    {
+        x = (u + v) + x;
+    }
+};
+
+var aninst = Abc(40)
