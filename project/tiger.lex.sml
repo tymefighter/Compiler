@@ -6,9 +6,30 @@ structure TigerLex=
 
 fun eof () = Tokens.EOF
 
+val pos_from_prev = ref 0
+val line_no = ref 0
+
+fun inc x = let
+        val _ = x := !x + 1
+    in
+        ()
+    end
+
+fun assign x vl = let
+        val _ = x := vl
+    in
+        ()
+    end
+
+fun reset x = let
+        val _ = x := 0
+    in
+        ()
+    end
+
 (* Square brackets are not added yet *)
 
-(*#line 11.1 "tiger.lex.sml"*)
+(*#line 32.1 "tiger.lex.sml"*)
 end (* end of user routines *)
 exception LexError (* raised if illegal leaf action tried *)
 structure Internal =
@@ -31,7 +52,7 @@ val s = [
 \\000"
 ),
  (1, 
-"\000\000\000\000\000\000\000\000\000\010\011\000\000\000\000\000\
+"\000\000\000\000\000\000\000\000\000\012\011\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\010\000\000\000\000\000\003\000\003\003\000\003\003\003\000\006\
 \\005\005\005\005\005\005\005\005\005\005\003\003\003\003\003\000\
@@ -96,17 +117,6 @@ val s = [
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007"
 ),
- (10, 
-"\000\000\000\000\000\000\000\000\000\010\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\010\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000"
-),
 (0, "")]
 fun f x = x 
 val s = List.map f (List.rev (tl (List.rev s))) 
@@ -118,15 +128,16 @@ in Vector.fromList(List.map g
 [{fin = [], trans = 0},
 {fin = [], trans = 1},
 {fin = [], trans = 1},
-{fin = [(N 31)], trans = 0},
-{fin = [(N 34)], trans = 4},
-{fin = [(N 13)], trans = 5},
-{fin = [(N 31)], trans = 6},
+{fin = [(N 32)], trans = 0},
+{fin = [(N 35)], trans = 4},
+{fin = [(N 14)], trans = 5},
+{fin = [(N 32)], trans = 6},
 {fin = [], trans = 7},
 {fin = [], trans = 8},
-{fin = [(N 10)], trans = 7},
-{fin = [(N 2)], trans = 10},
-{fin = [(N 4)], trans = 0}])
+{fin = [(N 11)], trans = 7},
+{fin = [(N 1)], trans = 0},
+{fin = [(N 5)], trans = 0},
+{fin = [(N 3)], trans = 0}])
 end
 structure StartStates =
 	struct
@@ -169,17 +180,47 @@ let fun continue() = lex() in
 
 			(* Application actions *)
 
-  10 => ((*#line 17.21 "tiger.lex"*)lex() (* comment *)(*#line 172.1 "tiger.lex.sml"*)
+  1 => ((*#line 36.20 "tiger.lex"*)let
+                        val _ = inc pos_from_prev
+                    in
+                        lex() (* whitespace *)
+                    end(*#line 187.1 "tiger.lex.sml"*)
 )
-| 13 => let val yytext=yymktext() in (*#line 18.21 "tiger.lex"*)Tokens.Number yytext(*#line 174.1 "tiger.lex.sml"*)
- end
-| 2 => ((*#line 15.21 "tiger.lex"*)lex() (* whitespace *)(*#line 176.1 "tiger.lex.sml"*)
+| 11 => ((*#line 55.21 "tiger.lex"*)lex() (* comment *)(*#line 189.1 "tiger.lex.sml"*)
 )
-| 31 => let val yytext=yymktext() in (*#line 19.105 "tiger.lex"*)Tokens.Symbol yytext(*#line 178.1 "tiger.lex.sml"*)
+| 14 => let val yytext=yymktext() in (*#line 57.21 "tiger.lex"*)let
+                        val p_prev = !pos_from_prev
+                        val _ = reset pos_from_prev
+                    in
+                        Tokens.Number (yytext, !line_no, p_prev)
+                    end(*#line 196.1 "tiger.lex.sml"*)
  end
-| 34 => let val yytext=yymktext() in (*#line 20.21 "tiger.lex"*)Tokens.AlphaStr yytext(*#line 180.1 "tiger.lex.sml"*)
+| 3 => ((*#line 42.20 "tiger.lex"*)let
+                        val _ = assign pos_from_prev (!pos_from_prev + 8)
+                    in
+                        lex() (* whitespace *)
+                    end(*#line 202.1 "tiger.lex.sml"*)
+)
+| 32 => let val yytext=yymktext() in (*#line 64.105 "tiger.lex"*)let
+                        val p_prev = !pos_from_prev
+                        val _ = reset pos_from_prev
+                    in
+                        Tokens.Symbol (yytext, !line_no, p_prev)
+                    end(*#line 209.1 "tiger.lex.sml"*)
  end
-| 4 => ((*#line 16.21 "tiger.lex"*)lex() (* newline *)(*#line 182.1 "tiger.lex.sml"*)
+| 35 => let val yytext=yymktext() in (*#line 70.21 "tiger.lex"*)let
+                        val p_prev = !pos_from_prev
+                        val _ = reset pos_from_prev
+                    in
+                        Tokens.AlphaStr (yytext, !line_no, p_prev)
+                    end(*#line 216.1 "tiger.lex.sml"*)
+ end
+| 5 => ((*#line 48.21 "tiger.lex"*)let
+                        val _ = inc line_no
+                        val _ = reset pos_from_prev
+                    in 
+                        lex() (* newline *)
+                    end(*#line 223.1 "tiger.lex.sml"*)
 )
 | _ => raise Internal.LexerError
 

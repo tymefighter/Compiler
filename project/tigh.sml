@@ -26,16 +26,52 @@ end
 structure Kset = BinarySetFn(StringKey)
 val key_list = Kset.addList (Kset.empty, keywords_arr) (* Get the keywords array in the form of a list for efficient lookup *)
 
-fun printList [] = print "\n"
-    | printList (x :: xs) = let
-            val _ = case x of 
-                Tokens.AlphaStr s => if(Kset.member (key_list, s)) then print (TermCol.returnColorTerm TermCol.keyword s)
-                                                                    else print (TermCol.returnColorTerm TermCol.id s)
-                | Tokens.Symbol s => print (TermCol.returnColorTerm TermCol.symb s)
-                | Tokens.Number s => print (TermCol.returnColorTerm TermCol.num s)
-                | _ => ()
+fun printSpaces s 0 = s
+    | printSpaces s n = printSpaces (s ^ " ") (n - 1) 
+
+fun printSpaceAndLine line_no pos_from_prev prev_line = let
+
+        val upd_prev_line = if(line_no <> prev_line) then (let
+                    val _ = print "\n"
+                in
+                    prev_line + 1
+                end)
+                else
+                    prev_line
+
+        val _ = printSpaces "" pos_from_prev 
+    in
+        upd_prev_line
+    end
+
+fun printTok (Tokens.AlphaStr (s, line_no, pos_from_prev)) prev_line = let
+        
+        val upd_prev_line = printSpaceAndLine line_no pos_from_prev prev_line
+        val _ = if(Kset.member (key_list, s)) then print (TermCol.returnColorTerm TermCol.keyword s)
+            else print (TermCol.returnColorTerm TermCol.id s)
+    in
+        upd_prev_line
+    end
+    | printTok (Tokens.Symbol (s, line_no, pos_from_prev)) prev_line = let
+
+        val upd_prev_line = printSpaceAndLine line_no pos_from_prev prev_line
+        val _ = print (TermCol.returnColorTerm TermCol.symb s)
+    in
+        upd_prev_line
+    end
+    | printTok (Tokens.Number (s, line_no, pos_from_prev)) prev_line = let
+        val upd_prev_line = printSpaceAndLine line_no pos_from_prev prev_line
+        val _ = print (TermCol.returnColorTerm TermCol.num s)
+    in
+        upd_prev_line
+    end
+    | printTok Tokens.EOF _ = 0
+
+fun printList [] prev_line = print "\n"
+    | printList (x :: xs) prev_line = let
+            val upd_prev_line = printTok x prev_line
         in
-            printList xs
+            printList xs upd_prev_line
         end
 
-val _ = printList (parseCode [])
+val _ = printList (parseCode []) 0
