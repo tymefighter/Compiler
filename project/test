@@ -1,14 +1,33 @@
 array a = [4, 5, 7];
 
+/* 
+    This is a comment
+    and it is within some
+    sample program
+*/
+
 class Abc
 {
     var u = 500;
     var v = 1000;
-    var x;
+    var x, p;
     Abc(100)
     {
         x = (u + v) + x;
+        p = a + x - 40;
     }
 };
 
-var aninst = Abc(40)
+var aninst = Abc(40);
+var u = nil;
+
+for(i = 0;i < 500;i++)
+{
+    for(j = 0;j < 50;j++)
+    {
+        u = i + j;
+        a.pushBack(u);
+    }
+}
+
+print(a);

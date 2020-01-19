@@ -54,7 +54,7 @@ val s = [
  (1, 
 "\000\000\000\000\000\000\000\000\000\012\011\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\010\000\000\000\000\000\003\000\003\003\000\003\003\003\000\006\
+\\010\000\000\000\000\000\003\000\003\003\000\003\003\003\003\006\
 \\005\005\005\005\005\005\005\005\005\005\003\003\003\003\003\000\
 \\000\004\004\004\004\004\004\004\004\004\004\004\004\004\004\004\
 \\004\004\004\004\004\004\004\004\004\004\004\003\000\003\000\000\
@@ -96,7 +96,7 @@ val s = [
 \\000"
 ),
  (7, 
-"\007\007\007\007\007\007\007\007\007\007\000\007\007\007\007\007\
+"\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\008\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
@@ -107,7 +107,7 @@ val s = [
 \\007"
 ),
  (8, 
-"\007\007\007\007\007\007\007\007\007\007\000\007\007\007\007\007\
+"\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\008\007\007\007\007\009\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
@@ -128,13 +128,13 @@ in Vector.fromList(List.map g
 [{fin = [], trans = 0},
 {fin = [], trans = 1},
 {fin = [], trans = 1},
-{fin = [(N 32)], trans = 0},
-{fin = [(N 35)], trans = 4},
-{fin = [(N 14)], trans = 5},
-{fin = [(N 32)], trans = 6},
+{fin = [(N 34)], trans = 0},
+{fin = [(N 37)], trans = 4},
+{fin = [(N 15)], trans = 5},
+{fin = [(N 34)], trans = 6},
 {fin = [], trans = 7},
 {fin = [], trans = 8},
-{fin = [(N 11)], trans = 7},
+{fin = [(N 12)], trans = 7},
 {fin = [(N 1)], trans = 0},
 {fin = [(N 5)], trans = 0},
 {fin = [(N 3)], trans = 0}])
@@ -186,41 +186,46 @@ let fun continue() = lex() in
                         lex() (* whitespace *)
                     end(*#line 187.1 "tiger.lex.sml"*)
 )
-| 11 => ((*#line 55.21 "tiger.lex"*)lex() (* comment *)(*#line 189.1 "tiger.lex.sml"*)
-)
-| 14 => let val yytext=yymktext() in (*#line 57.21 "tiger.lex"*)let
+| 12 => let val yytext=yymktext() in (*#line 55.28 "tiger.lex"*)let
+                        val p_prev = !pos_from_prev
+                        val _ = reset pos_from_prev
+                    in
+                        Tokens.Comment (yytext, !line_no, p_prev)
+                    end (* comment *)(*#line 194.1 "tiger.lex.sml"*)
+ end
+| 15 => let val yytext=yymktext() in (*#line 62.21 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
                         Tokens.Number (yytext, !line_no, p_prev)
-                    end(*#line 196.1 "tiger.lex.sml"*)
+                    end(*#line 201.1 "tiger.lex.sml"*)
  end
 | 3 => ((*#line 42.20 "tiger.lex"*)let
                         val _ = assign pos_from_prev (!pos_from_prev + 8)
                     in
                         lex() (* whitespace *)
-                    end(*#line 202.1 "tiger.lex.sml"*)
+                    end(*#line 207.1 "tiger.lex.sml"*)
 )
-| 32 => let val yytext=yymktext() in (*#line 64.105 "tiger.lex"*)let
+| 34 => let val yytext=yymktext() in (*#line 69.111 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
                         Tokens.Symbol (yytext, !line_no, p_prev)
-                    end(*#line 209.1 "tiger.lex.sml"*)
+                    end(*#line 214.1 "tiger.lex.sml"*)
  end
-| 35 => let val yytext=yymktext() in (*#line 70.21 "tiger.lex"*)let
+| 37 => let val yytext=yymktext() in (*#line 75.21 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
                         Tokens.AlphaStr (yytext, !line_no, p_prev)
-                    end(*#line 216.1 "tiger.lex.sml"*)
+                    end(*#line 221.1 "tiger.lex.sml"*)
  end
 | 5 => ((*#line 48.21 "tiger.lex"*)let
                         val _ = inc line_no
                         val _ = reset pos_from_prev
                     in 
                         lex() (* newline *)
-                    end(*#line 223.1 "tiger.lex.sml"*)
+                    end(*#line 228.1 "tiger.lex.sml"*)
 )
 | _ => raise Internal.LexerError
 
