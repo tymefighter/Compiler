@@ -8,14 +8,13 @@ fun eof () = Tokens.EOF
 %structure TigerLex
 
 alpha = [a-zA-Z];
-number = [0-9]+;
-sym = [,:(){}+-/=<>&|];
+digit = [0-9];
 whitespace = [\ \t];
 
 %%
 {whitespace}+   => (lex() (* whitespace *));
 \n              => (lex() (* newline *));
-"/*".*"*/"       => (lex() (* comment *));
-number          => (Tokens.Number yytext);
-sym             => (Tokens.Symbols yytext);
+"/*".*"*/"      => (lex() (* comment *));
+{digit}+        => (Tokens.Number yytext);
+"," | ";" | ":" | "(" | ")" | "{" | "}" | "+" | "-" | "/" | "=" | "<" | ">" | "&" | "|" | "[" | "]" => (Tokens.Symbol yytext);
 {alpha}+        => (Tokens.AlphaStr yytext);

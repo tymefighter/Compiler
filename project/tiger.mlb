@@ -2,6 +2,6 @@ $(SML_LIB)/basis/basis.mlb
 $(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
 
 tokens.sml
+term.sml
 tiger.lex.sml
 tigh.sml
-term.sml
