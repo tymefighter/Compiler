@@ -52,7 +52,12 @@ whitespace = [\ \t];
                         lex() (* newline *)
                     end);
 
-"/*".*"*/"      => (lex() (* comment *));
+"/*"(\n | .)*"*/"      => (let
+                        val p_prev = !pos_from_prev
+                        val _ = reset pos_from_prev
+                    in
+                        Tokens.Comment (yytext, !line_no, p_prev)
+                    end (* comment *));
 
 {digit}+        => (let
                         val p_prev = !pos_from_prev
@@ -61,7 +66,7 @@ whitespace = [\ \t];
                         Tokens.Number (yytext, !line_no, p_prev)
                     end);
 
-"," | ";" | ":" | "(" | ")" | "{" | "}" | "+" | "-" | "/" | "=" | "<" | ">" | "&" | "|" | "[" | "]" => (let
+"." | "," | ";" | ":" | "(" | ")" | "{" | "}" | "+" | "-" | "/" | "=" | "<" | ">" | "&" | "|" | "[" | "]" => (let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in

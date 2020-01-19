@@ -2,10 +2,13 @@
 
 .DEFAULT_GOAL := all
 
-all: tigc
+all: tigh
 
-tigc: tiger.sml tiger.cm tiger.mlb
-	@mlton -output tigc tiger.mlb
+tiger.lex.sml: tiger.lex
+	mllex tiger.lex
+
+tigh: tiger.lex.sml tiger.mlb
+	mlton -output tigh tiger.mlb
 
 clean:
-	@rm tigc
+	@rm tiger.lex.sml tigh

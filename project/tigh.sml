@@ -72,6 +72,12 @@ fun printTok (Tokens.AlphaStr (s, line_no, pos_from_prev)) prev_line = let
     in
         upd_prev_line
     end
+    | printTok (Tokens.Comment (s, line_no, pos_from_prev)) prev_line = let
+        val upd_prev_line = printSpaceAndLine line_no pos_from_prev prev_line
+        val _ = print (TermCol.returnColorTerm TermCol.comment s)
+    in
+        upd_prev_line
+    end
     | printTok Tokens.EOF _ = 0
 
 fun printList [] prev_line = print "\n"
