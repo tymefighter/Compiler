@@ -1,2 +1,7 @@
 $(SML_LIB)/basis/basis.mlb
-tiger.sml
+$(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
+
+tokens.sml
+tiger.lex.sml
+tigh.sml
+term.sml

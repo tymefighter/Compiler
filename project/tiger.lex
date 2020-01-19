@@ -1,16 +1,21 @@
+type lexresult = Tokens.token
+
+fun eof () = Tokens.EOF
+
+(* Square brackets are not added yet *)
+
 %%
 %structure TigerLex
 
 alpha = [a-zA-Z];
 number = [0-9]+;
-sym = [,:(){}\[\]+-/=<>&|];
+sym = [,:(){}+-/=<>&|];
 whitespace = [\ \t];
 
 %%
 {whitespace}+   => (lex() (* whitespace *));
 \n              => (lex() (* newline *));
-"/*"*"*/"       => (lex() (* comment *));
-number          => (SOME Tokens.Number yytext);
-sym             => (SOME Tokens.Symbols yytext);
-{alpha}+        => (SOME Tokens.AlphaStr yytext);
-.               => (SOME Tokens.Error (*Anything else*));
+"/*".*"*/"       => (lex() (* comment *));
+number          => (Tokens.Number yytext);
+sym             => (Tokens.Symbols yytext);
+{alpha}+        => (Tokens.AlphaStr yytext);

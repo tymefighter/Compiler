@@ -1,4 +1,6 @@
-datatype Tokens = AlphaStr of string
-    | Symbols of string
-    | Number of string
-    | Error of string
+structure Tokens = struct
+    datatype token = AlphaStr of string
+        | Symbols of string
+        | Number of string
+        | EOF
+    end

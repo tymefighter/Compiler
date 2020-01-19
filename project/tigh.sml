@@ -14,7 +14,7 @@ fun parseCode ls = let
     end
 
 
-keywords_arr = ["array", "if", "then", "else", "while", "for", "to", "do", "let",
+val keywords_arr = ["array", "if", "then", "else", "while", "for", "to", "do", "let",
     "in", "end", "of", "break", "nil", "function", "var", "type", "import", "primitive"]
 
 structure StringKey = struct
@@ -22,4 +22,5 @@ structure StringKey = struct
     val compare = String.compare
 end
 
-structure Kset = SplaySetFn(StringKey)
+structure Kset = BinarySetFn(StringKey)
+val key_list = Kset.addList (Kset.empty, keywords_arr) (* Get the keywords array in the form of a list for efficient lookup *)
