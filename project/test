@@ -6,7 +6,7 @@ array a = [4, 5, 7];
     sample program
 */
 
-var st = "this is a string"
+var st = "this is a string";
 
 class Abc
 {
@@ -21,6 +21,7 @@ class Abc
     }
 };
 
+var str = "abcdefgi";
 var aninst = Abc(40);
 var u = nil;
 
