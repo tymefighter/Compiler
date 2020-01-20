@@ -1,17 +1,26 @@
 structure Ast = struct
 
-    datatype Binop = ADD | SUB | MUL | DIV
-    datatype ConOp = G | GE | L | LE | E | NE | AND | OR
+    datatype Literal = Integer of int
+        | Str of string
+        | Nil
 
-    datatype Expr = Const of int
-        | ApplyOp of Expr * Binop * Expr
+    datatype Op = ADD | SUB | MUL | DIV | EQ | NE | G | L | GE | LE | AND | OR
 
-    datatype ConditionExpr = Expr
-        | ApplyConOp of ConditionExpr * ConOp * ConditionExpr
-    
-    datatype Asgn = Assign of string * Expr
+    type Id = string
 
-    datatype Control = IfThen of Condition * Stmt
-        | IfThenElse of Condition * Stmt * Stmt
-        | While of Condition * Stmt
-        | For of 
+    datatype Lvalue = Var of Id
+        | Member of Lvalue * Id
+
+    datatype Exp = Lit of Literal
+        | IfThen of Exp * Exp
+        | IfThenElse of Exp * Exp * Exp
+        | While of Exp * Exp
+        | For of Id * Exp * Exp * Exp
+        | Break
+        | Assign of Lvalue * Exp
+        | FunctionCall of Id * Exp list
+        | MethodCall of Lvalue * Id * (Exp list)
+        | VarExp of Lvalue
+        | OpApp of Exp * Op * Exp
+
+end

@@ -9,13 +9,13 @@ structure TermCol = struct
     val cyan = esc ^ "[36m"
     val noColorEnd = esc ^ "[0m"
 
-    datatype term = keyword | symb | id | num | comment | string
+    datatype term = keyword | symb | id | num | comment | str
 
     fun returnColorTerm keyword s = blue ^ s ^ noColorEnd
         | returnColorTerm symb s = red ^ s ^ noColorEnd
         | returnColorTerm id s = green ^ s ^ noColorEnd
         | returnColorTerm num s = yellow ^ s ^ noColorEnd
         | returnColorTerm comment s = magenta ^ s ^ noColorEnd
-        | returnColorTerm string s = cyan ^ s ^ noColorEnd
+        | returnColorTerm str s = cyan ^ s ^ noColorEnd
     
 end

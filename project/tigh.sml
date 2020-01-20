@@ -80,7 +80,7 @@ fun printTok (Tokens.AlphaStr (s, line_no, pos_from_prev)) prev_line = let
     end
     | printTok (Tokens.String (s, line_no, pos_from_prev)) prev_line = let
         val upd_prev_line = printSpaceAndLine line_no pos_from_prev prev_line
-        val _ = print (TermCol.returnColorTerm TermCol.string s)
+        val _ = print (TermCol.returnColorTerm TermCol.str s)
     in
         upd_prev_line
     end
