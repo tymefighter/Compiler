@@ -11,6 +11,7 @@ class Abc
     var u = 500;
     var v = 1000;
     var x, p;
+    /* This is a class*/
     Abc(100)
     {
         x = (u + v) + x;

@@ -109,7 +109,7 @@ val s = [
  (8, 
 "\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
-\\007\007\007\007\007\007\007\007\007\007\008\007\007\007\007\009\
+\\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\009\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
 \\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\007\
@@ -128,13 +128,13 @@ in Vector.fromList(List.map g
 [{fin = [], trans = 0},
 {fin = [], trans = 1},
 {fin = [], trans = 1},
-{fin = [(N 34)], trans = 0},
-{fin = [(N 37)], trans = 4},
-{fin = [(N 15)], trans = 5},
-{fin = [(N 34)], trans = 6},
+{fin = [(N 36)], trans = 0},
+{fin = [(N 39)], trans = 4},
+{fin = [(N 17)], trans = 5},
+{fin = [(N 36)], trans = 6},
 {fin = [], trans = 7},
 {fin = [], trans = 8},
-{fin = [(N 12)], trans = 7},
+{fin = [(N 14)], trans = 0},
 {fin = [(N 1)], trans = 0},
 {fin = [(N 5)], trans = 0},
 {fin = [(N 3)], trans = 0}])
@@ -186,14 +186,14 @@ let fun continue() = lex() in
                         lex() (* whitespace *)
                     end(*#line 187.1 "tiger.lex.sml"*)
 )
-| 12 => let val yytext=yymktext() in (*#line 55.28 "tiger.lex"*)let
+| 14 => let val yytext=yymktext() in (*#line 55.40 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
                         Tokens.Comment (yytext, !line_no, p_prev)
                     end (* comment *)(*#line 194.1 "tiger.lex.sml"*)
  end
-| 15 => let val yytext=yymktext() in (*#line 62.21 "tiger.lex"*)let
+| 17 => let val yytext=yymktext() in (*#line 62.21 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
@@ -206,14 +206,14 @@ let fun continue() = lex() in
                         lex() (* whitespace *)
                     end(*#line 207.1 "tiger.lex.sml"*)
 )
-| 34 => let val yytext=yymktext() in (*#line 69.111 "tiger.lex"*)let
+| 36 => let val yytext=yymktext() in (*#line 69.111 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
                         Tokens.Symbol (yytext, !line_no, p_prev)
                     end(*#line 214.1 "tiger.lex.sml"*)
  end
-| 37 => let val yytext=yymktext() in (*#line 75.21 "tiger.lex"*)let
+| 39 => let val yytext=yymktext() in (*#line 75.21 "tiger.lex"*)let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in

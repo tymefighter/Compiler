@@ -52,7 +52,7 @@ whitespace = [\ \t];
                         lex() (* newline *)
                     end);
 
-"/*"(\n | .)*"*/"      => (let
+"/*"(\n | \*[^/] | [^*])*"*/"      => (let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
