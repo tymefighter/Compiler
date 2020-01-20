@@ -4,11 +4,14 @@
 
 all: tigh
 
-tiger.lex.sml: tiger.lex
-	mllex tiger.lex
+%.lex.sml: %.lex
+	mllex $<
 
 tigh: tiger.lex.sml tiger.mlb
 	mlton -output tigh tiger.mlb
+
+test: tigh test
+	./tigh < test
 
 clean:
 	@rm tiger.lex.sml tigh
