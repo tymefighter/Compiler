@@ -6,6 +6,8 @@ array a = [4, 5, 7];
     sample program
 */
 
+var st = "this is a string"
+
 class Abc
 {
     var u = 500;
@@ -15,7 +17,7 @@ class Abc
     Abc(100)
     {
         x = (u + v) + x;
-        p = a + x - 40;
+        p = a * x - 40;
     }
 };
 

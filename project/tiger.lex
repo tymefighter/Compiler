@@ -52,6 +52,13 @@ whitespace = [\ \t];
                         lex() (* newline *)
                     end);
 
+"\""([^"])*"\""     => (let
+                        val p_prev = !pos_from_prev
+                        val _ = reset pos_from_prev
+                    in
+                        Tokens.String (yytext, !line_no, p_prev)
+                    end (* string *));
+
 "/*"(\n | \*[^/] | [^*])*"*/"      => (let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
@@ -66,7 +73,7 @@ whitespace = [\ \t];
                         Tokens.Number (yytext, !line_no, p_prev)
                     end);
 
-"." | "," | ";" | ":" | "(" | ")" | "{" | "}" | "+" | "-" | "/" | "=" | "<" | ">" | "&" | "|" | "[" | "]" => (let
+"." | "," | ";" | ":" | "(" | ")" | "{" | "}" | "+" | "-" | "*" |  "/" | "=" | "<" | ">" | "&" | "|" | "[" | "]" => (let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in

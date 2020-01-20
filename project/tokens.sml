@@ -3,5 +3,6 @@ structure Tokens = struct
         | Symbol of string * int * int
         | Number of string * int * int
         | Comment of string * int * int
+        | String of string * int * int
         | EOF
     end
