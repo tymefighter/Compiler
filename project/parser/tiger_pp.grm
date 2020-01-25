@@ -25,6 +25,7 @@
     | LEFT_B
     | RIGHT_B
     | SEMI
+    | EOF
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -38,12 +39,14 @@
 %left ADD SUB
 %left MUL DIV
 
+%pos int
+
 %%
 
 PROG : EXP (Ast.Expression EXP)
 
 EXPS : ([])
-    EXP SEMI EXPS (EXP :: EXPS)
+    | EXP SEMI EXPS (EXP :: EXPS)
 
 EXP : NIL (Ast.LiteralNil)
     | INT (Ast.LiteralInt INT)
