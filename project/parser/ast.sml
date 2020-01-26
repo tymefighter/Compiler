@@ -12,6 +12,10 @@ datatype Exp = LiteralNil
     | NegExp of Exp
     | Exprs of Exp list
 
+    | IfThen of Exp * Exp
+    | IfThenElse of Exp * Exp * Exp
+    | While of Exp * Exp
+
 datatype Prog = Expression of Exp
 
 (* datatype Exp = LiteralNil

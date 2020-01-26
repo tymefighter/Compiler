@@ -45,7 +45,44 @@ structure Pprint = struct
         | pprintExp (Ast.NegExp exp) = (pprintOp Ast.SUB) ^ " " ^ (pprintExp exp)
         | pprintExp (Ast.Exprs exp_list) = pprintExpList exp_list
 
-    and pprintExpList (exp_list) = let
+        | pprintExp (Ast.IfThen (exp1, exp2)) = (
+            let
+                val str1 = "if " ^ (pprintExp exp1) ^ " then\n"
+                val _ = inc indentation_level
+                val str2 = (ind ()) ^ (pprintExp exp2)
+                val _ = dec indentation_level
+            in
+                str1 ^ str2
+            end
+        )
+        | pprintExp (Ast.IfThenElse (exp1, exp2, exp3)) = (
+            let
+                val str1 = "if " ^ (pprintExp exp1) ^ " then\n"
+                val _ = inc indentation_level
+                val str2 = (ind ()) ^ (pprintExp exp2) ^ "\n"
+                val _ = dec indentation_level
+                val str3 = (ind ()) ^ "else\n"
+                val _ = inc indentation_level
+                val str4 = (ind ()) ^ (pprintExp exp3)
+                val _ = dec indentation_level
+            in
+                str1 ^ str2 ^ str3 ^ str4
+            end
+        )
+        | pprintExp (Ast.While (exp1, exp2)) = (
+            let
+                val str1 = "while " ^ (pprintExp exp1) ^ " do\n"
+                val _ = inc indentation_level
+                val str2 = (ind ()) ^ (pprintExp exp2) ^ "\n"
+                val _ = dec indentation_level
+            in
+                str1 ^ str2
+            end
+        )
+
+    and  pprintExpList [] = ""
+    | pprintExpList [exp] = "( " ^ (pprintExp exp) ^ " )"
+    | pprintExpList (exp_list) = let
         val str_begin = "(\n"
         val str_end = (ind ()) ^ ")"
         val _ = inc indentation_level

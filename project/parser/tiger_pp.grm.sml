@@ -17,66 +17,82 @@ structure Token = Token
 local open LrTable in 
 val table=let val actionRows =
 "\
-\\001\000\001\000\008\000\002\000\007\000\004\000\006\000\006\000\005\000\
-\\017\000\004\000\000\000\
-\\001\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\
-\\009\000\016\000\010\000\015\000\011\000\014\000\012\000\013\000\
-\\013\000\012\000\014\000\011\000\015\000\010\000\016\000\009\000\
-\\019\000\037\000\000\000\
-\\001\000\018\000\036\000\000\000\
+\\001\000\001\000\010\000\002\000\009\000\004\000\008\000\006\000\007\000\
+\\017\000\006\000\021\000\005\000\024\000\004\000\000\000\
+\\001\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\
+\\022\000\041\000\000\000\
+\\001\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\
+\\025\000\040\000\000\000\
+\\001\000\018\000\042\000\000\000\
 \\001\000\020\000\000\000\000\000\
-\\040\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\
-\\009\000\016\000\010\000\015\000\011\000\014\000\012\000\013\000\
-\\013\000\012\000\014\000\011\000\015\000\010\000\016\000\009\000\000\000\
-\\041\000\001\000\008\000\002\000\007\000\004\000\006\000\006\000\005\000\
-\\017\000\004\000\000\000\
-\\042\000\000\000\
-\\043\000\000\000\
-\\044\000\000\000\
-\\045\000\000\000\
-\\046\000\007\000\018\000\008\000\017\000\000\000\
-\\047\000\007\000\018\000\008\000\017\000\000\000\
-\\048\000\000\000\
-\\049\000\000\000\
-\\050\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\000\000\
-\\051\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\000\000\
-\\052\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\000\000\
-\\053\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\000\000\
-\\054\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\000\000\
-\\055\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\000\000\
-\\056\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\
-\\009\000\016\000\010\000\015\000\011\000\014\000\012\000\013\000\
-\\013\000\012\000\014\000\011\000\000\000\
-\\057\000\005\000\020\000\006\000\019\000\007\000\018\000\008\000\017\000\
-\\009\000\016\000\010\000\015\000\011\000\014\000\012\000\013\000\
-\\013\000\012\000\014\000\011\000\015\000\010\000\000\000\
-\\058\000\007\000\018\000\008\000\017\000\000\000\
+\\050\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\000\000\
+\\051\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\
+\\019\000\043\000\000\000\
+\\052\000\000\000\
+\\053\000\000\000\
+\\054\000\000\000\
+\\055\000\000\000\
+\\056\000\007\000\020\000\008\000\019\000\000\000\
+\\057\000\007\000\020\000\008\000\019\000\000\000\
+\\058\000\000\000\
 \\059\000\000\000\
+\\060\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\000\000\
+\\061\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\000\000\
+\\062\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\000\000\
+\\063\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\000\000\
+\\064\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\000\000\
+\\065\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\000\000\
+\\066\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\000\000\
+\\067\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\000\000\
+\\068\000\007\000\020\000\008\000\019\000\000\000\
+\\069\000\000\000\
+\\070\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\
+\\023\000\047\000\000\000\
+\\071\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\000\000\
+\\072\000\005\000\022\000\006\000\021\000\007\000\020\000\008\000\019\000\
+\\009\000\018\000\010\000\017\000\011\000\016\000\012\000\015\000\
+\\013\000\014\000\014\000\013\000\015\000\012\000\016\000\011\000\000\000\
 \"
 val actionRowNumbers =
-"\000\000\004\000\005\000\000\000\
-\\007\000\009\000\008\000\000\000\
+"\000\000\005\000\000\000\000\000\
+\\000\000\000\000\008\000\010\000\
+\\009\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\002\000\
-\\001\000\022\000\021\000\020\000\
-\\019\000\018\000\017\000\016\000\
-\\015\000\014\000\013\000\012\000\
-\\011\000\010\000\023\000\005\000\
-\\006\000\003\000"
+\\000\000\002\000\001\000\003\000\
+\\006\000\023\000\022\000\021\000\
+\\020\000\019\000\018\000\017\000\
+\\016\000\015\000\014\000\013\000\
+\\012\000\011\000\000\000\000\000\
+\\024\000\000\000\027\000\025\000\
+\\007\000\000\000\026\000\004\000"
 val gotoT =
 "\
-\\001\000\001\000\002\000\037\000\000\000\
+\\001\000\001\000\002\000\047\000\000\000\
 \\000\000\
-\\001\000\020\000\003\000\019\000\000\000\
 \\001\000\021\000\000\000\
-\\000\000\
-\\000\000\
-\\000\000\
 \\001\000\022\000\000\000\
-\\001\000\023\000\000\000\
-\\001\000\024\000\000\000\
+\\001\000\024\000\003\000\023\000\000\000\
 \\001\000\025\000\000\000\
+\\000\000\
+\\000\000\
+\\000\000\
 \\001\000\026\000\000\000\
 \\001\000\027\000\000\000\
 \\001\000\028\000\000\000\
@@ -85,6 +101,10 @@ val gotoT =
 \\001\000\031\000\000\000\
 \\001\000\032\000\000\000\
 \\001\000\033\000\000\000\
+\\001\000\034\000\000\000\
+\\001\000\035\000\000\000\
+\\001\000\036\000\000\000\
+\\001\000\037\000\000\000\
 \\000\000\
 \\000\000\
 \\000\000\
@@ -101,12 +121,20 @@ val gotoT =
 \\000\000\
 \\000\000\
 \\000\000\
-\\001\000\020\000\003\000\036\000\000\000\
+\\000\000\
+\\001\000\042\000\000\000\
+\\001\000\043\000\000\000\
+\\000\000\
+\\001\000\024\000\003\000\044\000\000\000\
+\\000\000\
+\\000\000\
+\\000\000\
+\\001\000\046\000\000\000\
 \\000\000\
 \\000\000\
 \"
-val numstates = 38
-val numrules = 20
+val numstates = 48
+val numrules = 23
 val s = ref "" and index = ref 0
 val string_to_int = fn () => 
 let val i = !index
@@ -205,13 +233,18 @@ fn (T 0) => "INT"
   | (T 17) => "RIGHT_B"
   | (T 18) => "SEMI"
   | (T 19) => "EOF"
+  | (T 20) => "IF"
+  | (T 21) => "THEN"
+  | (T 22) => "ELSE"
+  | (T 23) => "WHILE"
+  | (T 24) => "DO"
   | _ => "bogus-term"
 local open Header in
 val errtermvalue=
 fn _ => MlyValue.VOID
 end
 val terms : term list = nil
- $$ (T 19) $$ (T 18) $$ (T 17) $$ (T 16) $$ (T 15) $$ (T 14) $$ (T 13) $$ (T 12) $$ (T 11) $$ (T 10) $$ (T 9) $$ (T 8) $$ (T 7) $$ (T 6) $$ (T 5) $$ (T 4) $$ (T 3)end
+ $$ (T 24) $$ (T 23) $$ (T 22) $$ (T 21) $$ (T 20) $$ (T 19) $$ (T 18) $$ (T 17) $$ (T 16) $$ (T 15) $$ (T 14) $$ (T 13) $$ (T 12) $$ (T 11) $$ (T 10) $$ (T 9) $$ (T 8) $$ (T 7) $$ (T 6) $$ (T 5) $$ (T 4) $$ (T 3)end
 structure Actions =
 struct 
 exception mlyAction of int
@@ -220,85 +253,97 @@ val actions =
 fn (i392,defaultPos,stack,
     (()):arg) =>
 case (i392,stack)
-of  ( 0, ( ( _, ( MlyValue.EXP EXP, EXP1left, EXP1right)) :: rest671)) => let val  result = MlyValue.PROG ((*#line 46.13 "tiger_pp.grm"*)Ast.Expression EXP(*#line 223.1 "tiger_pp.grm.sml"*)
+of  ( 0, ( ( _, ( MlyValue.EXP EXP, EXP1left, EXP1right)) :: rest671)) => let val  result = MlyValue.PROG ((*#line 51.13 "tiger_pp.grm"*)Ast.Expression EXP(*#line 256.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 1, ( result, EXP1left, EXP1right), rest671)
 end
-|  ( 1, ( rest671)) => let val  result = MlyValue.EXPS ((*#line 48.9 "tiger_pp.grm"*)[](*#line 227.1 "tiger_pp.grm.sml"*)
+|  ( 1, ( ( _, ( MlyValue.EXP EXP, EXP1left, EXP1right)) :: rest671)) => let val  result = MlyValue.EXPS ((*#line 53.13 "tiger_pp.grm"*)[EXP](*#line 260.1 "tiger_pp.grm.sml"*)
 )
- in ( LrTable.NT 2, ( result, defaultPos, defaultPos), rest671)
+ in ( LrTable.NT 2, ( result, EXP1left, EXP1right), rest671)
 end
-|  ( 2, ( ( _, ( MlyValue.EXPS EXPS, _, EXPS1right)) :: _ :: ( _, ( MlyValue.EXP EXP, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXPS ((*#line 49.22 "tiger_pp.grm"*)EXP :: EXPS(*#line 231.1 "tiger_pp.grm.sml"*)
+|  ( 2, ( ( _, ( MlyValue.EXPS EXPS, _, EXPS1right)) :: _ :: ( _, ( MlyValue.EXP EXP, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXPS ((*#line 54.22 "tiger_pp.grm"*)EXP :: EXPS(*#line 264.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 2, ( result, EXP1left, EXPS1right), rest671)
 end
-|  ( 3, ( ( _, ( _, NIL1left, NIL1right)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 51.12 "tiger_pp.grm"*)Ast.LiteralNil(*#line 235.1 "tiger_pp.grm.sml"*)
+|  ( 3, ( ( _, ( _, NIL1left, NIL1right)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 56.12 "tiger_pp.grm"*)Ast.LiteralNil(*#line 268.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, NIL1left, NIL1right), rest671)
 end
-|  ( 4, ( ( _, ( MlyValue.INT INT, INT1left, INT1right)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 52.12 "tiger_pp.grm"*)Ast.LiteralInt INT(*#line 239.1 "tiger_pp.grm.sml"*)
+|  ( 4, ( ( _, ( MlyValue.INT INT, INT1left, INT1right)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 57.12 "tiger_pp.grm"*)Ast.LiteralInt INT(*#line 272.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, INT1left, INT1right), rest671)
 end
-|  ( 5, ( ( _, ( MlyValue.STR STR, STR1left, STR1right)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 53.12 "tiger_pp.grm"*)Ast.LiteralStr STR(*#line 243.1 "tiger_pp.grm.sml"*)
+|  ( 5, ( ( _, ( MlyValue.STR STR, STR1left, STR1right)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 58.12 "tiger_pp.grm"*)Ast.LiteralStr STR(*#line 276.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, STR1left, STR1right), rest671)
 end
-|  ( 6, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 54.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.ADD, EXP2)(*#line 247.1 "tiger_pp.grm.sml"*)
+|  ( 6, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 60.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.ADD, EXP2)(*#line 280.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 7, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 55.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.SUB, EXP2)(*#line 251.1 "tiger_pp.grm.sml"*)
+|  ( 7, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 61.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.SUB, EXP2)(*#line 284.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 8, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 56.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.MUL, EXP2)(*#line 255.1 "tiger_pp.grm.sml"*)
+|  ( 8, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 62.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.MUL, EXP2)(*#line 288.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 9, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 57.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.DIV, EXP2)(*#line 259.1 "tiger_pp.grm.sml"*)
+|  ( 9, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 63.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.DIV, EXP2)(*#line 292.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 10, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 58.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.EQ, EXP2)(*#line 263.1 "tiger_pp.grm.sml"*)
+|  ( 10, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 64.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.EQ, EXP2)(*#line 296.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 11, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 59.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.NE, EXP2)(*#line 267.1 "tiger_pp.grm.sml"*)
+|  ( 11, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 65.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.NE, EXP2)(*#line 300.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 12, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 60.18 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.G, EXP2)(*#line 271.1 "tiger_pp.grm.sml"*)
+|  ( 12, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 66.18 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.G, EXP2)(*#line 304.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 13, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 61.18 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.L, EXP2)(*#line 275.1 "tiger_pp.grm.sml"*)
+|  ( 13, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 67.18 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.L, EXP2)(*#line 308.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 14, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 62.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.GE, EXP2)(*#line 279.1 "tiger_pp.grm.sml"*)
+|  ( 14, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 68.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.GE, EXP2)(*#line 312.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 15, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 63.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.LE, EXP2)(*#line 283.1 "tiger_pp.grm.sml"*)
+|  ( 15, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 69.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.LE, EXP2)(*#line 316.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 16, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 64.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.AND, EXP2)(*#line 287.1 "tiger_pp.grm.sml"*)
+|  ( 16, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 70.20 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.AND, EXP2)(*#line 320.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 17, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 65.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.OR, EXP2)(*#line 291.1 "tiger_pp.grm.sml"*)
+|  ( 17, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, EXP1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 71.19 "tiger_pp.grm"*)Ast.Op (EXP1, Ast.OR, EXP2)(*#line 324.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, EXP1left, EXP2right), rest671)
 end
-|  ( 18, ( ( _, ( MlyValue.EXP EXP, _, EXP1right)) :: ( _, ( _, SUB1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 66.16 "tiger_pp.grm"*)Ast.NegExp EXP(*#line 295.1 "tiger_pp.grm.sml"*)
+|  ( 18, ( ( _, ( MlyValue.EXP EXP, _, EXP1right)) :: ( _, ( _, SUB1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 72.16 "tiger_pp.grm"*)Ast.NegExp EXP(*#line 328.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, SUB1left, EXP1right), rest671)
 end
-|  ( 19, ( ( _, ( _, _, RIGHT_B1right)) :: ( _, ( MlyValue.EXPS EXPS, _, _)) :: ( _, ( _, LEFT_B1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 67.28 "tiger_pp.grm"*)Ast.Exprs EXPS(*#line 299.1 "tiger_pp.grm.sml"*)
+|  ( 19, ( ( _, ( _, _, RIGHT_B1right)) :: ( _, ( MlyValue.EXPS EXPS, _, _)) :: ( _, ( _, LEFT_B1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 73.28 "tiger_pp.grm"*)Ast.Exprs EXPS(*#line 332.1 "tiger_pp.grm.sml"*)
 )
  in ( LrTable.NT 0, ( result, LEFT_B1left, RIGHT_B1right), rest671)
+end
+|  ( 20, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, _, _)) :: ( _, ( _, IF1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 75.24 "tiger_pp.grm"*)Ast.IfThen (EXP1, EXP2)(*#line 336.1 "tiger_pp.grm.sml"*)
+)
+ in ( LrTable.NT 0, ( result, IF1left, EXP2right), rest671)
+end
+|  ( 21, ( ( _, ( MlyValue.EXP EXP3, _, EXP3right)) :: _ :: ( _, ( MlyValue.EXP EXP2, _, _)) :: _ :: ( _, ( MlyValue.EXP EXP1, _, _)) :: ( _, ( _, IF1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 76.33 "tiger_pp.grm"*)Ast.IfThenElse (EXP1, EXP2, EXP3)(*#line 340.1 "tiger_pp.grm.sml"*)
+)
+ in ( LrTable.NT 0, ( result, IF1left, EXP3right), rest671)
+end
+|  ( 22, ( ( _, ( MlyValue.EXP EXP2, _, EXP2right)) :: _ :: ( _, ( MlyValue.EXP EXP1, _, _)) :: ( _, ( _, WHILE1left, _)) :: rest671)) => let val  result = MlyValue.EXP ((*#line 78.25 "tiger_pp.grm"*)Ast.While (EXP1, EXP2)(*#line 344.1 "tiger_pp.grm.sml"*)
+)
+ in ( LrTable.NT 0, ( result, WHILE1left, EXP2right), rest671)
 end
 | _ => raise (mlyAction i392)
 end
@@ -332,5 +377,10 @@ fun LEFT_B (p1,p2) = Token.TOKEN (ParserData.LrTable.T 16,(ParserData.MlyValue.V
 fun RIGHT_B (p1,p2) = Token.TOKEN (ParserData.LrTable.T 17,(ParserData.MlyValue.VOID,p1,p2))
 fun SEMI (p1,p2) = Token.TOKEN (ParserData.LrTable.T 18,(ParserData.MlyValue.VOID,p1,p2))
 fun EOF (p1,p2) = Token.TOKEN (ParserData.LrTable.T 19,(ParserData.MlyValue.VOID,p1,p2))
+fun IF (p1,p2) = Token.TOKEN (ParserData.LrTable.T 20,(ParserData.MlyValue.VOID,p1,p2))
+fun THEN (p1,p2) = Token.TOKEN (ParserData.LrTable.T 21,(ParserData.MlyValue.VOID,p1,p2))
+fun ELSE (p1,p2) = Token.TOKEN (ParserData.LrTable.T 22,(ParserData.MlyValue.VOID,p1,p2))
+fun WHILE (p1,p2) = Token.TOKEN (ParserData.LrTable.T 23,(ParserData.MlyValue.VOID,p1,p2))
+fun DO (p1,p2) = Token.TOKEN (ParserData.LrTable.T 24,(ParserData.MlyValue.VOID,p1,p2))
 end
 end

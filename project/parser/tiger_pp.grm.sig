@@ -2,6 +2,11 @@ signature Tiger_TOKENS =
 sig
 type ('a,'b) token
 type svalue
+val DO:  'a * 'a -> (svalue,'a) token
+val WHILE:  'a * 'a -> (svalue,'a) token
+val ELSE:  'a * 'a -> (svalue,'a) token
+val THEN:  'a * 'a -> (svalue,'a) token
+val IF:  'a * 'a -> (svalue,'a) token
 val EOF:  'a * 'a -> (svalue,'a) token
 val SEMI:  'a * 'a -> (svalue,'a) token
 val RIGHT_B:  'a * 'a -> (svalue,'a) token

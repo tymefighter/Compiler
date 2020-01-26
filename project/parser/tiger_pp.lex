@@ -63,6 +63,36 @@ tabspace = [\t];
         Tokens.NIL (!lineNo, !posInLine)
     end);
 
+"if" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.IF (!lineNo, !posInLine)
+    end);
+
+"then" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.THEN (!lineNo, !posInLine)
+    end);
+
+"else" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.ELSE (!lineNo, !posInLine)
+    end);
+
+"while" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.WHILE (!lineNo, !posInLine)
+    end);
+
+"do" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.DO (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in
