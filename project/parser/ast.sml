@@ -9,6 +9,7 @@ datatype Exp = LiteralNil
     | LiteralStr of string
 
     | Op of Exp * BinOp * Exp
+    | NegExp of Exp
     | Exprs of Exp list
 
 datatype Prog = Expression of Exp

@@ -40,7 +40,9 @@ structure Pprint = struct
     fun pprintExp Ast.LiteralNil = "nil"
         | pprintExp (Ast.LiteralInt int_num_str) = int_num_str
         | pprintExp (Ast.LiteralStr str) = str
+
         | pprintExp (Ast.Op (exp1, oper, exp2)) = (pprintExp exp1) ^ " " ^ (pprintOp oper) ^ " " ^ (pprintExp exp2)
+        | pprintExp (Ast.NegExp exp) = (pprintOp Ast.SUB) ^ " " ^ (pprintExp exp)
         | pprintExp (Ast.Exprs exp_list) = pprintExpList exp_list
 
     and pprintExpList (exp_list) = let

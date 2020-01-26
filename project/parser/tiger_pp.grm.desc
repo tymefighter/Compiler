@@ -3,13 +3,14 @@ state 0:
 
 	PROG : . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 1
-	PROG	goto 35
+	PROG	goto 37
 
 	.	error
 
@@ -30,18 +31,18 @@ state 1:
 	EXP : EXP . OR EXP 
 	PROG : EXP .  (reduce by rule 0)
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
-	EQ	shift 13
-	NE	shift 12
-	G	shift 11
-	L	shift 10
-	GE	shift 9
-	LE	shift 8
-	AND	shift 7
-	OR	shift 6
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
+	EQ	shift 14
+	NE	shift 13
+	G	shift 12
+	L	shift 11
+	GE	shift 10
+	LE	shift 9
+	AND	shift 8
+	OR	shift 7
 
 
 	.	reduce by rule 0
@@ -51,18 +52,34 @@ state 2:
 
 	EXP : LEFT_B . EXPS RIGHT_B 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
-	EXP	goto 19
-	EXPS	goto 18
+	EXP	goto 20
+	EXPS	goto 19
 
 	.	reduce by rule 1
 
 
 state 3:
+
+	EXP : SUB . EXP 
+
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
+	LEFT_B	shift 2
+
+	EXP	goto 21
+
+	.	error
+
+
+state 4:
 
 	EXP : NIL .  (reduce by rule 3)
 
@@ -71,7 +88,7 @@ state 3:
 	.	reduce by rule 3
 
 
-state 4:
+state 5:
 
 	EXP : STR .  (reduce by rule 5)
 
@@ -80,7 +97,7 @@ state 4:
 	.	reduce by rule 5
 
 
-state 5:
+state 6:
 
 	EXP : INT .  (reduce by rule 4)
 
@@ -89,41 +106,14 @@ state 5:
 	.	reduce by rule 4
 
 
-state 6:
+state 7:
 
 	EXP : EXP OR . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
-	LEFT_B	shift 2
-
-	EXP	goto 20
-
-	.	error
-
-
-state 7:
-
-	EXP : EXP AND . EXP 
-
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
-	LEFT_B	shift 2
-
-	EXP	goto 21
-
-	.	error
-
-
-state 8:
-
-	EXP : EXP LE . EXP 
-
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 22
@@ -131,13 +121,14 @@ state 8:
 	.	error
 
 
-state 9:
+state 8:
 
-	EXP : EXP GE . EXP 
+	EXP : EXP AND . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 23
@@ -145,13 +136,14 @@ state 9:
 	.	error
 
 
-state 10:
+state 9:
 
-	EXP : EXP L . EXP 
+	EXP : EXP LE . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 24
@@ -159,13 +151,14 @@ state 10:
 	.	error
 
 
-state 11:
+state 10:
 
-	EXP : EXP G . EXP 
+	EXP : EXP GE . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 25
@@ -173,13 +166,14 @@ state 11:
 	.	error
 
 
-state 12:
+state 11:
 
-	EXP : EXP NE . EXP 
+	EXP : EXP L . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 26
@@ -187,13 +181,14 @@ state 12:
 	.	error
 
 
-state 13:
+state 12:
 
-	EXP : EXP EQ . EXP 
+	EXP : EXP G . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 27
@@ -201,13 +196,14 @@ state 13:
 	.	error
 
 
-state 14:
+state 13:
 
-	EXP : EXP DIV . EXP 
+	EXP : EXP NE . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 28
@@ -215,13 +211,14 @@ state 14:
 	.	error
 
 
-state 15:
+state 14:
 
-	EXP : EXP MUL . EXP 
+	EXP : EXP EQ . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 29
@@ -229,13 +226,14 @@ state 15:
 	.	error
 
 
-state 16:
+state 15:
 
-	EXP : EXP SUB . EXP 
+	EXP : EXP DIV . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 30
@@ -243,13 +241,14 @@ state 16:
 	.	error
 
 
-state 17:
+state 16:
 
-	EXP : EXP ADD . EXP 
+	EXP : EXP MUL . EXP 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
 	EXP	goto 31
@@ -257,45 +256,41 @@ state 17:
 	.	error
 
 
+state 17:
+
+	EXP : EXP SUB . EXP 
+
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
+	LEFT_B	shift 2
+
+	EXP	goto 32
+
+	.	error
+
+
 state 18:
 
-	EXP : LEFT_B EXPS . RIGHT_B 
+	EXP : EXP ADD . EXP 
 
-	RIGHT_B	shift 32
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
+	LEFT_B	shift 2
 
+	EXP	goto 33
 
 	.	error
 
 
 state 19:
 
-	EXP : EXP . ADD EXP 
-	EXP : EXP . SUB EXP 
-	EXP : EXP . MUL EXP 
-	EXP : EXP . DIV EXP 
-	EXP : EXP . EQ EXP 
-	EXP : EXP . NE EXP 
-	EXP : EXP . G EXP 
-	EXP : EXP . L EXP 
-	EXP : EXP . GE EXP 
-	EXP : EXP . LE EXP 
-	EXP : EXP . AND EXP 
-	EXP : EXP . OR EXP 
-	EXPS : EXP . SEMI EXPS 
+	EXP : LEFT_B EXPS . RIGHT_B 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
-	EQ	shift 13
-	NE	shift 12
-	G	shift 11
-	L	shift 10
-	GE	shift 9
-	LE	shift 8
-	AND	shift 7
-	OR	shift 6
-	SEMI	shift 33
+	RIGHT_B	shift 34
 
 
 	.	error
@@ -315,22 +310,24 @@ state 20:
 	EXP : EXP . LE EXP 
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
-	EXP : EXP OR EXP .  (reduce by rule 17)
+	EXPS : EXP . SEMI EXPS 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
-	EQ	shift 13
-	NE	shift 12
-	G	shift 11
-	L	shift 10
-	GE	shift 9
-	LE	shift 8
-	AND	shift 7
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
+	EQ	shift 14
+	NE	shift 13
+	G	shift 12
+	L	shift 11
+	GE	shift 10
+	LE	shift 9
+	AND	shift 8
+	OR	shift 7
+	SEMI	shift 35
 
 
-	.	reduce by rule 17
+	.	error
 
 
 state 21:
@@ -346,25 +343,80 @@ state 21:
 	EXP : EXP . GE EXP 
 	EXP : EXP . LE EXP 
 	EXP : EXP . AND EXP 
+	EXP : EXP . OR EXP 
+	EXP : SUB EXP .  (reduce by rule 18)
+
+	MUL	shift 16
+	DIV	shift 15
+
+
+	.	reduce by rule 18
+
+
+state 22:
+
+	EXP : EXP . ADD EXP 
+	EXP : EXP . SUB EXP 
+	EXP : EXP . MUL EXP 
+	EXP : EXP . DIV EXP 
+	EXP : EXP . EQ EXP 
+	EXP : EXP . NE EXP 
+	EXP : EXP . G EXP 
+	EXP : EXP . L EXP 
+	EXP : EXP . GE EXP 
+	EXP : EXP . LE EXP 
+	EXP : EXP . AND EXP 
+	EXP : EXP . OR EXP 
+	EXP : EXP OR EXP .  (reduce by rule 17)
+
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
+	EQ	shift 14
+	NE	shift 13
+	G	shift 12
+	L	shift 11
+	GE	shift 10
+	LE	shift 9
+	AND	shift 8
+
+
+	.	reduce by rule 17
+
+
+state 23:
+
+	EXP : EXP . ADD EXP 
+	EXP : EXP . SUB EXP 
+	EXP : EXP . MUL EXP 
+	EXP : EXP . DIV EXP 
+	EXP : EXP . EQ EXP 
+	EXP : EXP . NE EXP 
+	EXP : EXP . G EXP 
+	EXP : EXP . L EXP 
+	EXP : EXP . GE EXP 
+	EXP : EXP . LE EXP 
+	EXP : EXP . AND EXP 
 	EXP : EXP AND EXP .  (reduce by rule 16)
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
-	EQ	shift 13
-	NE	shift 12
-	G	shift 11
-	L	shift 10
-	GE	shift 9
-	LE	shift 8
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
+	EQ	shift 14
+	NE	shift 13
+	G	shift 12
+	L	shift 11
+	GE	shift 10
+	LE	shift 9
 
 
 	.	reduce by rule 16
 
 
-state 22:
+state 24:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -380,16 +432,16 @@ state 22:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 15
 
 
-state 23:
+state 25:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -405,16 +457,16 @@ state 23:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 14
 
 
-state 24:
+state 26:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -430,16 +482,16 @@ state 24:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 13
 
 
-state 25:
+state 27:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -455,16 +507,16 @@ state 25:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 12
 
 
-state 26:
+state 28:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -480,16 +532,16 @@ state 26:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 11
 
 
-state 27:
+state 29:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -505,16 +557,16 @@ state 27:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	ADD	shift 17
-	SUB	shift 16
-	MUL	shift 15
-	DIV	shift 14
+	ADD	shift 18
+	SUB	shift 17
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 10
 
 
-state 28:
+state 30:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -535,7 +587,7 @@ state 28:
 	.	reduce by rule 9
 
 
-state 29:
+state 31:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -556,7 +608,7 @@ state 29:
 	.	reduce by rule 8
 
 
-state 30:
+state 32:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -572,14 +624,14 @@ state 30:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	MUL	shift 15
-	DIV	shift 14
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 7
 
 
-state 31:
+state 33:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP ADD EXP .  (reduce by rule 6)
@@ -595,38 +647,39 @@ state 31:
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
 
-	MUL	shift 15
-	DIV	shift 14
+	MUL	shift 16
+	DIV	shift 15
 
 
 	.	reduce by rule 6
 
 
-state 32:
+state 34:
 
-	EXP : LEFT_B EXPS RIGHT_B .  (reduce by rule 18)
-
-
-
-	.	reduce by rule 18
+	EXP : LEFT_B EXPS RIGHT_B .  (reduce by rule 19)
 
 
-state 33:
+
+	.	reduce by rule 19
+
+
+state 35:
 
 	EXPS : EXP SEMI . EXPS 
 
-	INT	shift 5
-	STR	shift 4
-	NIL	shift 3
+	INT	shift 6
+	STR	shift 5
+	NIL	shift 4
+	SUB	shift 3
 	LEFT_B	shift 2
 
-	EXP	goto 19
-	EXPS	goto 34
+	EXP	goto 20
+	EXPS	goto 36
 
 	.	reduce by rule 1
 
 
-state 34:
+state 36:
 
 	EXPS : EXP SEMI EXPS .  (reduce by rule 2)
 
@@ -635,7 +688,7 @@ state 34:
 	.	reduce by rule 2
 
 
-state 35:
+state 37:
 
 
 	EOF	accept
@@ -643,5 +696,5 @@ state 35:
 
 	.	error
 
-84 of 172 action table entries left after compaction
-18 goto table entries
+88 of 196 action table entries left after compaction
+19 goto table entries
