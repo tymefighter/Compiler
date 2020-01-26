@@ -93,6 +93,24 @@ tabspace = [\t];
         Tokens.DO (!lineNo, !posInLine)
     end);
 
+"for" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.FOR (!lineNo, !posInLine)
+    end);
+
+":=" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.ASSIGN (!lineNo, !posInLine)
+    end);
+
+"to" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.TO (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in

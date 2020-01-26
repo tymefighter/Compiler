@@ -73,7 +73,17 @@ structure Pprint = struct
             let
                 val str1 = "while " ^ (pprintExp exp1) ^ " do\n"
                 val _ = inc indentation_level
-                val str2 = (ind ()) ^ (pprintExp exp2) ^ "\n"
+                val str2 = (ind ()) ^ (pprintExp exp2)
+                val _ = dec indentation_level
+            in
+                str1 ^ str2
+            end
+        )
+        | pprintExp (Ast.For (id, exp1, exp2, exp3)) = (
+            let
+                val str1 = "for " ^ id ^ " := " ^ (pprintExp exp1) ^ " to " ^ (pprintExp exp2) ^ " do\n"
+                val _ = inc indentation_level
+                val str2 = (ind ()) ^ (pprintExp exp3)
                 val _ = dec indentation_level
             in
                 str1 ^ str2

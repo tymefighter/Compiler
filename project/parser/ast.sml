@@ -15,6 +15,7 @@ datatype Exp = LiteralNil
     | IfThen of Exp * Exp
     | IfThenElse of Exp * Exp * Exp
     | While of Exp * Exp
+    | For of string * Exp * Exp * Exp
 
 datatype Prog = Expression of Exp
 

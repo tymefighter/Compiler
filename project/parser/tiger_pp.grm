@@ -31,6 +31,9 @@
     | ELSE
     | WHILE
     | DO
+    | FOR
+    | ASSIGN
+    | TO
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -76,3 +79,4 @@ EXP : NIL (Ast.LiteralNil)
     | IF EXP THEN EXP ELSE EXP (Ast.IfThenElse (EXP1, EXP2, EXP3))
 
     | WHILE EXP DO EXP (Ast.While (EXP1, EXP2))
+    | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.For (ID, EXP1, EXP2, EXP3))
