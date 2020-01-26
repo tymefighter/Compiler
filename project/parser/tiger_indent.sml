@@ -9,4 +9,55 @@ val lexer = TigerParser.makeLexer (fn n => TextIO.inputN (TextIO.stdIn, n))
 
 fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int.toString i) ^ ", " ^ s ^ "\n")
 
-val prog = TigerParser.parse (0, lexer, print_error, ())
+val (prog, _) = TigerParser.parse (0, lexer, print_error, ())
+
+
+structure Pprint = struct
+
+    val indentation_level = ref 0
+
+    fun inc ref_x = ref_x := !ref_x + 1
+    fun dec ref_x = ref_x := !ref_x - 1
+    
+    fun getSpaces s n = if(n <= 0) then s
+        else getSpaces (" " ^ s) (n - 1)
+
+    fun ind () = getSpaces "" (!indentation_level)
+
+    fun pprintOp Ast.ADD = "+"
+        | pprintOp Ast.SUB = "-"
+        | pprintOp Ast.MUL = "*"
+        | pprintOp Ast.DIV = "/"
+        | pprintOp Ast.EQ = "="
+        | pprintOp Ast.NE = "<>"
+        | pprintOp Ast.G = ">"
+        | pprintOp Ast.L = "<"
+        | pprintOp Ast.GE = ">="
+        | pprintOp Ast.LE = "<="
+        | pprintOp Ast.AND = "&"
+        | pprintOp Ast.OR = "|"
+
+    fun pprintExp Ast.LiteralNil = "nil"
+        | pprintExp (Ast.LiteralInt int_num_str) = int_num_str
+        | pprintExp (Ast.LiteralStr str) = str
+        | pprintExp (Ast.Op (exp1, oper, exp2)) = (pprintExp exp1) ^ " " ^ (pprintOp oper) ^ " " ^ (pprintExp exp2)
+        | pprintExp (Ast.Exprs exp_list) = pprintExpList exp_list
+
+    and pprintExpList (exp_list) = let
+        val str_begin = "(\n"
+        val str_end = (ind ()) ^ ")"
+        val _ = inc indentation_level
+        val str = str_begin ^ pprintExpListHelper exp_list ^ str_end
+        val _ = dec indentation_level
+    in
+        str
+    end
+
+    and pprintExpListHelper [] = ""
+        | pprintExpListHelper (exp :: exp_list_tail) = (ind ()) ^ (pprintExp exp) ^ ";\n" ^ (pprintExpListHelper exp_list_tail)
+
+    fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
+
+end
+
+val _ = print (Pprint.pprintProg prog)
