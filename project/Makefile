@@ -4,8 +4,8 @@
 
 all: tigh
 
-%.lex.sml: %.lex
-	mllex $<
+%.lex.sml: $*.lex
+	mllex $*.lex
 
 tigh: tiger.lex.sml tiger.mlb
 	mlton -output tigh tiger.mlb

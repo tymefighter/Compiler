@@ -1,0 +1,13 @@
+.PHONY: clean
+
+indent: tiger.mlb tiger_indent.sml tiger_pp.lex.sml tiger_pp.grm.sml
+	mlton -output indent tiger.mlb
+
+%.lex.sml: %.lex
+	mllex $*.lex
+
+%.grm.sml: %.grm
+	mlyacc $*.grm
+
+clean:
+	rm indent *.lex.sml *.grm.sml *.grm.desc *.grm.sig

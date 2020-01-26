@@ -4,8 +4,6 @@ type svalue = Tokens.svalue
 type ('a, 'b) token = ('a, 'b) Tokens.token
 type lexresult = (svalue, pos) token
 
-fun eof () => Tokens.EOF
-
 val lineNo = ref 0
 val posInLine = ref 0
 
@@ -15,10 +13,11 @@ fun inc ref_x = ref_x := !ref_x + 1
 fun inc_n ref_x n = ref_x := !ref_x + n
 fun reset ref_x = ref_x := 0
 
+fun eof () = Tokens.EOF (!lineNo, !posInLine)
 
 %%
 
-%header (functor TigerLexFun(structure Tokens));
+%header (functor TigerLexFun(structure Tokens : Tiger_TOKENS));
 
 alpha = [a-zA-Z];
 digit = [0-9];
@@ -163,7 +162,7 @@ tabspace = [\t];
     end);
 
 . => (let
-    val _ = print "Syntax error on line " ^ (Int.toString !lineNo) ^ " and " ^ (Int.toString !posInLine) ^ " char"
+    val _ = print ("Syntax error on line " ^ (Int.toString (!lineNo)) ^ " and " ^ (Int.toString (!posInLine)) ^ " char\n")
     in
         raise SyntaxError
     end);
