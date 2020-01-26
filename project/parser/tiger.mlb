@@ -1,0 +1,9 @@
+$(SML_LIB)/basis/basis.mlb
+$(SML_LIB)/smlnj-lib/Util/smlnj-lib.mlb
+$(SML_LIB)/mlyacc-lib/mlyacc-lib.mlb
+
+ast.sml
+tiger_pp.grm.sig
+tiger_pp.grm.sml
+tiger_pp.lex.sml
+tiger_indent.sml

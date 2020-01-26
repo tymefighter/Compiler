@@ -1,6 +1,20 @@
-type lexresult = Tokens.token
+type pos = int
+
+type svalue = Tokens.svalue
+type ('a, 'b) token = ('a, 'b) Tokens.token
+type lexresult = (svalue, pos) token
 
 fun eof () => Tokens.EOF
+
+val lineNo = ref 0
+val posInLine = ref 0
+
+exception SyntaxError
+
+fun inc ref_x = ref_x := !ref_x + 1
+fun inc_n ref_x n = ref_x := !ref_x + n
+fun reset ref_x = ref_x := 0
+
 
 %%
 
@@ -8,46 +22,148 @@ fun eof () => Tokens.EOF
 
 alpha = [a-zA-Z];
 digit = [0-9];
-whitespace = [\ \t];
+space = [\ ];
+tabspace = [\t];
 
 %%
 
-{whitespace}+ => (lex());
+\n => (let 
+        val _ = inc lineNo
+        val _ = reset posInLine
+    in
+        lex()
+    end);
 
-{digit}+ => (Tokens.INT yytext);
+{space}+ => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        lex()
+    end);
 
-"\""([^"])*s"\"" =>(Tokens.STR yytext);
+{tabspace}+ => (let
+        val _ = inc_n posInLine (8 * (size yytext))
+    in
+        lex()
+    end);
 
-"nil" => (Tokens.NIL);
+{digit}+ => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.INT (yytext, !lineNo, !posInLine)
+    end);
 
-{alpha}+ => (Tokens.ID yytext);
+"\""([^"])*s"\"" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.STR (yytext, !lineNo, !posInLine)
+    end);
 
-"+" => (Tokens.ADD);
+"nil" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.NIL (!lineNo, !posInLine)
+    end);
 
-"-" => (Tokens.SUB);
+{alpha}+ => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.ID (yytext, !lineNo, !posInLine)
+    end);
 
-"*" => (Tokens.MUL);
+"+" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.ADD (!lineNo, !posInLine)
+    end);
 
-"/" => (Tokens.DIV);
+"-" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.SUB (!lineNo, !posInLine)
+    end);
 
-"=" => (Tokens.EQ);
+"*" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.MUL (!lineNo, !posInLine)
+    end);
 
-"<>" => (Tokens.NE);
+"/" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.DIV (!lineNo, !posInLine)
+    end);
 
-">=" => (Tokens.GE);
+"=" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.EQ (!lineNo, !posInLine)
+    end);
 
-"<=" => (Tokens.LE);
+"<>" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.NE (!lineNo, !posInLine)
+    end);
 
-">" => (Tokens.G);
+">=" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.GE (!lineNo, !posInLine)
+    end);
 
-"<" => (Tokens.L);
+"<=" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.LE (!lineNo, !posInLine)
+    end);
 
-"&" => (Tokens.AND);
+">" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.G (!lineNo, !posInLine)
+    end);
+    
 
-"|" => (Tokens.OR);
+"<" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.L (!lineNo, !posInLine)
+    end);
 
-"(" => (Tokens.LEFT_B);
+"&" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.AND (!lineNo, !posInLine)
+    end);
 
-")" => (Tokens.RIGHT_B);
 
-";" => (Tokens.SEMI);
+"|" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.OR (!lineNo, !posInLine)
+    end);
+
+"(" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.LEFT_B (!lineNo, !posInLine)
+    end);
+
+")" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.RIGHT_B (!lineNo, !posInLine)
+    end);
+
+";" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.SEMI (!lineNo, !posInLine)
+    end);
+
+. => (let
+    val _ = print "Syntax error on line " ^ (Int.toString !lineNo) ^ " and " ^ (Int.toString !posInLine) ^ " char"
+    in
+        raise SyntaxError
+    end);
