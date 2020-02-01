@@ -56,7 +56,7 @@ fun getFirstForProd first symbols nullable sym [] = first
         end
 
 (* Imp: The RHS list has been reversed and passed here for efficient computation of first and nullable of suffixes of actual RHS list *)
-(* fun getFollowForProd follow symbols nullable sym first_suff is_nullable_suff [] = follow 
+fun getFollowForProd follow symbols nullable sym first_suff is_nullable_suff [] = follow 
     | getFollowForProd follow symbols nullable sym first_suff is_nullable_suff (rev_x :: rev_xs) = let
 
         val followSymOpt = AtomMap.find (follow, sym)
@@ -71,6 +71,15 @@ fun getFirstForProd first symbols nullable sym [] = first
             case follow_rev_xOp of
                 NONE => (AtomMap.insert (follow_1, rev_x, AtomSet.empty), AtomSet.empty)  (* follow does not contain rev_x, so insert it *)
                 | SOME (follow_rev_x_found) => (follow_1, follow_rev_x_found)             (* follow contains rev_x, so return its follow set *)
-        ) *)
+        )
+
+        val follow_3 = if(is_nullable_suff) then 
+                AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x, followSym))
+            else
+                follow_2
+
+        val follow_new = AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x. first_suff))
+
+        
 
 
