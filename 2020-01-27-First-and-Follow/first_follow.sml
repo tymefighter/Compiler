@@ -270,3 +270,40 @@ val r3 = AtomMap.insert (r3_1, Atom.atom "F", RHSSet.addList (RHSSet.empty, map 
 val g3 : Grammar = {symbols = s3, tokens = t3, rules = r3}
 
 val _ = printAns g3
+
+(* 
+    E -> E + T
+    E -> T
+    T -> T * F
+    T -> F
+    F -> id
+*)
+
+val _ = print("\n\nTest Case #4\n")
+val s4 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E", "T", "F"])
+val t4 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "*", "id"])
+val r4_1 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "+", "T"], ["T"]]))
+val r4_2 = AtomMap.insert (r4_1, Atom.atom "T", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["T", "*", "F"], ["F"]]))
+val r4 = AtomMap.insert (r4_2, Atom.atom "F", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["id"]]))
+val g4 : Grammar = {symbols = s4, tokens = t4, rules = r4}
+
+val _ = printAns g4
+
+(* 
+    E -> E + T
+    E -> T
+    T -> T * F
+    T -> F
+    F -> id
+    F -> ( E )
+*)
+
+val _ = print("\n\nTest Case #5\n")
+val s5 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E", "T", "F"])
+val t5 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "*", "id", "("])
+val r5_1 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "+", "T"], ["T"]]))
+val r5_2 = AtomMap.insert (r5_1, Atom.atom "T", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["T", "*", "F"], ["F"]]))
+val r5 = AtomMap.insert (r5_2, Atom.atom "F", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["(", "E", ")"], ["id"]]))
+val g5 : Grammar = {symbols = s5, tokens = t5, rules = r5}
+
+val _ = printAns g5
