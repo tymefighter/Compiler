@@ -126,3 +126,38 @@ fun getAllForAllNonTerm nullable first follow symbols rules [] = (nullable, firs
             getAllForAllNonTerm nullable_new first_new follow_new symbols rules sym_list
         end
 
+fun iterateAllUntilFixedPoint nullable first follow symbols rules = let
+        
+            fun mapEqual (m1, m2) = if(AtomMap.numItems m1 <> AtomMap.numItems m2) then false
+                else (
+                    let
+                        val m1_list = AtomMap.listItemsi m1
+
+                        fun compareListAndMap [] mp = true
+                            | compareListAndMap ((key, value) :: ls) mp = let
+                                    val value_mp_opt = AtomMap.find (mp, key)
+                                in
+                                    case value_mp_opt of 
+                                        NONE => false
+                                        | SOME (value_mp) => if(AtomSet.equal (value, value_mp)) then 
+                                                compareListAndMap ls mp
+                                            else
+                                                false
+                                end
+                    in
+                        compareListAndMap m1_list m2
+                    end
+                )
+
+            val (nullable_new, first_new, follow_new) = getAllForAllNonTerm nullable first follow symbols rules (AtomSet.listItems symbols)
+            val foundFixPoint = if(AtomSet.equal (nullable_new, nullable) andalso mapEqual (first_new, first) andalso mapEqual (follow_new, follow)) then
+                    true
+                else
+                    false
+        
+        in
+            if(foundFixPoint) then 
+                (nullable, first, follow)
+            else
+                iterateAllUntilFixedPoint nullable_new first_new follow_new symbols rules
+        end
