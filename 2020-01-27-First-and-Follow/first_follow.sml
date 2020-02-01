@@ -38,7 +38,7 @@ fun getFirstForProd first symbols nullable sym [] = first
                     NONE => (AtomMap.insert (first, sym, AtomSet.empty), AtomSet.empty) (* first does not contain sym, so insert it *)
                     | SOME (first_sym) => (first, first_sym)                            (* first contains sym, so return its first set *)
             )
-
+            (* Mistake !!*)
             val firstxOpt = AtomMap.find (first_1, x)
             val (first_2, firstx) = (
                 case firstxOpt of
@@ -66,6 +66,7 @@ fun getFollowForProd follow symbols nullable sym first_suff is_nullable_suff [] 
                 | SOME (follow_sym) => (follow, follow_sym)                            (* follow contains sym, so return its follow set *)
         )
 
+        (* Mistake !!*)
         val follow_rev_xOp = AtomMap.find (follow_1, rev_x)
         val (follow_2, follow_rev_x) = (
             case follow_rev_xOp of
@@ -163,3 +164,54 @@ fun iterateAllUntilFixedPoint nullable first follow symbols rules = let
         end
 
 fun computeAllForGrammer (grammar : Grammar) = iterateAllUntilFixedPoint AtomSet.empty AtomMap.empty AtomMap.empty (#symbols grammar) (#rules grammar)
+
+(* Test cases *)
+
+exception FirstSetNotBuilt
+exception FollowSetNotBuilt
+
+fun listStr [] = "\n"
+    | listStr (x :: xs) = x ^ " " ^ listStr xs
+
+fun printAll (nullable, first, follow) [] = ()
+    | printAll (nullable, first, follow) (sym :: sym_list) = let
+        val _ = print ((Atom.toString sym) ^ "\n")
+
+        val _ = if(AtomSet.member (nullable, sym)) then 
+                print "Nullable: Yes\n"
+            else
+                print "Nullable: No\n"
+
+        val first_sym_opt = AtomMap.find (first, sym)
+        val first_sym_ls = case first_sym_opt of
+            SOME (first_sym) => AtomSet.listItems first_sym
+            | NONE => raise FirstSetNotBuilt
+        
+        val _ = print("First: ")
+        val _ = print (listStr (map Atom.toString first_sym_ls))
+
+        val follow_sym_opt = AtomMap.find (follow, sym)
+        val follow_sym_ls = case follow_sym_opt of
+            SOME (follow_sym) => AtomSet.listItems follow_sym
+            | NONE => raise FollowSetNotBuilt
+        
+        val _ = print("Follow: ")
+        val _ = print (listStr (map Atom.toString follow_sym_ls))
+    
+    in
+        printAll (nullable, first, follow) sym_list
+    end
+
+fun printAns (grammar : Grammar) = printAll (computeAllForGrammer grammar) (AtomSet.listItems (#symbols grammar))
+
+(* 
+    E -> E + id
+    E -> id
+*)
+
+val s1 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E"])
+val t1 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "id"])
+val r1 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "+", "id"], ["id"]]))
+val g1 : Grammar = {symbols = s1, tokens = t1, rules = r1}
+
+val _ = printAns g1
