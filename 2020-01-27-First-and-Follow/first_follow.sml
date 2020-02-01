@@ -93,3 +93,21 @@ fun getFollowForProd follow symbols nullable sym first_suff is_nullable_suff [] 
         getFollowForProd follow_new symbols nullable sym first_suff_new is_nullable_suff_new rev_xs
     end
 
+
+fun getAllForProd nullable first follow symbols sym rhs = let
+    
+        val nullable_new = getNullableForProd nullable symbols sym rhs
+        val first_new = getFirstForProd first symbols nullable sym rhs
+        val follow_new = getFollowForProd follow symbols nullable sym AtomSet.empty true rhs
+
+    in
+        (nullable_new, first_new, follow_new)
+    end
+
+fun getAllForEachProd nullable first follow symbols sym [] = (nullable, first, follow)
+    | getAllForEachProd nullable first follow symbols sym (prod :: prod_list) = let
+            val (nullable_new, first_new, follow_new) = getAllForProd nullable first follow symbols sym prod
+        in
+            getAllForEachProd nullable_new first_new follow_new symbols sym prod_list
+        end
+
