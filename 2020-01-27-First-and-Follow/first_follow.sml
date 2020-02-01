@@ -63,6 +63,7 @@ fun getFirstForProd first symbols nullable sym [] = first
 fun listStr [] = "\n"
     | listStr (x :: xs) = x ^ " " ^ listStr xs
 
+
 (* Imp: The RHS list has been reversed and passed here for efficient computation of first and nullable of suffixes of actual RHS list *)
 fun getFollowForProd first follow symbols nullable sym first_suff is_nullable_suff [] = follow 
     | getFollowForProd first follow symbols nullable sym first_suff is_nullable_suff (rev_x :: rev_xs) = let
@@ -74,7 +75,6 @@ fun getFollowForProd first follow symbols nullable sym first_suff is_nullable_su
                 | SOME (follow_sym) => (follow, follow_sym)                            (* follow contains sym, so return its follow set *)
         )
 
-        (* Mistake !!*)
         val follow_new = if(AtomSet.member (symbols, rev_x)) then
                 let
                     val follow_rev_xOp = AtomMap.find (follow_1, rev_x)
@@ -84,13 +84,13 @@ fun getFollowForProd first follow symbols nullable sym first_suff is_nullable_su
                             | SOME (follow_rev_x_found) => (follow_1, follow_rev_x_found)             (* follow contains rev_x, so return its follow set *)
                     )
 
-                    val follow_3 = if(is_nullable_suff) then 
-                            AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x, followSym))
+                    val (follow_3, follow_rev_x_new) = if(is_nullable_suff) then
+                            (AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x, followSym)), AtomSet.union (follow_rev_x, followSym))
                         else
-                            follow_2
+                            (follow_2, follow_rev_x)
 
                 in
-                    AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x, first_suff))
+                    AtomMap.insert (follow_3, rev_x, AtomSet.union (follow_rev_x_new, first_suff))
                 end
             else
                 follow_1
@@ -123,7 +123,7 @@ fun getFollowForProd first follow symbols nullable sym first_suff is_nullable_su
 
 
 fun getAllForProd nullable first follow symbols sym rhs = let
-    
+
         val nullable_new = getNullableForProd nullable symbols sym rhs
         val first_new = getFirstForProd first symbols nullable_new sym rhs
         val follow_new = getFollowForProd first_new follow symbols nullable_new sym AtomSet.empty true (List.rev rhs)
@@ -232,13 +232,41 @@ fun printAll (nullable, first, follow) [] = ()
 fun printAns (grammar : Grammar) = printAll (computeAllForGrammer grammar) (AtomSet.listItems (#symbols grammar))
 
 (* 
+    E -> id
+*)
+
+val _ = print("\n\nTest Case #1\n")
+val s1 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E"])
+val t1 = AtomSet.addList (AtomSet.empty, map Atom.atom ["id"])
+val r1 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["id"]]))
+val g1 : Grammar = {symbols = s1, tokens = t1, rules = r1}
+
+val _ = printAns g1
+
+(* 
     E -> E + id
     E -> id
 *)
 
-val s1 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E"])
-val t1 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "id"])
-val r1 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "+", "id"], ["id"]]))
-val g1 : Grammar = {symbols = s1, tokens = t1, rules = r1}
+val _ = print("\n\nTest Case #2\n")
+val s2 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E"])
+val t2 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "id"])
+val r2 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "+", "id"], ["id"]]))
+val g2 : Grammar = {symbols = s2, tokens = t2, rules = r2}
 
-val _ = printAns g1
+val _ = printAns g2
+
+(* 
+    T -> T * F
+    T -> F
+    F -> id
+*)
+
+val _ = print("\n\nTest Case #3\n")
+val s3 = AtomSet.addList (AtomSet.empty, map Atom.atom ["T", "F"])
+val t3 = AtomSet.addList (AtomSet.empty, map Atom.atom ["*", "id"])
+val r3_1 = AtomMap.insert (AtomMap.empty, Atom.atom "T", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["T", "*", "F"], ["F"]]))
+val r3 = AtomMap.insert (r3_1, Atom.atom "F", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["id"]]))
+val g3 : Grammar = {symbols = s3, tokens = t3, rules = r3}
+
+val _ = printAns g3
