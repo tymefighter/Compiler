@@ -111,3 +111,18 @@ fun getAllForEachProd nullable first follow symbols sym [] = (nullable, first, f
             getAllForEachProd nullable_new first_new follow_new symbols sym prod_list
         end
 
+exception NonTermHasNoProd
+
+fun getAllForAllNonTerm nullable first follow symbols rules [] = (nullable, first, follow)
+    | getAllForAllNonTerm nullable first follow symbols rules (sym :: sym_list) = let
+
+            val prod_setOpt = AtomMap.find (rules, sym)
+            val prod_list = case prod_setOpt of
+                SOME (prod_set) => RHSSet.listItems prod_set
+                | NONE => raise NonTermHasNoProd
+
+            val (nullable_new, first_new, follow_new) = getAllForEachProd nullable first follow symbols sym prod_list
+        in
+            getAllForAllNonTerm nullable_new first_new follow_new symbols rules sym_list
+        end
+
