@@ -300,10 +300,38 @@ val _ = printAns g4
 
 val _ = print("\n\nTest Case #5\n")
 val s5 = AtomSet.addList (AtomSet.empty, map Atom.atom ["E", "T", "F"])
-val t5 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "*", "id", "("])
+val t5 = AtomSet.addList (AtomSet.empty, map Atom.atom ["+", "*", "id", "(", ")"])
 val r5_1 = AtomMap.insert (AtomMap.empty, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "+", "T"], ["T"]]))
 val r5_2 = AtomMap.insert (r5_1, Atom.atom "T", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["T", "*", "F"], ["F"]]))
 val r5 = AtomMap.insert (r5_2, Atom.atom "F", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["(", "E", ")"], ["id"]]))
 val g5 : Grammar = {symbols = s5, tokens = t5, rules = r5}
 
 val _ = printAns g5
+
+(* 
+    S -> E $
+    E -> T E'
+    E' -> + T E'
+    E' -> - T E'
+    E' -> 
+    T -> F T'
+    T' -> * F T'
+    T' -> / F T'
+    T' -> 
+    F -> id
+    F -> num
+    F -> ( E )
+*)
+
+val _ = print("\n\nTest Case #6\n")
+val s6 = AtomSet.addList (AtomSet.empty, map Atom.atom ["S", "E", "E'", "T", "T'", "F"])
+val t6 = AtomSet.addList (AtomSet.empty, map Atom.atom ["$", "/", "-", "+", "*", "id", "(", ")", "num"])
+val r6_1 = AtomMap.insert (AtomMap.empty, Atom.atom "S", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["E", "$"]]))
+val r6_2 = AtomMap.insert (r6_1, Atom.atom "E", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["T", "E'"]]))
+val r6_3 = AtomMap.insert (r6_2, Atom.atom "E'", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["-", "T", "E'"], ["+", "T", "E'"], []]))
+val r6_4 = AtomMap.insert (r6_3, Atom.atom "T", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["F", "T'"]]))
+val r6_5 = AtomMap.insert (r6_4, Atom.atom "T'", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["*", "F", "T'"], ["/", "F", "T'"], []]))
+val r6 = AtomMap.insert (r6_5, Atom.atom "F", RHSSet.addList (RHSSet.empty, map (map Atom.atom) [["(", "E", ")"], ["id"], ["num"]]))
+val g6 : Grammar = {symbols = s6, tokens = t6, rules = r6}
+
+val _ = printAns g6
