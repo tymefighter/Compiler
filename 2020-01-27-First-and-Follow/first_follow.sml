@@ -78,8 +78,18 @@ fun getFollowForProd follow symbols nullable sym first_suff is_nullable_suff [] 
             else
                 follow_2
 
-        val follow_new = AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x. first_suff))
+        val follow_new = AtomMap.insert (follow_2, rev_x, AtomSet.union (follow_rev_x, first_suff))
 
+        val first_suff_new = if(AtomSet.member (symbols, rev_x) andalso AtomSet.member (nullable, rev_x)) then
+                AtomSet.add (first_suff, rev_x)
+            else
+                AtomSet.singleton rev_x
         
-
+        val is_nullable_suff_new = if(AtomSet.member (symbols, rev_x) andalso AtomSet.member (nullable, rev_x)) then
+                true
+            else
+                false
+    in
+        getFollowForProd follow_new symbols nullable sym first_suff_new is_nullable_suff_new rev_xs
+    end
 
