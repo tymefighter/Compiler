@@ -161,3 +161,5 @@ fun iterateAllUntilFixedPoint nullable first follow symbols rules = let
             else
                 iterateAllUntilFixedPoint nullable_new first_new follow_new symbols rules
         end
+
+fun computeAllForGrammer (grammar : Grammar) = iterateAllUntilFixedPoint AtomSet.empty AtomMap.empty AtomMap.empty (#symbols grammar) (#rules grammar)
