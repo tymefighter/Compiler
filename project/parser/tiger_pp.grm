@@ -47,6 +47,7 @@
     | IN
     | END
     | ARRAY
+    | IMPORT
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -122,5 +123,6 @@ DEC : VAR ID ASSIGN EXP (Ast.Vardec (ID, NONE, EXP))
     | VAR ID COLON ID ASSIGN EXP (Ast.Vardec (ID1, (SOME ID2), EXP))
     | TYPE ID EQ ID (Ast.Typedec (ID, Ast.Alias ID))
     | TYPE ID EQ TY (Ast.Typedec (ID, TY))
+    | IMPORT ID (Ast.Import (ID))
 
 TY : ARRAY OF ID (Ast.Array ID)

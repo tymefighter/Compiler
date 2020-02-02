@@ -143,6 +143,7 @@ structure Pprint = struct
             str1 ^ str2 ^ str3
         end
     | pprintDec (Ast.Typedec (id, tp)) = "type " ^ id ^ " = " ^ pprintType tp
+    | pprintDec (Ast.Import id) = "import " ^ id
 
     and pprintDecList [] = ""
         | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d ^ "\n" ^ pprintDecList d_list

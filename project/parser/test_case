@@ -1,5 +1,9 @@
-let 
+let
+    import uart
+    import math
+    import arrlib
     var u := 42
+    var eps := getValuEps()
     type itok = array of lltok
 in
 
