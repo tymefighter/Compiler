@@ -293,6 +293,18 @@ tabspace = [\t];
         Tokens.RIGHT_SQ (!lineNo, !posInLine)
     end);
 
+"{" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.LEFT_CUR (!lineNo, !posInLine)
+    end);
+
+"}" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.RIGHT_CUR (!lineNo, !posInLine)
+    end);
+
 . => (let
     val _ = print ("Syntax error on line " ^ (Int.toString (!lineNo)) ^ " and " ^ (Int.toString (!posInLine)) ^ " char\n")
     in

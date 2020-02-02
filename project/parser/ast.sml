@@ -6,6 +6,7 @@ datatype BinOp = ADD | SUB | MUL | DIV | EQ | NE | G | L | GE | LE | AND | OR
 
 datatype Type = Alias of string
     | Array of string
+    | RecordType of (string * string) list
 
 datatype Lvalue = Var of string
     | MemberRef of Lvalue * string

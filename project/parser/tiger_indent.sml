@@ -36,9 +36,22 @@ structure Pprint = struct
         | pprintOp Ast.LE = "<="
         | pprintOp Ast.AND = "&"
         | pprintOp Ast.OR = "|"
+
+    fun pprintTyfields [] = ""
+        | pprintTyfields [(id_left, id_right)] = (ind ()) ^ id_left ^ " : " ^ id_right ^ "\n"
+        | pprintTyfields ((id_left, id_right) :: xs) = (ind ()) ^ id_left ^ " : " ^ id_right ^ ",\n" ^ pprintTyfields xs
     
     fun pprintType (Ast.Alias tp) = tp
         | pprintType (Ast.Array arr) = "array of " ^ arr
+        | pprintType (Ast.RecordType tyfds) = let
+                val str1 = "{\n"
+                val _ = inc indentation_level
+                val str2 = pprintTyfields tyfds
+                val _ = dec indentation_level
+                val str3 =  (ind ()) ^ "}\n"
+            in
+                str1 ^ str2 ^ str3
+            end
 
     fun pprintExp Ast.LiteralNil = "nil"
         | pprintExp (Ast.LiteralInt int_num_str) = int_num_str

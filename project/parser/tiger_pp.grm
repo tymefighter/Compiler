@@ -48,6 +48,8 @@
     | END
     | ARRAY
     | IMPORT
+    | LEFT_CUR
+    | RIGHT_CUR
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -57,6 +59,7 @@
     | DEC of Ast.Dec
     | DECS of Ast.Dec list
     | TY of Ast.Type
+    | TYFIELDS of (string * string) list
 
 %noshift EOF
 
@@ -121,8 +124,13 @@ DECS : DEC ([DEC])
 
 DEC : VAR ID ASSIGN EXP (Ast.Vardec (ID, NONE, EXP))
     | VAR ID COLON ID ASSIGN EXP (Ast.Vardec (ID1, (SOME ID2), EXP))
-    | TYPE ID EQ ID (Ast.Typedec (ID, Ast.Alias ID))
+    | TYPE ID EQ ID (Ast.Typedec (ID1, Ast.Alias ID2))
     | TYPE ID EQ TY (Ast.Typedec (ID, TY))
     | IMPORT ID (Ast.Import (ID))
 
 TY : ARRAY OF ID (Ast.Array ID)
+    | LEFT_CUR TYFIELDS RIGHT_CUR (Ast.RecordType TYFIELDS)
+
+TYFIELDS : ([])
+    | ID COLON ID ([(ID1, ID2)])
+    | ID COLON ID COMMA TYFIELDS ((ID1, ID2) :: TYFIELDS)

@@ -3,6 +3,7 @@ let
     import math
     import arrlib
     var u := 42
+    type freqrec = {integ : i, floatno : flt}
     var eps := getValuEps()
     type itok = array of lltok
 in
