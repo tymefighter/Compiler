@@ -4,7 +4,7 @@
 
 all: tigh
 
-%.lex.sml: $*.lex
+%.lex.sml: %.lex
 	mllex $*.lex
 
 tigh: tiger.lex.sml tiger.mlb
