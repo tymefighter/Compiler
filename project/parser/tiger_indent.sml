@@ -90,10 +90,11 @@ structure Pprint = struct
             end
         )
         | pprintExp (Ast.Break) = "break"
-        | pprintExp (Ast.FunCall (func_name, ls)) = func_name ^ " ( " ^ pprintParamList ls ^ " ) "
+        | pprintExp (Ast.FunCall (func_name, ls)) = func_name ^ " (" ^ pprintParamList ls ^ ") "
+        | pprintExp (Ast.Lval lval) = pprintLval lval
 
     and  pprintExpList [] = ""
-    | pprintExpList [exp] = "( " ^ (pprintExp exp) ^ " )"
+    | pprintExpList [exp] = "(" ^ (pprintExp exp) ^ ")"
     | pprintExpList (exp_list) = let
         val str_begin = "(\n"
         val str_end = (ind ()) ^ ")"
@@ -105,11 +106,15 @@ structure Pprint = struct
     end
 
     and pprintExpListHelper [] = ""
-        | pprintExpListHelper (exp :: exp_list_tail) = (ind ()) ^ (pprintExp exp) ^ ";\n" ^ (pprintExpListHelper exp_list_tail)
+    | pprintExpListHelper (exp :: exp_list_tail) = (ind ()) ^ (pprintExp exp) ^ ";\n" ^ (pprintExpListHelper exp_list_tail)
     
     and pprintParamList [] = ""
     | pprintParamList [exp] = pprintExp exp
     | pprintParamList (exp :: exp_list) = pprintExp exp ^ ", " ^ pprintParamList exp_list
+
+    and pprintLval (Ast.Var id) = id
+    | pprintLval (Ast.MemberRef (lval, id)) = pprintLval lval ^ "." ^ id
+    | pprintLval (Ast.IdxArr (lval, exp)) = pprintLval lval ^ "[" ^ pprintExp exp ^ "]"
 
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
 

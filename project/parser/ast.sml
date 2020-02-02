@@ -4,7 +4,11 @@ type id = string
 
 datatype BinOp = ADD | SUB | MUL | DIV | EQ | NE | G | L | GE | LE | AND | OR
 
-datatype Exp = LiteralNil
+datatype Lvalue = Var of string
+    | MemberRef of Lvalue * string
+    | IdxArr of Lvalue * Exp
+
+and Exp = LiteralNil
     | LiteralInt of string
     | LiteralStr of string
 
@@ -17,6 +21,8 @@ datatype Exp = LiteralNil
     | While of Exp * Exp
     | For of string * Exp * Exp * Exp
     | Break
+
+    | Lval of Lvalue
 
     | FunCall of string * Exp list
 

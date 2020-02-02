@@ -221,6 +221,24 @@ tabspace = [\t];
         Tokens.COMMA (!lineNo, !posInLine)
     end);
 
+"." => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.DOT (!lineNo, !posInLine)
+    end);
+
+"[" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.LEFT_SQ (!lineNo, !posInLine)
+    end);
+
+"]" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.RIGHT_SQ (!lineNo, !posInLine)
+    end);
+
 . => (let
     val _ = print ("Syntax error on line " ^ (Int.toString (!lineNo)) ^ " and " ^ (Int.toString (!posInLine)) ^ " char\n")
     in

@@ -1,7 +1,7 @@
 for abc := 0 to 10 do
-    while (300 < 400) do 
+    while (u.eps < 400) do 
         if 4 < 5 then 
-            if 4 < 5 then 
+            if p.time[45] < v[u.eps].span then 
                 break 
             else 
                 getVal(400000)

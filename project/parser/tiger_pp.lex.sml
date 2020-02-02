@@ -43,12 +43,12 @@ val s = [
 \\000"
 ),
  (1, 
-"\003\003\003\003\003\003\003\003\003\062\061\003\003\003\003\003\
+"\003\003\003\003\003\003\003\003\003\065\064\003\003\003\003\003\
 \\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\003\
-\\059\003\055\003\003\003\054\003\053\052\051\050\049\048\003\047\
-\\045\045\045\045\045\045\045\045\045\045\043\042\039\038\036\003\
+\\062\003\058\003\003\003\057\003\056\055\054\053\052\051\050\049\
+\\047\047\047\047\047\047\047\047\047\047\045\044\041\040\038\003\
 \\003\005\005\005\005\005\005\005\005\005\005\005\005\005\005\005\
-\\005\005\005\005\005\005\005\005\005\005\005\003\003\003\003\003\
+\\005\005\005\005\005\005\005\005\005\005\005\037\003\036\003\003\
 \\003\005\031\005\029\025\022\005\005\020\005\005\005\005\017\005\
 \\005\005\005\005\012\005\005\007\005\005\005\003\004\003\003\003\
 \\003"
@@ -284,33 +284,22 @@ val s = [
 \\006\006\006\006\006\006\006\006\006\006\006\000\000\000\000\000\
 \\000"
 ),
- (36, 
+ (38, 
 "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\037\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\039\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000"
 ),
- (39, 
+ (41, 
 "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\041\040\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000"
-),
- (43, 
-"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\000\000\000\000\000\000\000\000\000\000\000\000\000\044\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\043\042\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
@@ -321,39 +310,50 @@ val s = [
 "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\046\046\046\046\046\046\046\046\046\046\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\046\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000"
 ),
- (55, 
-"\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\000\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\057\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056"
-),
- (57, 
-"\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\058\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056\056\056\057\056\056\056\056\056\056\056\056\056\056\056\056\
-\\056"
-),
- (59, 
+ (47, 
 "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
-\\060\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\048\048\048\048\048\048\048\048\048\048\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\000"
+),
+ (58, 
+"\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\000\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\060\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059"
+),
+ (60, 
+"\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\061\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059\059\059\060\059\059\059\059\059\059\059\059\059\059\059\059\
+\\059"
+),
+ (62, 
+"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
+\\063\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
@@ -361,8 +361,8 @@ val s = [
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000"
 ),
- (62, 
-"\000\000\000\000\000\000\000\000\000\063\000\000\000\000\000\000\
+ (65, 
+"\000\000\000\000\000\000\000\000\000\066\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
 \\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\
@@ -383,67 +383,70 @@ in Vector.fromList(List.map g
 [{fin = [], trans = 0},
 {fin = [], trans = 1},
 {fin = [], trans = 1},
-{fin = [(N 97)], trans = 0},
-{fin = [(N 87),(N 97)], trans = 0},
-{fin = [(N 60),(N 97)], trans = 5},
+{fin = [(N 103)], trans = 0},
+{fin = [(N 87),(N 103)], trans = 0},
+{fin = [(N 60),(N 103)], trans = 5},
 {fin = [(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 7},
+{fin = [(N 60),(N 103)], trans = 7},
 {fin = [(N 60)], trans = 8},
 {fin = [(N 60)], trans = 9},
 {fin = [(N 60)], trans = 10},
 {fin = [(N 38),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 12},
+{fin = [(N 60),(N 103)], trans = 12},
 {fin = [(N 51),(N 60)], trans = 5},
 {fin = [(N 60)], trans = 14},
 {fin = [(N 60)], trans = 15},
 {fin = [(N 27),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 17},
+{fin = [(N 60),(N 103)], trans = 17},
 {fin = [(N 60)], trans = 18},
 {fin = [(N 19),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 20},
+{fin = [(N 60),(N 103)], trans = 20},
 {fin = [(N 22),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 22},
+{fin = [(N 60),(N 103)], trans = 22},
 {fin = [(N 60)], trans = 23},
 {fin = [(N 45),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 25},
+{fin = [(N 60),(N 103)], trans = 25},
 {fin = [(N 60)], trans = 26},
 {fin = [(N 60)], trans = 27},
 {fin = [(N 32),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 29},
+{fin = [(N 60),(N 103)], trans = 29},
 {fin = [(N 41),(N 60)], trans = 5},
-{fin = [(N 60),(N 97)], trans = 31},
+{fin = [(N 60),(N 103)], trans = 31},
 {fin = [(N 60)], trans = 32},
 {fin = [(N 60)], trans = 33},
 {fin = [(N 60)], trans = 34},
 {fin = [(N 57),(N 60)], trans = 5},
-{fin = [(N 81),(N 97)], trans = 36},
+{fin = [(N 101),(N 103)], trans = 0},
+{fin = [(N 99),(N 103)], trans = 0},
+{fin = [(N 81),(N 103)], trans = 38},
 {fin = [(N 76)], trans = 0},
-{fin = [(N 70),(N 97)], trans = 0},
-{fin = [(N 83),(N 97)], trans = 39},
+{fin = [(N 70),(N 103)], trans = 0},
+{fin = [(N 83),(N 103)], trans = 41},
 {fin = [(N 73)], trans = 0},
 {fin = [(N 79)], trans = 0},
-{fin = [(N 93),(N 97)], trans = 0},
-{fin = [(N 97)], trans = 43},
+{fin = [(N 93),(N 103)], trans = 0},
+{fin = [(N 103)], trans = 45},
 {fin = [(N 48)], trans = 0},
-{fin = [(N 10),(N 97)], trans = 45},
-{fin = [(N 10)], trans = 45},
-{fin = [(N 68),(N 97)], trans = 0},
-{fin = [(N 64),(N 97)], trans = 0},
-{fin = [(N 95),(N 97)], trans = 0},
-{fin = [(N 62),(N 97)], trans = 0},
-{fin = [(N 66),(N 97)], trans = 0},
-{fin = [(N 91),(N 97)], trans = 0},
-{fin = [(N 89),(N 97)], trans = 0},
-{fin = [(N 85),(N 97)], trans = 0},
-{fin = [(N 97)], trans = 55},
-{fin = [], trans = 55},
-{fin = [], trans = 57},
+{fin = [(N 10),(N 103)], trans = 47},
+{fin = [(N 10)], trans = 47},
+{fin = [(N 68),(N 103)], trans = 0},
+{fin = [(N 97),(N 103)], trans = 0},
+{fin = [(N 64),(N 103)], trans = 0},
+{fin = [(N 95),(N 103)], trans = 0},
+{fin = [(N 62),(N 103)], trans = 0},
+{fin = [(N 66),(N 103)], trans = 0},
+{fin = [(N 91),(N 103)], trans = 0},
+{fin = [(N 89),(N 103)], trans = 0},
+{fin = [(N 85),(N 103)], trans = 0},
+{fin = [(N 103)], trans = 58},
+{fin = [], trans = 58},
+{fin = [], trans = 60},
 {fin = [(N 15)], trans = 0},
-{fin = [(N 4),(N 97)], trans = 59},
-{fin = [(N 4)], trans = 59},
+{fin = [(N 4),(N 103)], trans = 62},
+{fin = [(N 4)], trans = 62},
 {fin = [(N 1)], trans = 0},
-{fin = [(N 7),(N 97)], trans = 62},
-{fin = [(N 7)], trans = 62}])
+{fin = [(N 7),(N 103)], trans = 65},
+{fin = [(N 7)], trans = 65}])
 end
 structure StartStates =
 	struct
@@ -491,200 +494,218 @@ let fun continue() = lex() in
         val _ = reset posInLine
     in
         lex()
-    end(*#line 494.1 "tiger_pp.lex.sml"*)
+    end(*#line 497.1 "tiger_pp.lex.sml"*)
 )
 | 10 => let val yytext=yymktext() in (*#line 48.14 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.INT (yytext, !lineNo, !posInLine)
-    end(*#line 500.1 "tiger_pp.lex.sml"*)
+    end(*#line 503.1 "tiger_pp.lex.sml"*)
  end
+| 101 => let val yytext=yymktext() in (*#line 236.9 "tiger_pp.lex"*)let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.RIGHT_SQ (!lineNo, !posInLine)
+    end(*#line 509.1 "tiger_pp.lex.sml"*)
+ end
+| 103 => ((*#line 242.7 "tiger_pp.lex"*)let
+    val _ = print ("Syntax error on line " ^ (Int.toString (!lineNo)) ^ " and " ^ (Int.toString (!posInLine)) ^ " char\n")
+    in
+        raise SyntaxError
+    end(*#line 515.1 "tiger_pp.lex.sml"*)
+)
 | 15 => let val yytext=yymktext() in (*#line 54.22 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.STR (yytext, !lineNo, !posInLine)
-    end(*#line 506.1 "tiger_pp.lex.sml"*)
+    end(*#line 521.1 "tiger_pp.lex.sml"*)
  end
 | 19 => let val yytext=yymktext() in (*#line 60.11 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.NIL (!lineNo, !posInLine)
-    end(*#line 512.1 "tiger_pp.lex.sml"*)
+    end(*#line 527.1 "tiger_pp.lex.sml"*)
  end
 | 22 => let val yytext=yymktext() in (*#line 66.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.IF (!lineNo, !posInLine)
-    end(*#line 518.1 "tiger_pp.lex.sml"*)
+    end(*#line 533.1 "tiger_pp.lex.sml"*)
  end
 | 27 => let val yytext=yymktext() in (*#line 72.12 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.THEN (!lineNo, !posInLine)
-    end(*#line 524.1 "tiger_pp.lex.sml"*)
+    end(*#line 539.1 "tiger_pp.lex.sml"*)
  end
 | 32 => let val yytext=yymktext() in (*#line 78.12 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.ELSE (!lineNo, !posInLine)
-    end(*#line 530.1 "tiger_pp.lex.sml"*)
+    end(*#line 545.1 "tiger_pp.lex.sml"*)
  end
 | 38 => let val yytext=yymktext() in (*#line 84.13 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.WHILE (!lineNo, !posInLine)
-    end(*#line 536.1 "tiger_pp.lex.sml"*)
+    end(*#line 551.1 "tiger_pp.lex.sml"*)
  end
 | 4 => let val yytext=yymktext() in (*#line 36.14 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         lex()
-    end(*#line 542.1 "tiger_pp.lex.sml"*)
+    end(*#line 557.1 "tiger_pp.lex.sml"*)
  end
 | 41 => let val yytext=yymktext() in (*#line 90.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.DO (!lineNo, !posInLine)
-    end(*#line 548.1 "tiger_pp.lex.sml"*)
+    end(*#line 563.1 "tiger_pp.lex.sml"*)
  end
 | 45 => let val yytext=yymktext() in (*#line 96.11 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.FOR (!lineNo, !posInLine)
-    end(*#line 554.1 "tiger_pp.lex.sml"*)
+    end(*#line 569.1 "tiger_pp.lex.sml"*)
  end
 | 48 => let val yytext=yymktext() in (*#line 102.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.ASSIGN (!lineNo, !posInLine)
-    end(*#line 560.1 "tiger_pp.lex.sml"*)
+    end(*#line 575.1 "tiger_pp.lex.sml"*)
  end
 | 51 => let val yytext=yymktext() in (*#line 108.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.TO (!lineNo, !posInLine)
-    end(*#line 566.1 "tiger_pp.lex.sml"*)
+    end(*#line 581.1 "tiger_pp.lex.sml"*)
  end
 | 57 => let val yytext=yymktext() in (*#line 114.13 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.BREAK (!lineNo, !posInLine)
-    end(*#line 572.1 "tiger_pp.lex.sml"*)
+    end(*#line 587.1 "tiger_pp.lex.sml"*)
  end
 | 60 => let val yytext=yymktext() in (*#line 120.14 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.ID (yytext, !lineNo, !posInLine)
-    end(*#line 578.1 "tiger_pp.lex.sml"*)
+    end(*#line 593.1 "tiger_pp.lex.sml"*)
  end
 | 62 => let val yytext=yymktext() in (*#line 126.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.ADD (!lineNo, !posInLine)
-    end(*#line 584.1 "tiger_pp.lex.sml"*)
+    end(*#line 599.1 "tiger_pp.lex.sml"*)
  end
 | 64 => let val yytext=yymktext() in (*#line 132.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.SUB (!lineNo, !posInLine)
-    end(*#line 590.1 "tiger_pp.lex.sml"*)
+    end(*#line 605.1 "tiger_pp.lex.sml"*)
  end
 | 66 => let val yytext=yymktext() in (*#line 138.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.MUL (!lineNo, !posInLine)
-    end(*#line 596.1 "tiger_pp.lex.sml"*)
+    end(*#line 611.1 "tiger_pp.lex.sml"*)
  end
 | 68 => let val yytext=yymktext() in (*#line 144.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.DIV (!lineNo, !posInLine)
-    end(*#line 602.1 "tiger_pp.lex.sml"*)
+    end(*#line 617.1 "tiger_pp.lex.sml"*)
  end
 | 7 => let val yytext=yymktext() in (*#line 42.17 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (8 * (size yytext))
     in
         lex()
-    end(*#line 608.1 "tiger_pp.lex.sml"*)
+    end(*#line 623.1 "tiger_pp.lex.sml"*)
  end
 | 70 => let val yytext=yymktext() in (*#line 150.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.EQ (!lineNo, !posInLine)
-    end(*#line 614.1 "tiger_pp.lex.sml"*)
+    end(*#line 629.1 "tiger_pp.lex.sml"*)
  end
 | 73 => let val yytext=yymktext() in (*#line 156.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.NE (!lineNo, !posInLine)
-    end(*#line 620.1 "tiger_pp.lex.sml"*)
+    end(*#line 635.1 "tiger_pp.lex.sml"*)
  end
 | 76 => let val yytext=yymktext() in (*#line 162.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.GE (!lineNo, !posInLine)
-    end(*#line 626.1 "tiger_pp.lex.sml"*)
+    end(*#line 641.1 "tiger_pp.lex.sml"*)
  end
 | 79 => let val yytext=yymktext() in (*#line 168.10 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.LE (!lineNo, !posInLine)
-    end(*#line 632.1 "tiger_pp.lex.sml"*)
+    end(*#line 647.1 "tiger_pp.lex.sml"*)
  end
 | 81 => let val yytext=yymktext() in (*#line 174.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.G (!lineNo, !posInLine)
-    end(*#line 638.1 "tiger_pp.lex.sml"*)
+    end(*#line 653.1 "tiger_pp.lex.sml"*)
  end
 | 83 => let val yytext=yymktext() in (*#line 181.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.L (!lineNo, !posInLine)
-    end(*#line 644.1 "tiger_pp.lex.sml"*)
+    end(*#line 659.1 "tiger_pp.lex.sml"*)
  end
 | 85 => let val yytext=yymktext() in (*#line 187.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.AND (!lineNo, !posInLine)
-    end(*#line 650.1 "tiger_pp.lex.sml"*)
+    end(*#line 665.1 "tiger_pp.lex.sml"*)
  end
 | 87 => let val yytext=yymktext() in (*#line 194.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.OR (!lineNo, !posInLine)
-    end(*#line 656.1 "tiger_pp.lex.sml"*)
+    end(*#line 671.1 "tiger_pp.lex.sml"*)
  end
 | 89 => let val yytext=yymktext() in (*#line 200.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.LEFT_B (!lineNo, !posInLine)
-    end(*#line 662.1 "tiger_pp.lex.sml"*)
+    end(*#line 677.1 "tiger_pp.lex.sml"*)
  end
 | 91 => let val yytext=yymktext() in (*#line 206.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.RIGHT_B (!lineNo, !posInLine)
-    end(*#line 668.1 "tiger_pp.lex.sml"*)
+    end(*#line 683.1 "tiger_pp.lex.sml"*)
  end
 | 93 => let val yytext=yymktext() in (*#line 212.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.SEMI (!lineNo, !posInLine)
-    end(*#line 674.1 "tiger_pp.lex.sml"*)
+    end(*#line 689.1 "tiger_pp.lex.sml"*)
  end
 | 95 => let val yytext=yymktext() in (*#line 218.9 "tiger_pp.lex"*)let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.COMMA (!lineNo, !posInLine)
-    end(*#line 680.1 "tiger_pp.lex.sml"*)
+    end(*#line 695.1 "tiger_pp.lex.sml"*)
  end
-| 97 => ((*#line 224.7 "tiger_pp.lex"*)let
-    val _ = print ("Syntax error on line " ^ (Int.toString (!lineNo)) ^ " and " ^ (Int.toString (!posInLine)) ^ " char\n")
+| 97 => let val yytext=yymktext() in (*#line 224.9 "tiger_pp.lex"*)let
+        val _ = inc_n posInLine (size yytext)
     in
-        raise SyntaxError
-    end(*#line 686.1 "tiger_pp.lex.sml"*)
-)
+        Tokens.DOT (!lineNo, !posInLine)
+    end(*#line 701.1 "tiger_pp.lex.sml"*)
+ end
+| 99 => let val yytext=yymktext() in (*#line 230.9 "tiger_pp.lex"*)let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.LEFT_SQ (!lineNo, !posInLine)
+    end(*#line 707.1 "tiger_pp.lex.sml"*)
+ end
 | _ => raise Internal.LexerError
 
 		) end )

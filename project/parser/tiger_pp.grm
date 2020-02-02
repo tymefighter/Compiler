@@ -36,11 +36,15 @@
     | TO
     | BREAK
     | COMMA
+    | DOT
+    | LEFT_SQ
+    | RIGHT_SQ
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
     | EXPS of Ast.Exp list
     | PARAM of Ast.Exp list
+    | LVALUE of Ast.Lvalue
 
 %noshift EOF
 
@@ -85,7 +89,13 @@ EXP : NIL (Ast.LiteralNil)
     | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.For (ID, EXP1, EXP2, EXP3))
     | BREAK (Ast.Break)
 
+    | LVALUE (Ast.Lval LVALUE)
+
     | ID LEFT_B PARAM RIGHT_B (Ast.FunCall (ID, PARAM))
+
+LVALUE : ID (Ast.Var ID)
+    | LVALUE DOT ID (Ast.MemberRef (LVALUE, ID))
+    | LVALUE LEFT_SQ EXP RIGHT_SQ (Ast.IdxArr (LVALUE, EXP))
 
 PARAM : ([])
     | EXP ([EXP])
