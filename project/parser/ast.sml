@@ -31,21 +31,6 @@ and Exp = LiteralNil
 
 and Dec = Vardec of id * id option * Exp
 
-datatype Prog = Expression of Exp | Decs of Dec list
-
-(* datatype Exp = LiteralNil
-    | LiteralInt of string
-    | LiteralStr of string
-    
-    | IfThen of Exp * Exp 
-    | IfThenElse of Exp * Exp * Exp
-    | While of Exp * Exp
-    | For of id * Exp * Exp * Exp
-    | Break
-
-    | NegExp of Exp
-    | Op of Exp * BinOp * Exp
-    | RoundBracket of Exp *)
-
+datatype Prog = Expression of Exp | Decs of Dec lists
 
 end
