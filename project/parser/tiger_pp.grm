@@ -35,10 +35,12 @@
     | ASSIGN
     | TO
     | BREAK
+    | COMMA
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
     | EXPS of Ast.Exp list
+    | PARAM of Ast.Exp list
 
 %noshift EOF
 
@@ -82,3 +84,9 @@ EXP : NIL (Ast.LiteralNil)
     | WHILE EXP DO EXP (Ast.While (EXP1, EXP2))
     | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.For (ID, EXP1, EXP2, EXP3))
     | BREAK (Ast.Break)
+
+    | ID LEFT_B PARAM RIGHT_B (Ast.FunCall (ID, PARAM))
+
+PARAM : ([])
+    | EXP ([EXP])
+    | EXP COMMA PARAM (EXP :: PARAM)

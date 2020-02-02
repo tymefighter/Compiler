@@ -18,6 +18,8 @@ datatype Exp = LiteralNil
     | For of string * Exp * Exp * Exp
     | Break
 
+    | FunCall of string * Exp list
+
 datatype Prog = Expression of Exp
 
 (* datatype Exp = LiteralNil

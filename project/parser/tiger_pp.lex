@@ -215,6 +215,12 @@ tabspace = [\t];
         Tokens.SEMI (!lineNo, !posInLine)
     end);
 
+"," => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.COMMA (!lineNo, !posInLine)
+    end);
+
 . => (let
     val _ = print ("Syntax error on line " ^ (Int.toString (!lineNo)) ^ " and " ^ (Int.toString (!posInLine)) ^ " char\n")
     in

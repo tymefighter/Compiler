@@ -90,6 +90,7 @@ structure Pprint = struct
             end
         )
         | pprintExp (Ast.Break) = "break"
+        | pprintExp (Ast.FunCall (func_name, ls)) = func_name ^ " ( " ^ pprintParamList ls ^ " ) "
 
     and  pprintExpList [] = ""
     | pprintExpList [exp] = "( " ^ (pprintExp exp) ^ " )"
@@ -105,6 +106,10 @@ structure Pprint = struct
 
     and pprintExpListHelper [] = ""
         | pprintExpListHelper (exp :: exp_list_tail) = (ind ()) ^ (pprintExp exp) ^ ";\n" ^ (pprintExpListHelper exp_list_tail)
+    
+    and pprintParamList [] = ""
+    | pprintParamList [exp] = pprintExp exp
+    | pprintParamList (exp :: exp_list) = pprintExp exp ^ ", " ^ pprintParamList exp_list
 
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
 
