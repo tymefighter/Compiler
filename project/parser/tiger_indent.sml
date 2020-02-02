@@ -36,6 +36,9 @@ structure Pprint = struct
         | pprintOp Ast.LE = "<="
         | pprintOp Ast.AND = "&"
         | pprintOp Ast.OR = "|"
+    
+    fun pprintType (Ast.Alias tp) = tp
+        | pprintType (Ast.Array arr) = "array of " ^ arr
 
     fun pprintExp Ast.LiteralNil = "nil"
         | pprintExp (Ast.LiteralInt int_num_str) = int_num_str
@@ -139,9 +142,10 @@ structure Pprint = struct
         in
             str1 ^ str2 ^ str3
         end
+    | pprintDec (Ast.Typedec (id, tp)) = "type " ^ id ^ " = " ^ pprintType tp
 
-    and pprintDecList [] = "\n"
-        | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d  ^ pprintDecList d_list
+    and pprintDecList [] = ""
+        | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d ^ "\n" ^ pprintDecList d_list
 
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
         | pprintProg (Ast.Decs d_list) = pprintDecList d_list

@@ -153,6 +153,12 @@ tabspace = [\t];
         Tokens.END (!lineNo, !posInLine)
     end);
 
+"array" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.ARRAY (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in

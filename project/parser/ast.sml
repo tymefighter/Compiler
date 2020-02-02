@@ -4,6 +4,9 @@ type id = string
 
 datatype BinOp = ADD | SUB | MUL | DIV | EQ | NE | G | L | GE | LE | AND | OR
 
+datatype Type = Alias of string
+    | Array of string
+
 datatype Lvalue = Var of string
     | MemberRef of Lvalue * string
     | IdxArr of Lvalue * Exp
@@ -30,7 +33,8 @@ and Exp = LiteralNil
     | LetStmt of Dec list * Exp list
 
 and Dec = Vardec of id * id option * Exp
+    | Typedec of id * Type
 
-datatype Prog = Expression of Exp | Decs of Dec lists
+datatype Prog = Expression of Exp | Decs of Dec list
 
 end
