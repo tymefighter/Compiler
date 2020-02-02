@@ -165,6 +165,12 @@ tabspace = [\t];
         Tokens.IMPORT (!lineNo, !posInLine)
     end);
 
+"function" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.FUNCTION (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in

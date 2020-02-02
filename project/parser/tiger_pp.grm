@@ -50,6 +50,7 @@
     | IMPORT
     | LEFT_CUR
     | RIGHT_CUR
+    | FUNCTION
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -127,6 +128,8 @@ DEC : VAR ID ASSIGN EXP (Ast.Vardec (ID, NONE, EXP))
     | TYPE ID EQ ID (Ast.Typedec (ID1, Ast.Alias ID2))
     | TYPE ID EQ TY (Ast.Typedec (ID, TY))
     | IMPORT ID (Ast.Import (ID))
+    | FUNCTION ID LEFT_B TYFIELDS RIGHT_B EQ EXP (Ast.FuncDec (ID, TYFIELDS, NONE, EXP))
+    | FUNCTION ID LEFT_B TYFIELDS RIGHT_B COLON ID EQ EXP (Ast.FuncDec (ID1, TYFIELDS, SOME ID2, EXP))
 
 TY : ARRAY OF ID (Ast.Array ID)
     | LEFT_CUR TYFIELDS RIGHT_CUR (Ast.RecordType TYFIELDS)

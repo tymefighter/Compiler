@@ -36,6 +36,7 @@ and Exp = LiteralNil
 and Dec = Vardec of id * id option * Exp
     | Typedec of id * Type
     | Import of id
+    | FuncDec of id * (string * string) list * id option * Exp
 
 datatype Prog = Expression of Exp | Decs of Dec list
 

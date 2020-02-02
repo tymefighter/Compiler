@@ -48,7 +48,7 @@ structure Pprint = struct
                 val _ = inc indentation_level
                 val str2 = pprintTyfields tyfds
                 val _ = dec indentation_level
-                val str3 =  (ind ()) ^ "}\n"
+                val str3 =  (ind ()) ^ "}"
             in
                 str1 ^ str2 ^ str3
             end
@@ -157,6 +157,20 @@ structure Pprint = struct
         end
     | pprintDec (Ast.Typedec (id, tp)) = "type " ^ id ^ " = " ^ pprintType tp
     | pprintDec (Ast.Import id) = "import " ^ id
+    | pprintDec (Ast.FuncDec (id, tyfds, tp_opt, exp)) = let
+            val str1 = "function " ^ id ^ " "
+            val str2 = "(\n"
+            val _ = inc indentation_level
+            val str3 = pprintTyfields tyfds
+            val _ = dec indentation_level
+            val str4 =  (ind ()) ^ ")"
+            val str5 = case tp_opt of 
+                SOME (tp) => " : " ^ tp
+                | NONE => ""
+            val str6 = " = " ^ pprintExp exp
+        in
+            str1 ^ str2 ^ str3 ^ str4 ^ str5 ^ str6
+        end
 
     and pprintDecList [] = ""
         | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d ^ "\n" ^ pprintDecList d_list

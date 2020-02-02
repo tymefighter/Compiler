@@ -6,6 +6,7 @@ let
     type freqrec = {integ : i, floatno : flt}
     var eps := getValuEps()
     type itok = array of lltok
+    function getAcquire (epsilon : ep, theta : th) : integ = ep + theta / 5
 in
 
     for abc := 0 to 10 do
