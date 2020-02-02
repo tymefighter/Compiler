@@ -1,54 +1,54 @@
 49 shift/reduce conflicts
 
-error:  state 57: shift/reduce conflict (shift OR, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift AND, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift LE, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift GE, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift L, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift G, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift NE, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift EQ, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift DIV, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift MUL, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift SUB, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift ADD, reduce by rule 22)
-error:  state 58: shift/reduce conflict (shift ELSE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift OR, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift AND, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift LE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift GE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift L, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift G, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift NE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift EQ, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift DIV, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift MUL, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift SUB, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift ADD, reduce by rule 20)
-error:  state 66: shift/reduce conflict (shift OR, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift AND, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift LE, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift GE, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift L, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift G, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift NE, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift EQ, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift DIV, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift MUL, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift SUB, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift ADD, reduce by rule 21)
-error:  state 68: shift/reduce conflict (shift OR, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift AND, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift LE, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift GE, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift L, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift G, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift NE, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift EQ, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift DIV, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift MUL, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift SUB, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift ADD, reduce by rule 23)
+error:  state 58: shift/reduce conflict (shift OR, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift AND, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift LE, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift GE, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift L, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift G, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift NE, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift EQ, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift DIV, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift MUL, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift SUB, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift ADD, reduce by rule 22)
+error:  state 59: shift/reduce conflict (shift ELSE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift OR, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift AND, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift LE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift GE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift L, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift G, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift NE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift EQ, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift DIV, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift MUL, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift SUB, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift ADD, reduce by rule 20)
+error:  state 69: shift/reduce conflict (shift OR, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift AND, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift LE, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift GE, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift L, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift G, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift NE, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift EQ, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift DIV, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift MUL, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift SUB, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift ADD, reduce by rule 21)
+error:  state 71: shift/reduce conflict (shift OR, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift AND, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift LE, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift GE, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift L, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift G, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift NE, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift EQ, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift DIV, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift MUL, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift SUB, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift ADD, reduce by rule 23)
 
 state 0:
 
@@ -66,7 +66,7 @@ state 0:
 	BREAK	shift 3
 
 	EXP	goto 2
-	PROG	goto 69
+	PROG	goto 72
 	LVALUE	goto 1
 
 	.	error
@@ -75,6 +75,7 @@ state 0:
 state 1:
 
 	EXP : LVALUE .  (reduce by rule 25)
+	EXP : LVALUE . DOT ID LEFT_B PARAM RIGHT_B 
 	LVALUE : LVALUE . DOT ID 
 	LVALUE : LVALUE . LEFT_SQ EXP RIGHT_SQ 
 
@@ -235,12 +236,12 @@ state 9:
 state 10:
 
 	EXP : ID . LEFT_B PARAM RIGHT_B 
-	LVALUE : ID .  (reduce by rule 27)
+	LVALUE : ID .  (reduce by rule 28)
 
 	LEFT_B	shift 33
 
 
-	.	reduce by rule 27
+	.	reduce by rule 28
 
 
 state 11:
@@ -284,6 +285,7 @@ state 13:
 
 state 14:
 
+	EXP : LVALUE DOT . ID LEFT_B PARAM RIGHT_B 
 	LVALUE : LVALUE DOT . ID 
 
 	ID	shift 35
@@ -710,7 +712,7 @@ state 33:
 	PARAM	goto 53
 	LVALUE	goto 1
 
-	.	reduce by rule 30
+	.	reduce by rule 31
 
 
 state 34:
@@ -749,11 +751,13 @@ state 34:
 
 state 35:
 
-	LVALUE : LVALUE DOT ID .  (reduce by rule 28)
+	EXP : LVALUE DOT ID . LEFT_B PARAM RIGHT_B 
+	LVALUE : LVALUE DOT ID .  (reduce by rule 29)
+
+	LEFT_B	shift 56
 
 
-
-	.	reduce by rule 28
+	.	reduce by rule 29
 
 
 state 36:
@@ -1072,7 +1076,7 @@ state 48:
 	FOR	shift 4
 	BREAK	shift 3
 
-	EXP	goto 56
+	EXP	goto 57
 	LVALUE	goto 1
 
 	.	error
@@ -1093,7 +1097,7 @@ state 49:
 	FOR	shift 4
 	BREAK	shift 3
 
-	EXP	goto 57
+	EXP	goto 58
 	LVALUE	goto 1
 
 	.	error
@@ -1115,7 +1119,7 @@ state 50:
 	FOR	shift 4
 	BREAK	shift 3
 
-	EXP	goto 58
+	EXP	goto 59
 	LVALUE	goto 1
 
 	.	error
@@ -1146,7 +1150,7 @@ state 52:
 	BREAK	shift 3
 
 	EXP	goto 31
-	EXPS	goto 59
+	EXPS	goto 60
 	LVALUE	goto 1
 
 	.	error
@@ -1156,7 +1160,7 @@ state 53:
 
 	EXP : ID LEFT_B PARAM . RIGHT_B 
 
-	RIGHT_B	shift 60
+	RIGHT_B	shift 61
 
 
 	.	error
@@ -1176,7 +1180,7 @@ state 54:
 	EXP : EXP . LE EXP 
 	EXP : EXP . AND EXP 
 	EXP : EXP . OR EXP 
-	PARAM : EXP .  (reduce by rule 31)
+	PARAM : EXP .  (reduce by rule 32)
 	PARAM : EXP . COMMA PARAM 
 
 	ADD	shift 26
@@ -1191,22 +1195,44 @@ state 54:
 	LE	shift 17
 	AND	shift 16
 	OR	shift 15
-	COMMA	shift 61
+	COMMA	shift 62
 
 
-	.	reduce by rule 31
+	.	reduce by rule 32
 
 
 state 55:
 
-	LVALUE : LVALUE LEFT_SQ EXP RIGHT_SQ .  (reduce by rule 29)
+	LVALUE : LVALUE LEFT_SQ EXP RIGHT_SQ .  (reduce by rule 30)
 
 
 
-	.	reduce by rule 29
+	.	reduce by rule 30
 
 
 state 56:
+
+	EXP : LVALUE DOT ID LEFT_B . PARAM RIGHT_B 
+
+	INT	shift 12
+	STR	shift 11
+	ID	shift 10
+	NIL	shift 9
+	SUB	shift 8
+	LEFT_B	shift 7
+	IF	shift 6
+	WHILE	shift 5
+	FOR	shift 4
+	BREAK	shift 3
+
+	EXP	goto 54
+	PARAM	goto 63
+	LVALUE	goto 1
+
+	.	reduce by rule 31
+
+
+state 57:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -1234,25 +1260,25 @@ state 56:
 	LE	shift 17
 	AND	shift 16
 	OR	shift 15
-	TO	shift 62
+	TO	shift 64
 
 
 	.	error
 
-error:  state 57: shift/reduce conflict (shift OR, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift AND, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift LE, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift GE, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift L, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift G, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift NE, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift EQ, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift DIV, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift MUL, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift SUB, reduce by rule 22)
-error:  state 57: shift/reduce conflict (shift ADD, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift OR, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift AND, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift LE, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift GE, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift L, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift G, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift NE, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift EQ, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift DIV, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift MUL, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift SUB, reduce by rule 22)
+error:  state 58: shift/reduce conflict (shift ADD, reduce by rule 22)
 
-state 57:
+state 58:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -1284,21 +1310,21 @@ state 57:
 
 	.	reduce by rule 22
 
-error:  state 58: shift/reduce conflict (shift ELSE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift OR, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift AND, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift LE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift GE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift L, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift G, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift NE, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift EQ, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift DIV, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift MUL, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift SUB, reduce by rule 20)
-error:  state 58: shift/reduce conflict (shift ADD, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift ELSE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift OR, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift AND, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift LE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift GE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift L, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift G, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift NE, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift EQ, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift DIV, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift MUL, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift SUB, reduce by rule 20)
+error:  state 59: shift/reduce conflict (shift ADD, reduce by rule 20)
 
-state 58:
+state 59:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -1327,13 +1353,13 @@ state 58:
 	LE	shift 17
 	AND	shift 16
 	OR	shift 15
-	ELSE	shift 63
+	ELSE	shift 65
 
 
 	.	reduce by rule 20
 
 
-state 59:
+state 60:
 
 	EXPS : EXP SEMI EXPS .  (reduce by rule 2)
 
@@ -1342,7 +1368,7 @@ state 59:
 	.	reduce by rule 2
 
 
-state 60:
+state 61:
 
 	EXP : ID LEFT_B PARAM RIGHT_B .  (reduce by rule 26)
 
@@ -1351,7 +1377,7 @@ state 60:
 	.	reduce by rule 26
 
 
-state 61:
+state 62:
 
 	PARAM : EXP COMMA . PARAM 
 
@@ -1367,13 +1393,23 @@ state 61:
 	BREAK	shift 3
 
 	EXP	goto 54
-	PARAM	goto 64
+	PARAM	goto 66
 	LVALUE	goto 1
 
-	.	reduce by rule 30
+	.	reduce by rule 31
 
 
-state 62:
+state 63:
+
+	EXP : LVALUE DOT ID LEFT_B PARAM . RIGHT_B 
+
+	RIGHT_B	shift 67
+
+
+	.	error
+
+
+state 64:
 
 	EXP : FOR ID ASSIGN EXP TO . EXP DO EXP 
 
@@ -1388,13 +1424,13 @@ state 62:
 	FOR	shift 4
 	BREAK	shift 3
 
-	EXP	goto 65
+	EXP	goto 68
 	LVALUE	goto 1
 
 	.	error
 
 
-state 63:
+state 65:
 
 	EXP : IF EXP THEN EXP ELSE . EXP 
 
@@ -1409,22 +1445,31 @@ state 63:
 	FOR	shift 4
 	BREAK	shift 3
 
-	EXP	goto 66
+	EXP	goto 69
 	LVALUE	goto 1
 
 	.	error
 
 
-state 64:
+state 66:
 
-	PARAM : EXP COMMA PARAM .  (reduce by rule 32)
-
-
-
-	.	reduce by rule 32
+	PARAM : EXP COMMA PARAM .  (reduce by rule 33)
 
 
-state 65:
+
+	.	reduce by rule 33
+
+
+state 67:
+
+	EXP : LVALUE DOT ID LEFT_B PARAM RIGHT_B .  (reduce by rule 27)
+
+
+
+	.	reduce by rule 27
+
+
+state 68:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -1452,25 +1497,25 @@ state 65:
 	LE	shift 17
 	AND	shift 16
 	OR	shift 15
-	DO	shift 67
+	DO	shift 70
 
 
 	.	error
 
-error:  state 66: shift/reduce conflict (shift OR, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift AND, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift LE, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift GE, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift L, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift G, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift NE, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift EQ, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift DIV, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift MUL, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift SUB, reduce by rule 21)
-error:  state 66: shift/reduce conflict (shift ADD, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift OR, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift AND, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift LE, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift GE, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift L, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift G, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift NE, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift EQ, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift DIV, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift MUL, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift SUB, reduce by rule 21)
+error:  state 69: shift/reduce conflict (shift ADD, reduce by rule 21)
 
-state 66:
+state 69:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -1503,7 +1548,7 @@ state 66:
 	.	reduce by rule 21
 
 
-state 67:
+state 70:
 
 	EXP : FOR ID ASSIGN EXP TO EXP DO . EXP 
 
@@ -1518,25 +1563,25 @@ state 67:
 	FOR	shift 4
 	BREAK	shift 3
 
-	EXP	goto 68
+	EXP	goto 71
 	LVALUE	goto 1
 
 	.	error
 
-error:  state 68: shift/reduce conflict (shift OR, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift AND, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift LE, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift GE, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift L, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift G, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift NE, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift EQ, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift DIV, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift MUL, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift SUB, reduce by rule 23)
-error:  state 68: shift/reduce conflict (shift ADD, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift OR, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift AND, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift LE, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift GE, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift L, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift G, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift NE, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift EQ, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift DIV, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift MUL, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift SUB, reduce by rule 23)
+error:  state 71: shift/reduce conflict (shift ADD, reduce by rule 23)
 
-state 68:
+state 71:
 
 	EXP : EXP . ADD EXP 
 	EXP : EXP . SUB EXP 
@@ -1569,7 +1614,7 @@ state 68:
 	.	reduce by rule 23
 
 
-state 69:
+state 72:
 
 
 	EOF	accept
@@ -1577,5 +1622,5 @@ state 69:
 
 	.	error
 
-232 of 552 action table entries left after compaction
-59 goto table entries
+234 of 567 action table entries left after compaction
+62 goto table entries

@@ -25,6 +25,7 @@ and Exp = LiteralNil
     | Lval of Lvalue
 
     | FunCall of string * Exp list
+    | MethodCall of Lvalue * string * Exp list
 
 datatype Prog = Expression of Exp
 

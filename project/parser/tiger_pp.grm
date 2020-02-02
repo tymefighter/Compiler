@@ -92,6 +92,7 @@ EXP : NIL (Ast.LiteralNil)
     | LVALUE (Ast.Lval LVALUE)
 
     | ID LEFT_B PARAM RIGHT_B (Ast.FunCall (ID, PARAM))
+    | LVALUE DOT ID LEFT_B PARAM RIGHT_B (Ast.MethodCall (LVALUE, ID, PARAM))
 
 LVALUE : ID (Ast.Var ID)
     | LVALUE DOT ID (Ast.MemberRef (LVALUE, ID))

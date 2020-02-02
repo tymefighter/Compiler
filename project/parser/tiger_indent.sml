@@ -90,8 +90,9 @@ structure Pprint = struct
             end
         )
         | pprintExp (Ast.Break) = "break"
-        | pprintExp (Ast.FunCall (func_name, ls)) = func_name ^ " (" ^ pprintParamList ls ^ ") "
         | pprintExp (Ast.Lval lval) = pprintLval lval
+        | pprintExp (Ast.FunCall (func_name, ls)) = func_name ^ " (" ^ pprintParamList ls ^ ")"
+        | pprintExp (Ast.MethodCall (lval, m_name, ls)) = pprintLval lval ^ "." ^ m_name ^ " (" ^ pprintParamList ls ^ ")"
 
     and  pprintExpList [] = ""
     | pprintExpList [exp] = "(" ^ (pprintExp exp) ^ ")"
