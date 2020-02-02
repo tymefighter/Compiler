@@ -117,10 +117,34 @@ tabspace = [\t];
         Tokens.BREAK (!lineNo, !posInLine)
     end);
 
+"of" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.OF (!lineNo, !posInLine)
+    end);
+
+"type" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.TYPE (!lineNo, !posInLine)
+    end);
+
+"var" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.VAR (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.ID (yytext, !lineNo, !posInLine)
+    end);
+
+":" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.COLON (!lineNo, !posInLine)
     end);
 
 "+" => (let

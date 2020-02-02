@@ -39,12 +39,18 @@
     | DOT
     | LEFT_SQ
     | RIGHT_SQ
+    | OF
+    | TYPE
+    | VAR
+    | COLON
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
     | EXPS of Ast.Exp list
     | PARAM of Ast.Exp list
     | LVALUE of Ast.Lvalue
+    | DEC of Ast.Dec
+    | DECS of Ast.Dec list
 
 %noshift EOF
 
@@ -101,3 +107,9 @@ LVALUE : ID (Ast.Var ID)
 PARAM : ([])
     | EXP ([EXP])
     | EXP COMMA PARAM (EXP :: PARAM)
+
+DECS : DEC ([DEC])
+    | DEC DECS (DEC :: DECS)
+
+DEC : VAR ID ASSIGN EXP (Ast.Vardec (ID, NONE, EXP))
+    | VAR ID COLON ID ASSIGN EXP (Ast.Vardec (ID1, (SOME ID2), EXP))

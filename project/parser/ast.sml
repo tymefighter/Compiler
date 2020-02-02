@@ -27,7 +27,9 @@ and Exp = LiteralNil
     | FunCall of string * Exp list
     | MethodCall of Lvalue * string * Exp list
 
-datatype Prog = Expression of Exp
+and Dec = Vardec of id * id option * Exp
+
+datatype Prog = Expression of Exp | Decs of Dec list
 
 (* datatype Exp = LiteralNil
     | LiteralInt of string

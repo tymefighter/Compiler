@@ -117,7 +117,21 @@ structure Pprint = struct
     | pprintLval (Ast.MemberRef (lval, id)) = pprintLval lval ^ "." ^ id
     | pprintLval (Ast.IdxArr (lval, exp)) = pprintLval lval ^ "[" ^ pprintExp exp ^ "]"
 
+    fun pprintDec (Ast.Vardec (id, type_id_opt, exp)) = let
+            val str1 = "var" ^ id
+            val str2 = case type_id_opt of 
+                SOME (type_id) => " : " ^ type_id
+                | NONE => ""
+            val str3 = pprintExp exp
+        in
+            str1 ^ str2 ^ str3
+        end
+
+    fun pprintDecList [] = "\n"
+        | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d ^ "\n" ^ pprintDecList d_list
+
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
+        | pprintProg (Ast.Decs d_list) = pprintDecList d_list
 
 end
 
