@@ -111,6 +111,12 @@ tabspace = [\t];
         Tokens.TO (!lineNo, !posInLine)
     end);
 
+"break" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.BREAK (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in

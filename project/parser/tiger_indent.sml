@@ -89,6 +89,7 @@ structure Pprint = struct
                 str1 ^ str2
             end
         )
+        | pprintExp (Ast.Break) = "break"
 
     and  pprintExpList [] = ""
     | pprintExpList [exp] = "( " ^ (pprintExp exp) ^ " )"

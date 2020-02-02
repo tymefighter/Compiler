@@ -34,6 +34,7 @@
     | FOR
     | ASSIGN
     | TO
+    | BREAK
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -80,3 +81,4 @@ EXP : NIL (Ast.LiteralNil)
 
     | WHILE EXP DO EXP (Ast.While (EXP1, EXP2))
     | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.For (ID, EXP1, EXP2, EXP3))
+    | BREAK (Ast.Break)
