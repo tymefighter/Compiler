@@ -43,6 +43,9 @@
     | TYPE
     | VAR
     | COLON
+    | LET
+    | IN
+    | END
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -99,6 +102,8 @@ EXP : NIL (Ast.LiteralNil)
 
     | ID LEFT_B PARAM RIGHT_B (Ast.FunCall (ID, PARAM))
     | LVALUE DOT ID LEFT_B PARAM RIGHT_B (Ast.MethodCall (LVALUE, ID, PARAM))
+
+    | LET DECS IN EXPS END (Ast.LetStmt (DECS, EXPS))
 
 LVALUE : ID (Ast.Var ID)
     | LVALUE DOT ID (Ast.MemberRef (LVALUE, ID))

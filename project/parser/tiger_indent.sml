@@ -93,11 +93,24 @@ structure Pprint = struct
         | pprintExp (Ast.Lval lval) = pprintLval lval
         | pprintExp (Ast.FunCall (func_name, ls)) = func_name ^ " (" ^ pprintParamList ls ^ ")"
         | pprintExp (Ast.MethodCall (lval, m_name, ls)) = pprintLval lval ^ "." ^ m_name ^ " (" ^ pprintParamList ls ^ ")"
+        | pprintExp (Ast.LetStmt (d_list, e_list)) = let
+                val str1 = "let\n"
+                val _ = inc indentation_level
+                val str2 = pprintDecList d_list
+                val _ = dec indentation_level
+                val str3 = (ind ()) ^ "in\n"
+                val _ = inc indentation_level
+                val str4 = pprintExpList e_list
+                val _ = dec indentation_level
+                val str5 = "\n" ^ (ind ()) ^ "end"
+            in
+                str1 ^ str2 ^ str3 ^ str4 ^ str5
+            end
 
     and  pprintExpList [] = ""
-    | pprintExpList [exp] = "(" ^ (pprintExp exp) ^ ")"
+    | pprintExpList [exp] = (ind ()) ^ "(" ^ (pprintExp exp) ^ ")"
     | pprintExpList (exp_list) = let
-        val str_begin = "(\n"
+        val str_begin = (ind ()) ^ "(\n"
         val str_end = (ind ()) ^ ")"
         val _ = inc indentation_level
         val str = str_begin ^ pprintExpListHelper exp_list ^ str_end
@@ -117,18 +130,18 @@ structure Pprint = struct
     | pprintLval (Ast.MemberRef (lval, id)) = pprintLval lval ^ "." ^ id
     | pprintLval (Ast.IdxArr (lval, exp)) = pprintLval lval ^ "[" ^ pprintExp exp ^ "]"
 
-    fun pprintDec (Ast.Vardec (id, type_id_opt, exp)) = let
-            val str1 = "var" ^ id
+    and pprintDec (Ast.Vardec (id, type_id_opt, exp)) = let
+            val str1 = "var " ^ id
             val str2 = case type_id_opt of 
                 SOME (type_id) => " : " ^ type_id
                 | NONE => ""
-            val str3 = pprintExp exp
+            val str3 = " := " ^ pprintExp exp
         in
             str1 ^ str2 ^ str3
         end
 
-    fun pprintDecList [] = "\n"
-        | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d ^ "\n" ^ pprintDecList d_list
+    and pprintDecList [] = "\n"
+        | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d  ^ pprintDecList d_list
 
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
         | pprintProg (Ast.Decs d_list) = pprintDecList d_list
