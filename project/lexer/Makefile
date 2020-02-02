@@ -10,8 +10,8 @@ all: tigh
 tigh: tiger.lex.sml tiger.mlb
 	mlton -output tigh tiger.mlb
 
-test: tigh test
-	./tigh < test
+test: tigh test_case
+	./tigh < test_case
 
 clean:
 	@rm tiger.lex.sml tigh
