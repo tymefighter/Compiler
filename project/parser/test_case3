@@ -1,0 +1,4 @@
+class Alpha extends AlphaBeta {
+    method getNum (a : ab, ty : time) : expec = a + ty / 45
+    method getTime (tm : time, eps : epsilon) : rev = eps (tm)
+}

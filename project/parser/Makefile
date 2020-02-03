@@ -7,7 +7,7 @@ tc%: test_case%
 	@echo "--------------------------------------------------\nTest case $*\n--------------------------------------------------"
 	@./indent < test_case$*
 
-test: indent tc1 tc2
+test: indent tc1 tc2 tc3
 
 %.lex.sml: %.lex
 	mllex $*.lex

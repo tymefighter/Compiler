@@ -171,9 +171,40 @@ structure Pprint = struct
         in
             str1 ^ str2 ^ str3 ^ str4 ^ str5 ^ str6
         end
+    | pprintDec (Ast.ClassDef (cname, ext_tp, cfds)) = let
+            val str1 = "class " ^ cname
+            val str2 = case ext_tp of
+                SOME (tp) => "extends " ^ tp
+                | NONE => ""
+            val str3 = " {\n"
+            val _ = inc indentation_level
+            val str4 = pprintClassFields cfds
+            val _ = dec indentation_level
+            val str5 =  (ind ()) ^ "}"
+        in
+            str1 ^ str2 ^ str3 ^ str4 ^ str5
+        end
 
     and pprintDecList [] = ""
         | pprintDecList (d :: d_list) = (ind()) ^ pprintDec d ^ "\n" ^ pprintDecList d_list
+    
+    and pprintClassField (Ast.MethodDec (fname, tyfds, tp_opt, exp)) = let
+            val str1 = "method " ^ fname ^ " "
+            val str2 = "(\n"
+            val _ = inc indentation_level
+            val str3 = pprintTyfields tyfds
+            val _ = dec indentation_level
+            val str4 =  (ind ()) ^ ")"
+            val str5 = case tp_opt of 
+                SOME (tp) => " : " ^ tp
+                | NONE => ""
+            val str6 = " = " ^ pprintExp exp
+        in
+            str1 ^ str2 ^ str3 ^ str4 ^ str5 ^ str6
+        end
+    
+    and pprintClassFields [] = ""
+        | pprintClassFields (cf :: cf_list) = (ind()) ^ pprintClassField cf ^ "\n" ^ pprintClassFields cf_list
 
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
         | pprintProg (Ast.Decs d_list) = pprintDecList d_list

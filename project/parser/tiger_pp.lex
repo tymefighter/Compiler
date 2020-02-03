@@ -171,6 +171,24 @@ tabspace = [\t];
         Tokens.FUNCTION (!lineNo, !posInLine)
     end);
 
+"class" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.CLASS (!lineNo, !posInLine)
+    end);
+
+"method" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.METHOD (!lineNo, !posInLine)
+    end);
+
+"extends" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.EXTENDS (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in
