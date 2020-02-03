@@ -75,6 +75,7 @@
 %%
 
 PROG : EXP (Ast.Expression EXP)
+    | DECS (Ast.Decs DECS)
 
 EXPS : EXP ([EXP])
     | EXP SEMI EXPS (EXP :: EXPS)
