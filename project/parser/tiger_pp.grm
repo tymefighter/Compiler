@@ -69,6 +69,8 @@
 
 %noshift EOF
 
+%nonassoc WHILE FOR THEN
+%nonassoc ELSE
 %left OR
 %left AND
 %nonassoc EQ NE G L GE LE
@@ -104,11 +106,11 @@ EXP : NIL (Ast.LiteralNil)
     | SUB EXP (Ast.NegExp EXP)
     | LEFT_B EXPS RIGHT_B (Ast.Exprs EXPS)
  
-    | IF EXP THEN EXP (Ast.IfThen (EXP1, EXP2))
-    | IF EXP THEN EXP ELSE EXP (Ast.IfThenElse (EXP1, EXP2, EXP3))
+    | IF EXP THEN EXP %prec THEN (Ast.IfThen (EXP1, EXP2))
+    | IF EXP THEN EXP ELSE EXP %prec ELSE (Ast.IfThenElse (EXP1, EXP2, EXP3))
 
-    | WHILE EXP DO EXP (Ast.While (EXP1, EXP2))
-    | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.For (ID, EXP1, EXP2, EXP3))
+    | WHILE EXP DO EXP %prec WHILE (Ast.While (EXP1, EXP2))
+    | FOR ID ASSIGN EXP TO EXP DO EXP %prec FOR (Ast.For (ID, EXP1, EXP2, EXP3))
     | BREAK (Ast.Break)
 
     | LVALUE (Ast.Lval LVALUE)
