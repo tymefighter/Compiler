@@ -37,6 +37,7 @@ and Dec = Vardec of id * id option * Exp
     | PrimitiveDec of string * (string * string) list * id option
 
 and ClassField = MethodDec of string * (string * string) list * id option * Exp
+    | VarDecCF of id * id option * Exp
 
 and Type = Alias of string
     | Array of string

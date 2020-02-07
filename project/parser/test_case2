@@ -8,5 +8,8 @@ function getEpsilon (delta : del, dist : ds, first : fs, valfn : valtype) : eps 
 function extractDataRec (uart : ep, spin : spinlock, net : network, ival : iportvalue) = net.transfer(ep.getScreen(spin), ival)
 primitve primA (ext : uv, tr : trace, eps : epsilon, ap : alpha) : gamma
 type ExtNext = class extends Ext {
+    var sLock : lock := getLock(3 | 5)
+    var strVal : stV := vval
+    var tr := 30
     method mComp (ut : eps, vv : vval) : gamma = ut * (vv & 3)    
 }

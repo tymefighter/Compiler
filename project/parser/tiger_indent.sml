@@ -203,6 +203,15 @@ structure Pprint = struct
         in
             str1 ^ str2 ^ str3 ^ str4 ^ str5 ^ str6
         end
+        | pprintClassField (Ast.VarDecCF (id, type_id_opt, exp)) = let
+            val str1 = "var " ^ id
+            val str2 = case type_id_opt of 
+                SOME (type_id) => " : " ^ type_id
+                | NONE => ""
+            val str3 = " := " ^ pprintExp exp
+        in
+            str1 ^ str2 ^ str3
+        end
     
     and pprintClassFields [] = ""
         | pprintClassFields (cf :: cf_list) = (ind()) ^ pprintClassField cf ^ "\n" ^ pprintClassFields cf_list
