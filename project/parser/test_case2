@@ -5,3 +5,4 @@ type o = one
 type t = two
 type eps = epsilon
 function getEpsilon (delta : del, dist : ds, first : fs, valfn : valtype) : eps = valfn(fs + del - ds)
+primitve primA (ext : uv, tr : trace, eps : epsilon, ap : alpha) : gamma

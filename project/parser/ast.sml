@@ -38,6 +38,7 @@ and Dec = Vardec of id * id option * Exp
     | Import of id
     | FuncDec of id * (string * string) list * id option * Exp
     | ClassDef of string * string option * ClassField list
+    | PrimitiveDec of string * (string * string) list * id option
 
 and ClassField = MethodDec of string * (string * string) list * id option * Exp
 

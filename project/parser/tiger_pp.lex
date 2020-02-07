@@ -189,6 +189,12 @@ tabspace = [\t];
         Tokens.EXTENDS (!lineNo, !posInLine)
     end);
 
+"primitve" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.PRIMITIVE (!lineNo, !posInLine)
+    end);
+
 {alpha}+ => (let
         val _ = inc_n posInLine (size yytext)
     in
