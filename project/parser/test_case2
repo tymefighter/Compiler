@@ -1,6 +1,6 @@
-import vars
-import special
-import types
+import "vars"
+import "special"
+import "types"
 type o = one
 type t = two
 type eps = epsilon

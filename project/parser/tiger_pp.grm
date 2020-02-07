@@ -9,6 +9,7 @@
 %term INT of string
     | STR of string
     | ID of string
+    | STRING of string
     | NIL
     | ADD
     | SUB
@@ -136,7 +137,7 @@ DEC : VAR ID ASSIGN EXP (Ast.Vardec (ID, NONE, EXP))
     | VAR ID COLON ID ASSIGN EXP (Ast.Vardec (ID1, (SOME ID2), EXP))
     | TYPE ID EQ ID (Ast.Typedec (ID1, Ast.Alias ID2))
     | TYPE ID EQ TY (Ast.Typedec (ID, TY))
-    | IMPORT ID (Ast.Import (ID))
+    | IMPORT STR (Ast.Import (STR))
     | FUNCTION ID LEFT_B TYFIELDS RIGHT_B EQ EXP (Ast.FuncDec (ID, TYFIELDS, NONE, EXP))
     | FUNCTION ID LEFT_B TYFIELDS RIGHT_B COLON ID EQ EXP (Ast.FuncDec (ID1, TYFIELDS, SOME ID2, EXP))
     | CLASS ID LEFT_CUR CLASSFIELDS RIGHT_CUR (Ast.ClassDef (ID, NONE, CLASSFIELDS))

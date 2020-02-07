@@ -51,7 +51,7 @@ tabspace = [\t];
         Tokens.INT (yytext, !lineNo, !posInLine)
     end);
 
-"\""([^"])*s"\"" => (let
+"\""([^"])*"\"" => (let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.STR (yytext, !lineNo, !posInLine)

@@ -1,7 +1,7 @@
 let
-    import uart
-    import math
-    import arrlib
+    import "uart"
+    import "math"
+    import "arrlib"
     var u := 42
     type freqrec = {integ : i, floatno : flt}
     var eps := getValuEps()
