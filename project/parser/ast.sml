@@ -28,6 +28,7 @@ and Exp = LiteralNil
     | MethodCall of Lvalue * string * Exp list
 
     | LetStmt of Dec list * Exp list
+    | New of id
 
 and Dec = Vardec of id * id option * Exp
     | Typedec of id * Type

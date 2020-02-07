@@ -56,6 +56,7 @@
     | METHOD
     | EXTENDS
     | PRIMITIVE
+    | NEW
 
 %nonterm EXP of Ast.Exp
     | PROG of Ast.Prog
@@ -121,6 +122,7 @@ EXP : NIL (Ast.LiteralNil)
     | LVALUE DOT ID LEFT_B PARAM RIGHT_B (Ast.MethodCall (LVALUE, ID, PARAM))
 
     | LET DECS IN EXPS END (Ast.LetStmt (DECS, EXPS))
+    | NEW ID (Ast.New (ID))
 
 LVALUE : ID (Ast.Var ID)
     | LVALUE DOT ID (Ast.MemberRef (LVALUE, ID))

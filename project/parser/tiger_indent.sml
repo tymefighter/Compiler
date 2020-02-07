@@ -110,6 +110,7 @@ structure Pprint = struct
             in
                 str1 ^ str2 ^ str3 ^ str4 ^ str5
             end
+        | pprintExp (Ast.New st) = "new " ^ st
 
     and  pprintExpList [] = ""
     | pprintExpList [exp] = (ind ()) ^ "(" ^ (pprintExp exp) ^ ")"
