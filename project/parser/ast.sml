@@ -4,10 +4,6 @@ type id = string
 
 datatype BinOp = ADD | SUB | MUL | DIV | EQ | NE | G | L | GE | LE | AND | OR
 
-datatype Type = Alias of string
-    | Array of string
-    | RecordType of (string * string) list
-
 datatype Lvalue = Var of string
     | MemberRef of Lvalue * string
     | IdxArr of Lvalue * Exp
@@ -41,6 +37,11 @@ and Dec = Vardec of id * id option * Exp
     | PrimitiveDec of string * (string * string) list * id option
 
 and ClassField = MethodDec of string * (string * string) list * id option * Exp
+
+and Type = Alias of string
+    | Array of string
+    | RecordType of (string * string) list
+    | ClassType of id option * ClassField list
 
 datatype Prog = Expression of Exp | Decs of Dec list
 

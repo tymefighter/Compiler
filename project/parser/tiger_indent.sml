@@ -40,18 +40,6 @@ structure Pprint = struct
     fun pprintTyfields [] = ""
         | pprintTyfields [(id_left, id_right)] = (ind ()) ^ id_left ^ " : " ^ id_right ^ "\n"
         | pprintTyfields ((id_left, id_right) :: xs) = (ind ()) ^ id_left ^ " : " ^ id_right ^ ",\n" ^ pprintTyfields xs
-    
-    fun pprintType (Ast.Alias tp) = tp
-        | pprintType (Ast.Array arr) = "array of " ^ arr
-        | pprintType (Ast.RecordType tyfds) = let
-                val str1 = "{\n"
-                val _ = inc indentation_level
-                val str2 = pprintTyfields tyfds
-                val _ = dec indentation_level
-                val str3 =  (ind ()) ^ "}"
-            in
-                str1 ^ str2 ^ str3
-            end
 
     fun pprintExp Ast.LiteralNil = "nil"
         | pprintExp (Ast.LiteralInt int_num_str) = int_num_str
@@ -218,6 +206,33 @@ structure Pprint = struct
     
     and pprintClassFields [] = ""
         | pprintClassFields (cf :: cf_list) = (ind()) ^ pprintClassField cf ^ "\n" ^ pprintClassFields cf_list
+
+    and pprintType (Ast.Alias tp) = tp
+        | pprintType (Ast.Array arr) = "array of " ^ arr
+        | pprintType (Ast.RecordType tyfds) = let
+                val str1 = "{\n"
+                val _ = inc indentation_level
+                val str2 = pprintTyfields tyfds
+                val _ = dec indentation_level
+                val str3 =  (ind ()) ^ "}"
+            in
+                str1 ^ str2 ^ str3
+            end
+        | pprintType (Ast.ClassType (ext_op, cf_list)) = (
+            let
+                val str1 = "class"
+                val str2 = case ext_op of
+                    (SOME ext) => " extends " ^ ext
+                    | NONE => ""
+                val str3 = "{\n"
+                val _ = inc indentation_level
+                val str4 = pprintClassFields cf_list
+                val _ = dec indentation_level
+                val str5 = (ind ()) ^ "}"
+            in
+                str1 ^ str2 ^ str3 ^ str4 ^ str5
+            end
+        )
 
     fun pprintProg (Ast.Expression exp) = (pprintExp exp) ^ "\n"
         | pprintProg (Ast.Decs d_list) = pprintDecList d_list
