@@ -1,3 +1,13 @@
+/*
+    Author: Tymefighter
+    Test Case: 1
+
+    This is a test program which is being
+    used to test if the indent program 
+    (parser) for the tiger language works 
+    correctly or not.
+*/
+
 let
     import "uart"
     import "math"

@@ -1,10 +1,22 @@
+/*
+    Author: Tymefighter
+    Test Case: 2
+
+    This is a test program which is being
+    used to test if the indent program 
+    (parser) for the tiger language works 
+    correctly or not.
+*/
+
 import "vars"
 import "special"
 import "types"
 type o = one
 type t = two
 type eps = epsilon
+/* A function */
 function getEpsilon (delta : del, dist : ds, first : fs, valfn : valtype) : eps = valfn(fs + del - ds)
+/* Another function */
 function extractDataRec (uart : ep, spin : spinlock, net : network, ival : iportvalue) = net.transfer(ep.getScreen(spin), ival)
 primitve primA (ext : uv, tr : trace, eps : epsilon, ap : alpha) : gamma
 type ExtNext = class extends Ext {

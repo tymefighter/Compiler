@@ -1,4 +1,15 @@
+/*
+    Author: Tymefighter
+    Test Case: 3
+
+    This is a test program which is being
+    used to test if the indent program 
+    (parser) for the tiger language works 
+    correctly or not.
+*/
+
 let
+    /* A class */
     class Alpha extends AlphaBeta {
         method getNum (a : ab, ty : time) : expec = a + ty / 45
         method getTime (tm : time, eps : epsilon) : rev = eps (tm)

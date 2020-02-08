@@ -250,3 +250,4 @@ structure Pprint = struct
 end
 
 val _ = print (Pprint.pprintProg prog)
+val _ = print "\n/*\n Indented by tymefighter's indent program\n*/\n"

@@ -12,6 +12,27 @@ exception SyntaxError
 fun inc ref_x = ref_x := !ref_x + 1
 fun inc_n ref_x n = ref_x := !ref_x + n
 fun reset ref_x = ref_x := 0
+fun updatePos (x_char :: xs) = let
+        val x = String.str x_char
+        val isNewline = (x = "\n")
+        val _ = inc posInLine
+        val _ = (
+                if(isNewline) then
+                    let
+                        val _ = inc lineNo
+                        val _ = reset posInLine
+                    in
+                        ()
+                    end
+                else
+                    ()
+        )
+    in
+        updatePos xs
+    end
+    | updatePos [] = ()
+        
+
 
 fun eof () = Tokens.EOF (!lineNo, !posInLine)
 
@@ -41,6 +62,12 @@ tabspace = [\t];
 
 {tabspace}+ => (let
         val _ = inc_n posInLine (8 * (size yytext))
+    in
+        lex()
+    end);
+
+"/*"(\n | \*[^/] | [^*])*"*/" => (let
+        val _ = updatePos (String.explode yytext)
     in
         lex()
     end);
