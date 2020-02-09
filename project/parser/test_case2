@@ -6,6 +6,10 @@
     used to test if the indent program 
     (parser) for the tiger language works 
     correctly or not.
+
+    /*
+        This is a nested comment
+    */
 */
 
 import "vars"
