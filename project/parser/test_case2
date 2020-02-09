@@ -27,5 +27,6 @@ type ExtNext = class extends Ext {
     var sLock : lock := getLock(3 | 5)
     var strVal : stV := vval
     var tr := 30
+    var newVar := "a string \"!"
     method mComp (ut : eps, vv : vval) : gamma = ut * (vv & 3)    
 }

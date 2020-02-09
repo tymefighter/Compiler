@@ -53,7 +53,7 @@ varallowed = [a-zA-Z0-9_];
                         lex() (* newline *)
                     end);
 
-"\""([^"])*"\""     => (let
+"\""([\\]. | [^"])*"\""     => (let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in
