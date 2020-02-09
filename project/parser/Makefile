@@ -11,11 +11,6 @@ tc_color%: test_case%
 	@echo "--------------------------------------------------\nTest case $*\n--------------------------------------------------"
 	@./indent < test_case$* | ../lexer/tigh
 
-../lexer/tigh: 
-	@cd ../lexer
-	@make tigh
-	@cd ../parser/
-
 test: indent tc1 tc2 tc3
 
 test_with_color: ../lexer/tigh indent tc_color1 tc_color2 tc_color3

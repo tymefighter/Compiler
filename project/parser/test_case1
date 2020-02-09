@@ -18,10 +18,10 @@ let
     import "uart"
     import "math"
     import "arrlib"
-    var u := 42
+    var u2 := 42
     type freqrec = {integ : i, floatno : flt}
     var eps := getValuEps()
-    type itok = array of lltok
+    type itok = array of lltok_v2
     function getAcquire (epsilon : ep, theta : th) : integ = ep + theta / 5
 in
 

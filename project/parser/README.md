@@ -1,2 +1,2 @@
 - To run the indent on test cases 1, 2 and 3, write `make test`
-- To run the pretty printer along with the highlighter, do this `make test_with_color`
+- To run the pretty printer along with the highlighter, do this `make test_with_color` after making `tigh` in the ../lexer directory

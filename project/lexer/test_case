@@ -6,13 +6,13 @@ array a = [4, 5, 7];
     sample program
 */
 
-var st = "this is a string";
+var st_1 = "this is a string";
 
 class Abc
 {
-    var u = 500;
-    var v = 1000;
-    var x, p;
+    var u1 = 500;
+    var v5 = 1000;
+    var x_r, p;
     /* This is a class*/
     Abc(100)
     {
@@ -21,7 +21,7 @@ class Abc
     }
 };
 
-var str = "abcdefgi";
+var str_1_2 = "abcdefgi";
 var aninst = Abc(40);
 var u = nil;
 

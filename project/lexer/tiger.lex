@@ -31,6 +31,7 @@ fun reset x = let
 alpha = [a-zA-Z];
 digit = [0-9];
 whitespace = [\ \t];
+varallowed = [a-zA-Z0-9_];
 
 %%
 \              => (let
@@ -79,7 +80,7 @@ whitespace = [\ \t];
                     in
                         Tokens.Symbol (yytext, !line_no, p_prev)
                     end);
-{alpha}+        => (let
+{alpha}{varallowed}* => (let
                         val p_prev = !pos_from_prev
                         val _ = reset pos_from_prev
                     in

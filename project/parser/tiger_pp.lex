@@ -24,6 +24,7 @@ fun eof () = Tokens.EOF (!lineNo, !posInLine)
 
 alpha = [a-zA-Z];
 digit = [0-9];
+varallowed = [a-zA-Z0-9_];
 space = [\ ];
 tabspace = [\t];
 
@@ -242,7 +243,7 @@ tabspace = [\t];
         Tokens.NEW (!lineNo, !posInLine)
     end);
 
-<INITIAL> {alpha}+ => (let
+<INITIAL> {alpha}{varallowed}* => (let
         val _ = inc_n posInLine (size yytext)
     in
         Tokens.ID (yytext, !lineNo, !posInLine)
