@@ -71,12 +71,24 @@ datatype ('l, 't) ArithmeticLogicInst = AbsVal of 't * 't
 	| Rem of 't * 't * 't
 	| RotateLeft of 't * 't * 't
 	| RotateRight of 't * 't * 't
+	| ShiftLeftLogical of 't * 't * 't
+	| ShiftLeftLogicalVar of 't * 't * 't
+	| ShiftRightArithmetic of 't * 't * 't
+	| ShiftRightLogical of 't * 't * 't
+	| ShiftRightLogicalVar of 't * 't * 't
+	| Sub of 't * 't * 't
+	| SubU of 't * 't * 't
+	| Xor of 't * 't * 't
+	| XorImm of 't * 't * Immediate
+	
+datatype ('l, 't) ComparisonInst = SetEqual of 't * 't * 't
+	| Set
 	
 
 datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 	| ExceptionTrap of ExceptionTrapInst
 	| ConstMapping of ('l, 't) ConstMappingInst
-	
+	| ArithmeticLogic of ('l, 't) ArithmeticLogicInst
 end
 	
 
