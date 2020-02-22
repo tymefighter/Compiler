@@ -29,7 +29,7 @@ datatype ('l, 't) LoadStoreInst = LoadAddress of 't * int
 	| StoreByte of 't * int
 	| StoreDoubleWord of 't * int
 	| StoreHalfWord of 't * int
-	| StoreWordCoprossor of 't * int
+	| StoreWordCoprocessor of 't * int
 	| StoreWordLeft of 't * int
 	| StoreWordRight of 't * int
 	| UnalignedLoadHalfword of 't * int
@@ -82,13 +82,56 @@ datatype ('l, 't) ArithmeticLogicInst = AbsVal of 't * 't
 	| XorImm of 't * 't * Immediate
 	
 datatype ('l, 't) ComparisonInst = SetEqual of 't * 't * 't
-	| Set
+	| SetGE of 't * 't * 't
+	| SetGEU of 't * 't * 't
+	| SetG of 't * 't * 't
+	| SetGU of 't * 't * 't
+	| SetLE of 't * 't * 't
+	| SetLEU of 't * 't * 't
+	| SetL of 't * 't * 't
+	| SetLImm of 't * 't * Immediate
+	| SetLU of 't * 't * 't
+	| SetLImmU of 't * 't * Immediate
+	| SetNotEqual of 't * 't * 't
+
+datatype ('l, 't) BranchJumpInst = Branch of 'l
+	| BranchCoprocessorZTrue of 'l
+	| BranchCoprocessorZFalse of 'l
+	| BranchEq of 't * 't * 'l
+	| BranchEqZero of 't * 'l
+	| BranchGE of 't * 't * 'l
+	| BranchGEU of 't * 't * 'l
+	| BranchGEZero of 't * 'l
+	| BranchGEZeroLink of 't * 'l
+	| BranchG of 't * 't * 'l
+	| BranchGU of 't * 't * 'l
+	| BranchGZero of 't * 'l
+	| BranchLE of 't * 't * 'l
+	| BranchLEU of 't * 't * 'l
+	| BranchLEZero of 't * 'l
+	| BranchLessZeroLink of 't * 'l
+	| BranchL of 't * 't * 'l
+	| BranchLU of 't * 't * 'l
+	| BranchLZero of 't * 'l
+	| BranchNE of 't * 't * 'l
+	| BranchNEZero of 't * 'l
+	| Jump of 'l
+	| JumpLink of 'l
+	| JumpLinkReg of 't
+	| JumpReg of 't
 	
+datatype ('l, 't) DataMoveInst = Move of 't * 't
+	| MoveFormHI of 't
+	| MoveFromLO of 't
+	| MoveToHI of 't
+	| MoveToLO of 't
 
 datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 	| ExceptionTrap of ExceptionTrapInst
 	| ConstMapping of ('l, 't) ConstMappingInst
 	| ArithmeticLogic of ('l, 't) ArithmeticLogicInst
+	| Comparison of ('l, 't) ComparisonInst
+	| BranchJump of ('l, 't) BranchJumpInst
 end
 	
 
