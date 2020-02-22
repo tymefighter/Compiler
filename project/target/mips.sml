@@ -142,7 +142,7 @@ signature TEMP = sig
 end
 	
 
-structure Temp :> TEMP = struct
+structure Temp : TEMP = struct
 
 	type temp = string
 	type label = string
@@ -150,25 +150,25 @@ structure Temp :> TEMP = struct
 	val tempRef = ref ""
 	val labelRef = ref ""
 
-	fun getNewString (ch :: chs) = ch :: getNewString strRef (cs)
-		| getNewString [c] = (
+	fun getNewString [c] = (
 			if (Char.toString c) = "z" then
 				["z", "a"]
 			else
 				[Char.toString (Char.succ c)]
 		)
+		|getNewString (ch :: chs) = (Char.toString ch) :: getNewString chs
 		| getNewString [] = ["a"]
 
 
 	fun newtemp () = let
-			val new_str = getNewString !tempRef
+			val new_str = (String.concat o getNewString o String.explode) (!tempRef)
 			val _ = tempRef := new_str
 		in
 			new_str
 		end
 	
 	fun newlabel () = let
-			val new_str = getNewString !labelRef
+			val new_str = (String.concat o getNewString o String.explode) (!labelRef)
 			val _ = labelRef := new_str
 		in
 			new_str
