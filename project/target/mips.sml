@@ -133,12 +133,44 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 	| Comparison of ('l, 't) ComparisonInst
 	| BranchJump of ('l, 't) BranchJumpInst
 end
+
+signature TEMP = sig
+    type temp
+    type label
+	val newtemp  : unit -> temp
+    val newlabel : unit -> label
+end
 	
 
-structure Temp = struct
+structure Temp :> TEMP = struct
 
 	type temp = string
 	type label = string
 
-	val tempRef = ref 0
-	val labelRef = ref 0
+	val tempRef = ref ""
+	val labelRef = ref ""
+
+	fun getNewString (ch :: chs) = ch :: getNewString strRef (cs)
+		| getNewString [c] = (
+			if (Char.toString c) = "z" then
+				["z", "a"]
+			else
+				[Char.toString (Char.succ c)]
+		)
+		| getNewString [] = ["a"]
+
+
+	fun newtemp () = let
+			val new_str = getNewString !tempRef
+			val _ = tempRef := new_str
+		in
+			new_str
+		end
+	
+	fun newlabel () = let
+			val new_str = getNewString !labelRef
+			val _ = labelRef := new_str
+		in
+			new_str
+		end
+end
