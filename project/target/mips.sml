@@ -135,4 +135,10 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 end
 	
 
-	
+structure Temp = struct
+
+	type temp = string
+	type label = string
+
+	val tempRef = ref 0
+	val labelRef = ref 0
