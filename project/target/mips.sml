@@ -29,6 +29,7 @@ datatype ('l, 't) LoadStoreInst = LoadAddress of 't * int
 	| StoreByte of 't * int
 	| StoreDoubleWord of 't * int
 	| StoreHalfWord of 't * int
+	| StoreWord of 't * int
 	| StoreWordCoprocessor of 't * int
 	| StoreWordLeft of 't * int
 	| StoreWordRight of 't * int
@@ -132,6 +133,43 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 	| ArithmeticLogic of ('l, 't) ArithmeticLogicInst
 	| Comparison of ('l, 't) ComparisonInst
 	| BranchJump of ('l, 't) BranchJumpInst
+	
+	
+	fun prettyReg Zero = "zero"
+		| prettyReg At = "at"
+		| prettyReg (V n) = "v" ^ Int.toString n
+		| prettyReg (A n) = "a" ^ Int.toString n
+		| prettyReg (T n) = "t" ^ Int.toString n
+		| prettyReg (S n) = "s" ^ Int.toString n
+		| prettyReg (K n) = "k" ^ Int.toString n
+		| prettyReg Gp = "gp" 
+		| prettyReg Sp = "sp"
+		| prettyReg Fp = "fp"
+		| prettyReg Ra = "ra"
+	
+	fun prettyLoadStore (LoadAddress (reg, addr)) = "la " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadByte (reg, addr)) = "lb " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadByteU (reg, addr)) = "lbu " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadDoubleWord (reg, addr)) = "ld " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadHalfWord (reg, addr)) = "lh " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadHalfWordU (reg, addr)) = "lhu " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadWord (reg, addr)) = "lw " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadWordCoprocessor (reg, addr)) = "lwcz " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadWordLeft (reg, addr)) = "lwl " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (LoadWordRight (reg, addr)) = "lwr " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreByte (reg, addr)) = "sb " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreDoubleWord (reg, addr)) = "sd " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreHalfWord (reg, addr)) = "sh " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreWord (reg, addr)) = "sw " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreWordCoprocessor (reg, addr)) = "swcz " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreWordLeft (reg, addr)) = "swl " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (StoreWordRight (reg, addr)) = "swr " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (UnalignedLoadHalfword (reg, addr)) = "ulh " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (UnalignedLoadHalfwordU (reg, addr)) = "ulhu " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (UnalignedLoadWord (reg, addr)) = "ulw " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (UnalignedStoreHalfword (reg, addr)) = "ush " ^ prettyReg reg ^ ", " ^ Int.toString addr
+		| prettyLoadStore (UnalignedStoreWord (reg, addr)) = "usw " ^ prettyReg reg ^ ", " ^ Int.toString addr
+	
 end
 
 signature TEMP = sig
@@ -174,3 +212,4 @@ structure Temp : TEMP = struct
 			new_str
 		end
 end
+
