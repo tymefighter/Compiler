@@ -255,6 +255,19 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyBranchJump (JumpLink label) = "jal " ^ label
 		| prettyBranchJump (JumpLinkReg rSource) = "jalr " ^ prettyReg rSource
 		| prettyBranchJump (JumpReg rSource) = "jr " ^ prettyReg rSource
+	
+	fun prettyDataMove (Move (rDest, rSource)) = "move " ^ prettyReg rDest ^ ", " ^ prettyReg rSource
+		| prettyDataMove (MoveFormHI rDest) = "mfhi " ^ prettyReg rDest 
+		| prettyDataMove (MoveFromLO rDest) = "mflo " ^ prettyReg rDest
+		| prettyDataMove (MoveToHI rDest) = "mthi " ^ prettyReg rDest
+		| prettyDataMove (MoveToLO rDest) = "mtlo " ^ prettyReg rDest
+
+	fun prettyInst (LoadStore load_store_inst) = prettyLoadStore load_store_inst
+		| prettyInst (ExceptionTrap exc_trap_inst) = prettyExceptionTrap exc_trap_inst
+		| prettyInst (ConstMapping const_map_inst) = prettyConstMapping const_map_inst
+		| prettyInst (ArithmeticLogic ar_logic_inst) = prettyArithmeticLogic ar_logic_inst
+		| prettyInst (Comparison comp_inst) = prettyComparison comp_inst
+		| prettyInst (BranchJump br_jmp_inst) = prettyBranchJump br_jmp_inst
 end
 
 signature TEMP = sig
