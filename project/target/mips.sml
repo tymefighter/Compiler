@@ -292,7 +292,7 @@ structure Temp : TEMP = struct
 			else
 				[Char.toString (Char.succ c)]
 		)
-		|getNewString (ch :: chs) = (Char.toString ch) :: getNewString chs
+		| getNewString (ch :: chs) = (Char.toString ch) :: getNewString chs
 		| getNewString [] = ["a"]
 
 
@@ -310,4 +310,3 @@ structure Temp : TEMP = struct
 			new_str
 		end
 end
-
