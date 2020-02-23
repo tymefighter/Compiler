@@ -217,6 +217,44 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyArithmeticLogic (Xor (rDest, rSource1, rSource2)) = "xor " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
 		| prettyArithmeticLogic (XorImm (rDest, rSource, imm)) = "xori " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
 	
+	fun prettyComparison (SetEqual (rDest, rSource1, rSource2)) = "seq " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetGE (rDest, rSource1, rSource2)) = "sge " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetGEU (rDest, rSource1, rSource2)) = "sgeu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetG (rDest, rSource1, rSource2)) = "sgt " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetGU (rDest, rSource1, rSource2)) = "sgtu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyComparison (SetLE (rDest, rSource1, rSource2)) = "sle " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetLEU (rDest, rSource1, rSource2)) = "sleu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetL (rDest, rSource1, rSource2)) = "slt " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetLImm  (rDest, rSource, imm)) = "slti " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
+		| prettyComparison (SetLU (rDest, rSource1, rSource2)) = "sltu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+		| prettyComparison (SetLImmU  (rDest, rSource, imm)) = "sltiu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
+		| prettyComparison (SetNotEqual (rDest, rSource1, rSource2)) = "sne " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 
+
+	fun prettyBranchJump (Branch label) = "b " ^ label
+		| prettyBranchJump (BranchCoprocessorZTrue label) = "bczt " ^ label
+		| prettyBranchJump (BranchCoprocessorZFalse label) = "bczf " ^ label
+		| prettyBranchJump (BranchEq (rSource1, rSource2, label)) = "beq " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchEqZero (rSource, label)) = "beqz " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchGE (rSource1, rSource2, label)) = "bge " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchGEU (rSource1, rSource2, label)) = "bgeu " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchGEZero (rSource, label)) = "bgez " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchGEZeroLink (rSource, label)) = "bgezal " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchG (rSource1, rSource2, label)) = "bgt " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchGU (rSource1, rSource2, label)) = "bgtu " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchGZero (rSource, label)) = "bgtz " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchLE (rSource1, rSource2, label)) = "ble " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchLEU (rSource1, rSource2, label)) = "bleu " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchLEZero (rSource, label)) = "blez " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchLessZeroLink (rSource, label)) = "bltzal " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchL (rSource1, rSource2, label)) = "blt " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchLU (rSource1, rSource2, label)) = "bltu " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchLZero (rSource, label)) = "bltz " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (BranchNE (rSource1, rSource2, label)) = "bne " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2 ^ ", " ^ label
+		| prettyBranchJump (BranchNEZero (rSource, label)) = "bnez " ^ prettyReg rSource ^ ", " ^ label
+		| prettyBranchJump (Jump label) = "j " ^ label
+		| prettyBranchJump (JumpLink label) = "jal " ^ label
+		| prettyBranchJump (JumpLinkReg rSource) = "jalr " ^ prettyReg rSource
+		| prettyBranchJump (JumpReg rSource) = "jr " ^ prettyReg rSource
 end
 
 signature TEMP = sig
