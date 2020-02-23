@@ -147,6 +147,10 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyReg Fp = "fp"
 		| prettyReg Ra = "ra"
 	
+	fun prettyImm (Int n) = Int.toString n
+		| prettyImm (String s) = s
+		| prettyImm (Float f) = Real.toString f
+	
 	fun prettyLoadStore (LoadAddress (reg, addr)) = "la " ^ prettyReg reg ^ ", " ^ Int.toString addr
 		| prettyLoadStore (LoadByte (reg, addr)) = "lb " ^ prettyReg reg ^ ", " ^ Int.toString addr
 		| prettyLoadStore (LoadByteU (reg, addr)) = "lbu " ^ prettyReg reg ^ ", " ^ Int.toString addr
@@ -169,6 +173,49 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyLoadStore (UnalignedLoadWord (reg, addr)) = "ulw " ^ prettyReg reg ^ ", " ^ Int.toString addr
 		| prettyLoadStore (UnalignedStoreHalfword (reg, addr)) = "ush " ^ prettyReg reg ^ ", " ^ Int.toString addr
 		| prettyLoadStore (UnalignedStoreWord (reg, addr)) = "usw " ^ prettyReg reg ^ ", " ^ Int.toString addr
+
+	fun prettyExceptionTrap ReturnFromException = "rfe"
+		| prettyExceptionTrap SystemCall = "syscall"
+		| prettyExceptionTrap Break = "break"
+		| prettyExceptionTrap Nop = "nop"
+	
+	fun prettyConstMapping (LoadImm (rDest, imm)) = "li " ^ prettyReg rDest ^ ", " ^ prettyImm imm
+		| prettyConstMapping (LoadUpperImm (rDest, n)) = "lui " ^ prettyReg rDest ^ ", " ^ Int.toString n
+
+	fun prettyArithmeticLogic (AbsVal (rDest, rSource)) = "abs " ^ prettyReg rDest ^ ", " ^ prettyReg rSource
+		| prettyArithmeticLogic (Add (rDest, rSource1, rSource2)) = "add " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (AddImm (rDest, rSource, imm)) = "addi " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
+		| prettyArithmeticLogic (AddU (rDest, rSource1, rSource2)) = "addu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (AddImmU (rDest, rSource, imm)) = "addiu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
+		| prettyArithmeticLogic (And (rDest, rSource1, rSource2)) = "and " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (AndImm (rDest, rSource, imm)) = "andi " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
+		| prettyArithmeticLogic (Divide (rSource1, rSource2)) = "div " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (DivideU (rSource1, rSource2)) = "divu " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (DivideQuo (rDest, rSource1, rSource2)) = "div " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (DivideQuoU (rDest, rSource1, rSource2)) = "divu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Mul (rDest, rSource1, rSource2)) = "mul " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (MulOver (rDest, rSource1, rSource2)) = "mulo " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (MulOverU (rDest, rSource1, rSource2)) = "mulou " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Mult (rSource1, rSource2)) = "mult " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (MultU (rSource1, rSource2)) = "multu " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Neg (rDest, rSource)) = "neg " ^ prettyReg rDest ^ ", " ^ prettyReg rSource
+		| prettyArithmeticLogic (NegU (rDest, rSource)) = "negu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource
+		| prettyArithmeticLogic (Nor (rDest, rSource1, rSource2)) = "nor " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Not (rDest, rSource)) = "not " ^ prettyReg rDest ^ ", " ^ prettyReg rSource
+		| prettyArithmeticLogic (Or (rDest, rSource1, rSource2)) = "or " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (OrImm (rDest, rSource, imm)) = "ori " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
+		| prettyArithmeticLogic (Rem (rDest, rSource1, rSource2)) = "rem " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (RotateLeft (rDest, rSource1, rSource2)) = "rol " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (RotateRight (rDest, rSource1, rSource2)) = "ror " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (ShiftLeftLogical (rDest, rSource1, rSource2)) = "sll " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (ShiftLeftLogicalVar (rDest, rSource1, rSource2)) = "sllv " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (ShiftRightArithmetic (rDest, rSource1, rSource2)) = "sra " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (ShiftRightLogical (rDest, rSource1, rSource2)) = "srl " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (ShiftRightLogicalVar (rDest, rSource1, rSource2)) = "srlv " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (SubU (rDest, rSource1, rSource2)) = "sub " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Sub (rDest, rSource1, rSource2)) = "subu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Xor (rDest, rSource1, rSource2)) = "xor " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (XorImm (rDest, rSource, imm)) = "xori " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
 	
 end
 
