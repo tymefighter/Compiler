@@ -1,6 +1,6 @@
 structure MIPS = struct
 
-datatype Regs = Zero
+datatype Reg = Zero
 	| At
 	| V of int
 	| A of int
@@ -16,28 +16,31 @@ datatype Immediate = Int of int
 	| String of string
 	| Float of real
 
-datatype ('l, 't) LoadStoreInst = LoadAddress of 't * int
-	| LoadByte of 't * int
-	| LoadByteU of 't * int
-	| LoadDoubleWord of 't * int
-	| LoadHalfWord of 't * int
-	| LoadHalfWordU of 't * int
-	| LoadWord of 't * int
-	| LoadWordCoprocessor of 't * int
-	| LoadWordLeft of 't * int	
-	| LoadWordRight of 't * int
-	| StoreByte of 't * int
-	| StoreDoubleWord of 't * int
-	| StoreHalfWord of 't * int
-	| StoreWord of 't * int
-	| StoreWordCoprocessor of 't * int
-	| StoreWordLeft of 't * int
-	| StoreWordRight of 't * int
-	| UnalignedLoadHalfword of 't * int
-	| UnalignedLoadHalfwordU of 't * int
-	| UnalignedLoadWord of 't * int
-	| UnalignedStoreHalfword of 't * int
-	| UnalignedStoreWord of 't * int
+datatype Addr = RegAddr of int * Reg
+	| StringAddr of string
+
+datatype ('l, 't) LoadStoreInst = LoadAddress of 't * Addr
+	| LoadByte of 't * Addr
+	| LoadByteU of 't * Addr
+	| LoadDoubleWord of 't * Addr
+	| LoadHalfWord of 't * Addr
+	| LoadHalfWordU of 't * Addr
+	| LoadWord of 't * Addr
+	| LoadWordCoprocessor of 't * Addr
+	| LoadWordLeft of 't * Addr	
+	| LoadWordRight of 't * Addr
+	| StoreByte of 't * Addr
+	| StoreDoubleWord of 't * Addr
+	| StoreHalfWord of 't * Addr
+	| StoreWord of 't * Addr
+	| StoreWordCoprocessor of 't * Addr
+	| StoreWordLeft of 't * Addr
+	| StoreWordRight of 't * Addr
+	| UnalignedLoadHalfword of 't * Addr
+	| UnalignedLoadHalfwordU of 't * Addr
+	| UnalignedLoadWord of 't * Addr
+	| UnalignedStoreHalfword of 't * Addr
+	| UnalignedStoreWord of 't * Addr
 
 datatype ExceptionTrapInst = ReturnFromException
 	| SystemCall
@@ -133,46 +136,50 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 	| ArithmeticLogic of ('l, 't) ArithmeticLogicInst
 	| Comparison of ('l, 't) ComparisonInst
 	| BranchJump of ('l, 't) BranchJumpInst
+	| DataMove of ('l, 't) DataMoveInst
 	
 	
-	fun prettyReg Zero = "zero"
-		| prettyReg At = "at"
-		| prettyReg (V n) = "v" ^ Int.toString n
-		| prettyReg (A n) = "a" ^ Int.toString n
-		| prettyReg (T n) = "t" ^ Int.toString n
-		| prettyReg (S n) = "s" ^ Int.toString n
-		| prettyReg (K n) = "k" ^ Int.toString n
-		| prettyReg Gp = "gp" 
-		| prettyReg Sp = "sp"
-		| prettyReg Fp = "fp"
-		| prettyReg Ra = "ra"
+	fun prettyReg Zero = "$zero"
+		| prettyReg At = "$at"
+		| prettyReg (V n) = "$v" ^ Int.toString n
+		| prettyReg (A n) = "$a" ^ Int.toString n
+		| prettyReg (T n) = "$t" ^ Int.toString n
+		| prettyReg (S n) = "$s" ^ Int.toString n
+		| prettyReg (K n) = "$k" ^ Int.toString n
+		| prettyReg Gp = "$gp" 
+		| prettyReg Sp = "$sp"
+		| prettyReg Fp = "$fp"
+		| prettyReg Ra = "$ra"
 	
 	fun prettyImm (Int n) = Int.toString n
 		| prettyImm (String s) = s
 		| prettyImm (Float f) = Real.toString f
+
+	fun prettyAddr (RegAddr (off, reg)) = Int.toString off ^ "(" ^ prettyReg reg ^ ")"
+		| prettyAddr (StringAddr addr) = addr
 	
-	fun prettyLoadStore (LoadAddress (reg, addr)) = "la " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadByte (reg, addr)) = "lb " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadByteU (reg, addr)) = "lbu " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadDoubleWord (reg, addr)) = "ld " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadHalfWord (reg, addr)) = "lh " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadHalfWordU (reg, addr)) = "lhu " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadWord (reg, addr)) = "lw " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadWordCoprocessor (reg, addr)) = "lwcz " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadWordLeft (reg, addr)) = "lwl " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (LoadWordRight (reg, addr)) = "lwr " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreByte (reg, addr)) = "sb " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreDoubleWord (reg, addr)) = "sd " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreHalfWord (reg, addr)) = "sh " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreWord (reg, addr)) = "sw " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreWordCoprocessor (reg, addr)) = "swcz " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreWordLeft (reg, addr)) = "swl " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (StoreWordRight (reg, addr)) = "swr " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (UnalignedLoadHalfword (reg, addr)) = "ulh " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (UnalignedLoadHalfwordU (reg, addr)) = "ulhu " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (UnalignedLoadWord (reg, addr)) = "ulw " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (UnalignedStoreHalfword (reg, addr)) = "ush " ^ prettyReg reg ^ ", " ^ Int.toString addr
-		| prettyLoadStore (UnalignedStoreWord (reg, addr)) = "usw " ^ prettyReg reg ^ ", " ^ Int.toString addr
+	fun prettyLoadStore (LoadAddress (reg, addr)) = "la " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadByte (reg, addr)) = "lb " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadByteU (reg, addr)) = "lbu " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadDoubleWord (reg, addr)) = "ld " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadHalfWord (reg, addr)) = "lh " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadHalfWordU (reg, addr)) = "lhu " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadWord (reg, addr)) = "lw " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadWordCoprocessor (reg, addr)) = "lwcz " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadWordLeft (reg, addr)) = "lwl " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (LoadWordRight (reg, addr)) = "lwr " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreByte (reg, addr)) = "sb " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreDoubleWord (reg, addr)) = "sd " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreHalfWord (reg, addr)) = "sh " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreWord (reg, addr)) = "sw " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreWordCoprocessor (reg, addr)) = "swcz " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreWordLeft (reg, addr)) = "swl " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (StoreWordRight (reg, addr)) = "swr " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (UnalignedLoadHalfword (reg, addr)) = "ulh " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (UnalignedLoadHalfwordU (reg, addr)) = "ulhu " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (UnalignedLoadWord (reg, addr)) = "ulw " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (UnalignedStoreHalfword (reg, addr)) = "ush " ^ prettyReg reg ^ ", " ^ prettyAddr addr
+		| prettyLoadStore (UnalignedStoreWord (reg, addr)) = "usw " ^ prettyReg reg ^ ", " ^ prettyAddr addr
 
 	fun prettyExceptionTrap ReturnFromException = "rfe"
 		| prettyExceptionTrap SystemCall = "syscall"
@@ -268,6 +275,7 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyInst (ArithmeticLogic ar_logic_inst) = prettyArithmeticLogic ar_logic_inst
 		| prettyInst (Comparison comp_inst) = prettyComparison comp_inst
 		| prettyInst (BranchJump br_jmp_inst) = prettyBranchJump br_jmp_inst
+		| prettyInst (DataMove dt_mv_inst) = prettyDataMove dt_mv_inst
 end
 
 signature TEMP = sig
