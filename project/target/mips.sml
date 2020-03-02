@@ -294,14 +294,34 @@ structure Temp : TEMP = struct
 	val tempRef = ref ""
 	val labelRef = ref ""
 
-	fun getNewString [c] = (
-			if (Char.toString c) = "z" then
-				["z", "a"]
-			else
-				[Char.toString (Char.succ c)]
-		)
-		| getNewString (ch :: chs) = (Char.toString ch) :: getNewString chs
-		| getNewString [] = ["a"]
+    fun getNewString char_list = let
+            fun getNewStringHelper [c] = (
+                if(Char.toString c) = "z" then
+                    (["a"], true)
+                else
+                    ([Char.toString (Char.succ c)], false)
+            )
+            | getNewStringHelper (ch :: chs) = let
+                    val (str_ls, update_curr) = getNewStringHelper chs
+                in
+                    if(update_curr) then (
+                        if(Char.toString ch) = "z" then
+                            (("a") :: str_ls, true)
+                        else
+                            ((Char.toString (Char.succ ch)) :: str_ls, false)
+                    )
+                    else
+                        ((Char.toString ch) :: str_ls, false)
+                end
+            | getNewStringHelper [] = (["a"], false)
+            
+            val (str_ls, upd_first) = getNewStringHelper char_list
+        in
+            if(upd_first) then
+                "a" :: str_ls
+            else
+                str_ls
+        end
 
 
 	fun newtemp () = let
