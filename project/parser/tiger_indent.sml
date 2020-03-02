@@ -42,7 +42,7 @@ structure Pprint = struct
         | pprintTyfields ((id_left, id_right) :: xs) = (ind ()) ^ id_left ^ " : " ^ id_right ^ ",\n" ^ pprintTyfields xs
 
     fun pprintExp Ast.LiteralNil = "nil"
-        | pprintExp (Ast.LiteralInt int_num_str) = int_num_str
+        | pprintExp (Ast.LiteralInt int_num_str) = Int.toString int_num_str
         | pprintExp (Ast.LiteralStr str) = str
 
         | pprintExp (Ast.Op (exp1, oper, exp2)) = (pprintExp exp1) ^ " " ^ (pprintOp oper) ^ " " ^ (pprintExp exp2)

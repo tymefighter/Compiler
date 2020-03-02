@@ -9,7 +9,7 @@ datatype Lvalue = Var of string
     | IdxArr of Lvalue * Exp
 
 and Exp = LiteralNil
-    | LiteralInt of string
+    | LiteralInt of int
     | LiteralStr of string
 
     | Op of Exp * BinOp * Exp

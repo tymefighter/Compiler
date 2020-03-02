@@ -91,7 +91,7 @@ EXPS : EXP ([EXP])
     | EXP SEMI EXPS (EXP :: EXPS)
 
 EXP : NIL (Ast.LiteralNil)
-    | INT (Ast.LiteralInt INT)
+    | INT (Ast.LiteralInt (case Int.fromString INT of (SOME x) => x | NONE => 0))
     | STR (Ast.LiteralStr STR)
 
     | EXP ADD EXP (Ast.Op (EXP1, Ast.ADD, EXP2))
