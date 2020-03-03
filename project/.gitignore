@@ -3,4 +3,4 @@ tiger
 *.lex.sml
 *.grm.sml
 *.grm.sig
-*.grm.descs
+*.grm.desc
