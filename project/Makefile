@@ -2,10 +2,11 @@
 
 .DEFAULT_GOAL := tiger
 
-tiger: tiger.lex.sml tiger.grm.sml tiger.mlb
+tiger: tree.sml tiger_driver.sml ast.sml tiger.lex.sml tiger.grm.sml tiger.mlb
 	mlton -output tiger tiger.mlb
 
-test: tiger
+test: tiger test_case
+	./tiger < test_case
 
 %.lex.sml: %.lex
 	mllex $*.lex

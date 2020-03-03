@@ -10,3 +10,6 @@ val lexer = TigerParser.makeLexer (fn n => TextIO.inputN (TextIO.stdIn, n))
 fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int.toString i) ^ ", " ^ s ^ "\n")
 
 val (prog, _) = TigerParser.parse (0, lexer, print_error, ())
+
+val tree_code = Translate.translateProg prog
+val _ = print (Tree.pprintExp tree_code ^ "\n")

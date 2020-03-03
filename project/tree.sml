@@ -21,6 +21,32 @@ structure Tree = struct
     and relop = EQ | NE | LT | GT | LE | GE
         | ULT | ULE | UGT | UGE
     
+    fun pprintExp (CONST n) = Int.toString n
+        | pprintExp (NAME lab) = "Label: " ^ lab
+        | pprintExp (BINOP (bin_op, e1, e2)) = let
+                val bin_op_str = case bin_op of 
+                    PLUS => "PLUS "
+                    | MINUS => "MINUS "
+                    | MUL => "MUL "
+                    | DIV => "DIV "
+                    | AND => "AND "
+                    | OR => "OR "
+                    | LSHIFT => "LSHIFT "
+                    | RSHIFT => "RSHIFT "
+                    | ARSHIFT => "ARSHIFT "
+                    | XOR => "XOR "
+            in
+                bin_op_str ^ "(" ^ pprintExp e1 ^ ", " ^ pprintExp e2 ^ ")"
+            end
+        | pprintExp (MEM e) = "Mem (" ^ pprintExp e ^ ")"
+        | pprintExp (CALL (f_name, arg_list)) = let
+                fun printArg [arg] = pprintExp arg
+                    | printArg (arg :: arg_ls) = pprintExp arg ^ ", " ^ printArg arg_ls
+                    | printArg [] = ""
+            in
+                pprintExp f_name ^ " (" ^ printArg arg_list ^ ")"
+            end
+        | pprintExp _ = ""
 end
 
 structure Translate = struct
@@ -53,10 +79,10 @@ structure Translate = struct
                 ], Tree.TEMP res)
             end
    
-     fun translate (Ast.LiteralInt x) = Ex (Tree.CONST x)
-        | translate (Ast.Op (e1, bin_op, e2)) = let
-                val ex1 = unEx (translate e1)
-                val ex2 = unEx (translate e2)
+     fun translateExp (Ast.LiteralInt x) = Ex (Tree.CONST x)
+        | translateExp (Ast.Op (e1, bin_op, e2)) = let
+                val ex1 = unEx (translateExp e1)
+                val ex2 = unEx (translateExp e2)
                 val ex = case bin_op of
                     Ast.ADD => Tree.BINOP (Tree.PLUS, ex1, ex2)
                     | Ast.SUB => Tree.BINOP (Tree.MINUS, ex1, ex2)
@@ -73,8 +99,11 @@ structure Translate = struct
             in
                 Ex ex
             end
-        | translate (Ast.NegExp e) = Ex (Tree.BINOP (Tree.MINUS, Tree.CONST 0, unEx (translate e)))
-        | translate _ = Ex (Tree.CONST ~1)
+        | translateExp (Ast.NegExp e) = Ex (Tree.BINOP (Tree.MINUS, Tree.CONST 0, unEx (translateExp e)))
+        | translateExp _ = Ex (Tree.CONST ~1)
+
+    fun translateProg (Ast.Expression exp) = unEx (translateExp exp)
+        | translateProg _ = (Tree.CONST ~1)
 end
 
 
