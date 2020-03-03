@@ -1,0 +1,165 @@
+
+%%
+
+%eop EOF
+%verbose
+%pure
+%name Tiger
+
+%term INT of string
+    | STR of string
+    | ID of string
+    | STRING of string
+    | NIL
+    | ADD
+    | SUB
+    | MUL
+    | DIV
+    | EQ
+    | NE
+    | G
+    | L
+    | GE
+    | LE
+    | AND
+    | OR
+    | LEFT_B
+    | RIGHT_B
+    | SEMI
+    | EOF
+    | IF
+    | THEN
+    | ELSE
+    | WHILE
+    | DO
+    | FOR
+    | ASSIGN
+    | TO
+    | BREAK
+    | COMMA
+    | DOT
+    | LEFT_SQ
+    | RIGHT_SQ
+    | OF
+    | TYPE
+    | VAR
+    | COLON
+    | LET
+    | IN
+    | END
+    | ARRAY
+    | IMPORT
+    | LEFT_CUR
+    | RIGHT_CUR
+    | FUNCTION
+    | CLASS
+    | METHOD
+    | EXTENDS
+    | PRIMITIVE
+    | NEW
+
+%nonterm EXP of Ast.Exp
+    | PROG of Ast.Prog
+    | EXPS of Ast.Exp list
+    | PARAM of Ast.Exp list
+    | LVALUE of Ast.Lvalue
+    | DEC of Ast.Dec
+    | DECS of Ast.Dec list
+    | TY of Ast.Type
+    | TYFIELDS of (string * string) list
+    | CLASSFIELD of Ast.ClassField
+    | CLASSFIELDS of Ast.ClassField list
+
+%noshift EOF
+
+%nonassoc WHILE FOR THEN
+%nonassoc ELSE
+%left OR
+%left AND
+%nonassoc EQ NE G L GE LE
+%left ADD SUB
+%left MUL DIV
+
+%pos int
+
+%%
+
+PROG : EXP (Ast.Expression EXP)
+    | DECS (Ast.Decs DECS)
+
+EXPS : EXP ([EXP])
+    | EXP SEMI EXPS (EXP :: EXPS)
+
+EXP : NIL (Ast.LiteralNil)
+    | INT (Ast.LiteralInt (case Int.fromString INT of (SOME x) => x | NONE => 0))
+    | STR (Ast.LiteralStr STR)
+
+    | EXP ADD EXP (Ast.Op (EXP1, Ast.ADD, EXP2))
+    | EXP SUB EXP (Ast.Op (EXP1, Ast.SUB, EXP2))
+    | EXP MUL EXP (Ast.Op (EXP1, Ast.MUL, EXP2))
+    | EXP DIV EXP (Ast.Op (EXP1, Ast.DIV, EXP2))
+    | EXP EQ EXP (Ast.Op (EXP1, Ast.EQ, EXP2))
+    | EXP NE EXP (Ast.Op (EXP1, Ast.NE, EXP2))
+    | EXP G EXP (Ast.Op (EXP1, Ast.G, EXP2))
+    | EXP L EXP (Ast.Op (EXP1, Ast.L, EXP2))
+    | EXP GE EXP (Ast.Op (EXP1, Ast.GE, EXP2))
+    | EXP LE EXP (Ast.Op (EXP1, Ast.LE, EXP2))
+    | EXP AND EXP (Ast.Op (EXP1, Ast.AND, EXP2))
+    | EXP OR EXP (Ast.Op (EXP1, Ast.OR, EXP2))
+    | SUB EXP (Ast.NegExp EXP)
+    | LEFT_B EXPS RIGHT_B (Ast.Exprs EXPS)
+ 
+    | IF EXP THEN EXP %prec THEN (Ast.IfThen (EXP1, EXP2))
+    | IF EXP THEN EXP ELSE EXP %prec ELSE (Ast.IfThenElse (EXP1, EXP2, EXP3))
+
+    | WHILE EXP DO EXP %prec WHILE (Ast.While (EXP1, EXP2))
+    | FOR ID ASSIGN EXP TO EXP DO EXP %prec FOR (Ast.For (ID, EXP1, EXP2, EXP3))
+    | BREAK (Ast.Break)
+
+    | LVALUE (Ast.Lval LVALUE)
+
+    | ID LEFT_B PARAM RIGHT_B (Ast.FunCall (ID, PARAM))
+    | LVALUE DOT ID LEFT_B PARAM RIGHT_B (Ast.MethodCall (LVALUE, ID, PARAM))
+
+    | LET DECS IN EXPS END (Ast.LetStmt (DECS, EXPS))
+    | NEW ID (Ast.New (ID))
+
+LVALUE : ID (Ast.Var ID)
+    | LVALUE DOT ID (Ast.MemberRef (LVALUE, ID))
+    | LVALUE LEFT_SQ EXP RIGHT_SQ (Ast.IdxArr (LVALUE, EXP))
+
+PARAM : ([])
+    | EXP ([EXP])
+    | EXP COMMA PARAM (EXP :: PARAM)
+
+DECS : DEC ([DEC])
+    | DEC DECS (DEC :: DECS)
+
+DEC : VAR ID ASSIGN EXP (Ast.Vardec (ID, NONE, EXP))
+    | VAR ID COLON ID ASSIGN EXP (Ast.Vardec (ID1, (SOME ID2), EXP))
+    | TYPE ID EQ ID (Ast.Typedec (ID1, Ast.Alias ID2))
+    | TYPE ID EQ TY (Ast.Typedec (ID, TY))
+    | IMPORT STR (Ast.Import (STR))
+    | FUNCTION ID LEFT_B TYFIELDS RIGHT_B EQ EXP (Ast.FuncDec (ID, TYFIELDS, NONE, EXP))
+    | FUNCTION ID LEFT_B TYFIELDS RIGHT_B COLON ID EQ EXP (Ast.FuncDec (ID1, TYFIELDS, SOME ID2, EXP))
+    | CLASS ID LEFT_CUR CLASSFIELDS RIGHT_CUR (Ast.ClassDef (ID, NONE, CLASSFIELDS))
+    | CLASS ID EXTENDS ID LEFT_CUR CLASSFIELDS RIGHT_CUR (Ast.ClassDef (ID1, SOME ID2, CLASSFIELDS))
+    | PRIMITIVE ID LEFT_B TYFIELDS RIGHT_B (Ast.PrimitiveDec (ID, TYFIELDS, NONE))
+    | PRIMITIVE ID LEFT_B TYFIELDS RIGHT_B COLON ID (Ast.PrimitiveDec (ID1, TYFIELDS, SOME ID2))
+
+CLASSFIELDS : CLASSFIELD ([CLASSFIELD])
+    | CLASSFIELD CLASSFIELDS (CLASSFIELD :: CLASSFIELDS)
+
+CLASSFIELD : METHOD ID LEFT_B TYFIELDS RIGHT_B EQ EXP (Ast.MethodDec (ID, TYFIELDS, NONE, EXP))
+    | METHOD ID LEFT_B TYFIELDS RIGHT_B COLON ID EQ EXP (Ast.MethodDec (ID1, TYFIELDS, SOME ID2, EXP))
+    | VAR ID ASSIGN EXP (Ast.VarDecCF (ID, NONE, EXP))
+    | VAR ID COLON ID ASSIGN EXP (Ast.VarDecCF (ID1, (SOME ID2), EXP))
+
+TY : ARRAY OF ID (Ast.Array ID)
+    | LEFT_CUR TYFIELDS RIGHT_CUR (Ast.RecordType TYFIELDS)
+    | CLASS LEFT_CUR CLASSFIELDS RIGHT_CUR (Ast.ClassType (NONE, CLASSFIELDS))
+    | CLASS EXTENDS ID LEFT_CUR CLASSFIELDS RIGHT_CUR (Ast.ClassType (SOME ID, CLASSFIELDS))
+
+TYFIELDS : ([])
+    | ID COLON ID ([(ID1, ID2)])
+    | ID COLON ID COMMA TYFIELDS ((ID1, ID2) :: TYFIELDS)

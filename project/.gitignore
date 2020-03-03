@@ -1,2 +1,6 @@
-# ignore the following executable
-tigc
+# ignore the following files
+tiger
+*.lex.sml
+*.grm.sml
+*.grm.sig
+*.grm.descs
