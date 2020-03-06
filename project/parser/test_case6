@@ -1,0 +1,4 @@
+if uart = timeSet then
+   a := a + 1
+else 
+    a := a * 2

@@ -72,6 +72,7 @@
 
 %noshift EOF
 
+%nonassoc ASSIGN
 %nonassoc WHILE FOR THEN
 %nonassoc ELSE
 %left OR
@@ -123,6 +124,8 @@ EXP : NIL (Ast.LiteralNil)
 
     | LET DECS IN EXPS END (Ast.LetStmt (DECS, EXPS))
     | NEW ID (Ast.New (ID))
+
+    | LVALUE ASSIGN EXP %prec ASSIGN (Ast.Assignment (LVALUE, EXP))
 
 LVALUE : ID (Ast.Var ID)
     | LVALUE DOT ID (Ast.MemberRef (LVALUE, ID))

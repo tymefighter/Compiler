@@ -1,0 +1,8 @@
+let
+   var N := 0
+in
+    if ( i >20) then 
+	N := N + 20
+    else 
+	 N := N + 10
+end

@@ -111,6 +111,7 @@ structure Pprint = struct
                 str1 ^ str2 ^ str3 ^ str4 ^ str5
             end
         | pprintExp (Ast.New st) = "new " ^ st
+        | pprintExp (Ast.Assignment (lval, e)) = pprintLval lval ^ " := " ^ pprintExp e
 
     and  pprintExpList [] = ""
     | pprintExpList [exp] = (ind ()) ^ "(" ^ (pprintExp exp) ^ ")"
