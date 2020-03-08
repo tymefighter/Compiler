@@ -24,7 +24,7 @@ structure Tree = struct
     exception Incomplete
 
     fun pprintExp (CONST n) = Int.toString n
-        | pprintExp (NAME lab) = "Label " ^ lab
+        | pprintExp (NAME lab) = "NAME " ^ lab
         | pprintExp (TEMP tmp) = "Temp " ^ tmp
         | pprintExp (BINOP (bin_op, e1, e2)) = let
                 val bin_op_str = case bin_op of 
@@ -62,6 +62,7 @@ structure Translate = struct
     exception EmptySeq
     exception EmptyExpressionList
     exception ConditionalToNoReturn
+    exception NoReturnToConditional
 
     datatype exp = Ex of Tree.exp
         | Nx of Tree.stm
@@ -92,6 +93,10 @@ structure Translate = struct
     fun unNx (Ex e) = Tree.EXP e
         | unNx (Nx s) = s
         | unNx (Cx con) = raise ConditionalToNoReturn
+    
+    fun unCx (Ex e) = (fn (t, f) => Tree.CJUMP (Tree.NE, e, Tree.CONST 0, t, f))
+        | unCx (Nx s) = raise NoReturnToConditional
+        | unCx (Cx c) = c
    
      fun translateExp (Ast.LiteralInt x) = Ex (Tree.CONST x)
         | translateExp (Ast.Op (e1, bin_op, e2)) = let
@@ -127,6 +132,37 @@ structure Translate = struct
                 case ls of
                     [] => translateExp last_ele
                     | _ => Ex (Tree.ESEQ ((seq o map (unNx o translateExp)) ls, unEx (translateExp last_ele)))
+            end
+        | translateExp (Ast.IfThen (cond_ex, ex)) = let
+                val cnd = unCx (translateExp cond_ex)
+                val true_label = Temp.newlabel ()
+                val false_label = Temp.newlabel ()
+                val stmts = seq [
+                    cnd (true_label, false_label),
+                    Tree.LABEL true_label,
+                    Tree.EXP ((unEx o translateExp) ex),
+                    Tree.LABEL false_label
+                ]
+            in
+                Ex (Tree.ESEQ (stmts, Tree.CONST 0))
+            end
+        | translateExp (Ast.IfThenElse (cond_ex, true_ex, false_ex)) = let
+                val cnd = unCx (translateExp cond_ex)
+                val true_label = Temp.newlabel ()
+                val false_label = Temp.newlabel ()
+                val continue_label = Temp.newlabel ()
+                val stmts = seq [
+                    cnd (true_label, false_label),
+                    Tree.LABEL true_label,
+                    Tree.EXP ((unEx o translateExp) true_ex),
+                    Tree.JUMP (Tree.NAME continue_label, [continue_label]),
+                    Tree.LABEL false_label,
+                    Tree.EXP ((unEx o translateExp) false_ex),
+                    Tree.JUMP (Tree.NAME continue_label, [continue_label]),
+                    Tree.LABEL continue_label
+                ]
+            in
+                Ex (Tree.ESEQ (stmts, Tree.CONST 0))
             end
         | translateExp _ = Ex (Tree.CONST ~1)
 
