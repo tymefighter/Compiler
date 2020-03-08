@@ -177,6 +177,22 @@ structure Translate = struct
             in
                 Ex (Tree.ESEQ (stmts, Tree.CONST 0))
             end
+        | translateExp (Ast.While (cond_exp, exp)) = let
+                val cnd = unCx (translateExp cond_exp)
+                val loop_label = Temp.newlabel ()
+                val true_label = Temp.newlabel ()
+                val false_label = Temp.newlabel ()
+                val stmts = seq [
+                    Tree.LABEL loop_label,
+                    cnd (true_label, false_label),
+                    Tree.LABEL true_label,
+                    Tree.EXP ((unEx o translateExp) exp),
+                    Tree.JUMP (Tree.NAME loop_label, [loop_label]),
+                    Tree.LABEL false_label
+                ]
+            in
+                Ex (Tree.ESEQ (stmts, Tree.CONST 0))
+            end
         | translateExp _ = Ex (Tree.CONST ~1)
 
     fun translateProg (Ast.Expression exp) = unEx (translateExp exp)

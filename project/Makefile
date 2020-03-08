@@ -10,7 +10,7 @@ tc%: test_case%
 	@echo "-------------"
 	@./tiger < test_case$*
 
-test: tiger tc1 tc2
+test: tiger tc1 tc2 tc3 tc4 tc5
 
 %.lex.sml: %.lex
 	mllex $*.lex

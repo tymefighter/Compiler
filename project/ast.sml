@@ -19,7 +19,7 @@ and Exp = LiteralNil
     | IfThen of Exp * Exp
     | IfThenElse of Exp * Exp * Exp
     | While of Exp * Exp
-    | For of string * Exp * Exp * Exp
+    | For of id * Exp * Exp * Exp
     | Break
 
     | Lval of Lvalue
