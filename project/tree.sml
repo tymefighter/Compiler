@@ -52,6 +52,7 @@ end
 structure Translate = struct
 
     exception EmptySeq
+    exception EmptyExpressionList
 
     datatype exp = Ex of Tree.exp
         | Nx of Tree.stm
@@ -100,20 +101,22 @@ structure Translate = struct
                 Ex ex
             end
         | translateExp (Ast.NegExp e) = Ex (Tree.BINOP (Tree.MINUS, Tree.CONST 0, unEx (translateExp e)))
+        | translateExp (Ast.Exprs exp_list) = let
+                fun seperateLastEle [] = raise EmptyExpressionList
+                    | seperateLastEle [x] = ([], x)
+                    | seperateLastEle (x :: xs) = let
+                            val (ls, last_ele) = seperateLastEle xs
+                        in
+                            (x :: ls, last_ele)
+                        end
+                val (ls, last_ele) = seperateLastEle exp_list
+            in
+                case ls of
+                    [] => translateExp last_ele
+                    | _ => Ex (Tree.ESEQ ((seq o map (Tree.EXP o unEx o translateExp)) ls, unEx (translateExp last_ele)))
+            end
         | translateExp _ = Ex (Tree.CONST ~1)
 
     fun translateProg (Ast.Expression exp) = unEx (translateExp exp)
         | translateProg _ = (Tree.CONST ~1)
 end
-
-
-
-
-
-
-
-
-
-
-
-

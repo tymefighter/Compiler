@@ -30,6 +30,8 @@ and Exp = LiteralNil
     | LetStmt of Dec list * Exp list
     | New of id
 
+    | Assignment of Lvalue * Exp
+
 and Dec = Vardec of id * id option * Exp
     | Typedec of id * Type
     | Import of id
