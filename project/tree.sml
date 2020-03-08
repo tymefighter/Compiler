@@ -23,6 +23,17 @@ structure Tree = struct
     
     exception Incomplete
 
+    fun pprintRelop EQ = "EQ"
+        | pprintRelop NE = "NE"
+        | pprintRelop LT = "LT"
+        | pprintRelop GT = "GT"
+        | pprintRelop LE = "LE"
+        | pprintRelop GE = "GE"
+        | pprintRelop ULT = "ULT"
+        | pprintRelop ULE = "ULE"
+        | pprintRelop UGT = "UGT"
+        | pprintRelop UGE = "UGE"
+
     fun pprintExp (CONST n) = Int.toString n
         | pprintExp (NAME lab) = "NAME " ^ lab
         | pprintExp (TEMP tmp) = "Temp " ^ tmp
@@ -53,8 +64,10 @@ structure Tree = struct
     
     and pprintStm (MOVE (to, value)) = "MOVE (" ^ pprintExp to ^ ", " ^ pprintExp value ^ ")"
         | pprintStm (EXP ex) = "EXP (" ^ pprintExp ex ^ ")"
+        | pprintStm (JUMP (loc, _)) = "JUMP (" ^ pprintExp loc ^ ")"
+        | pprintStm (CJUMP (rel_op, e1, e2, true_lab, false_lab)) = "CJUMP (" ^ pprintRelop rel_op ^ ", " ^ pprintExp e1 ^ ", " ^ pprintExp e2 ^ ", " ^ true_lab ^ ", " ^ false_lab ^ ")" 
         | pprintStm (SEQ (st1, st2)) = "SEQ (" ^ pprintStm st1 ^ ", " ^ pprintStm st2 ^ ")"
-        | pprintStm _ = raise Incomplete
+        | pprintStm (LABEL lab) = "Label (" ^ lab ^ ")"
 end
 
 structure Translate = struct
