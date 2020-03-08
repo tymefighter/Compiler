@@ -21,8 +21,11 @@ structure Tree = struct
     and relop = EQ | NE | LT | GT | LE | GE
         | ULT | ULE | UGT | UGE
     
+    exception Incomplete
+
     fun pprintExp (CONST n) = Int.toString n
-        | pprintExp (NAME lab) = "Label: " ^ lab
+        | pprintExp (NAME lab) = "Label " ^ lab
+        | pprintExp (TEMP tmp) = "Temp " ^ tmp
         | pprintExp (BINOP (bin_op, e1, e2)) = let
                 val bin_op_str = case bin_op of 
                     PLUS => "PLUS "
@@ -46,13 +49,19 @@ structure Tree = struct
             in
                 pprintExp f_name ^ " (" ^ printArg arg_list ^ ")"
             end
-        | pprintExp _ = ""
+        | pprintExp (ESEQ (st, ex)) = "ESEQ (" ^ pprintStm st ^ ", " ^ pprintExp ex ^ ")"
+    
+    and pprintStm (MOVE (to, value)) = "MOVE (" ^ pprintExp to ^ ", " ^ pprintExp value ^ ")"
+        | pprintStm (EXP ex) = "EXP (" ^ pprintExp ex ^ ")"
+        | pprintStm (SEQ (st1, st2)) = "SEQ (" ^ pprintStm st1 ^ ", " ^ pprintStm st2 ^ ")"
+        | pprintStm _ = raise Incomplete
 end
 
 structure Translate = struct
 
     exception EmptySeq
     exception EmptyExpressionList
+    exception ConditionalToNoReturn
 
     datatype exp = Ex of Tree.exp
         | Nx of Tree.stm
@@ -79,6 +88,10 @@ structure Translate = struct
                     Tree.LABEL t
                 ], Tree.TEMP res)
             end
+
+    fun unNx (Ex e) = Tree.EXP e
+        | unNx (Nx s) = s
+        | unNx (Cx con) = raise ConditionalToNoReturn
    
      fun translateExp (Ast.LiteralInt x) = Ex (Tree.CONST x)
         | translateExp (Ast.Op (e1, bin_op, e2)) = let
@@ -113,7 +126,7 @@ structure Translate = struct
             in
                 case ls of
                     [] => translateExp last_ele
-                    | _ => Ex (Tree.ESEQ ((seq o map (Tree.EXP o unEx o translateExp)) ls, unEx (translateExp last_ele)))
+                    | _ => Ex (Tree.ESEQ ((seq o map (unNx o translateExp)) ls, unEx (translateExp last_ele)))
             end
         | translateExp _ = Ex (Tree.CONST ~1)
 

@@ -5,8 +5,12 @@
 tiger: tree.sml tiger_driver.sml ast.sml tiger.lex.sml tiger.grm.sml tiger.mlb
 	mlton -output tiger tiger.mlb
 
-test: tiger test_case
-	./tiger < test_case
+tc%: test_case%
+	@echo "\nTest Case $*"
+	@echo "-------------"
+	@./tiger < test_case$*
+
+test: tiger tc1 tc2
 
 %.lex.sml: %.lex
 	mllex $*.lex
