@@ -70,6 +70,15 @@ structure Tree = struct
         | pprintStm (LABEL lab) = "Label (" ^ lab ^ ")"
 end
 
+structure Env = struct
+
+    structure IdMap = RedBlackMapFn (Ast.IdKey)
+    type env = Temp.temp IdMap.map
+    
+    fun newEnv env ((var, temp) :: var_temp_ls) = IdMap.insert (env, 
+
+end
+
 structure Translate = struct
 
     exception EmptySeq
