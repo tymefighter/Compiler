@@ -215,11 +215,13 @@ structure Translate = struct
                 val loop_label = Temp.newlabel ()
                 val cont_label = Temp.newlabel ()
                 val end_label = Temp.newlabel ()
+                val eval_endex_temp = Temp.newtemp ()
                 
                 val stmts = seq [
+                    Tree.MOVE (Tree.TEMP eval_endex_temp, end_ex),
                     Tree.MOVE (Tree.TEMP loop_temp, start_ex),
                     Tree.LABEL loop_label,
-                    Tree.CJUMP (Tree.NE, Tree.TEMP loop_temp, end_ex, cont_label, end_label),
+                    Tree.CJUMP (Tree.NE, Tree.TEMP loop_temp, Tree.TEMP eval_endex_temp, cont_label, end_label),
                     Tree.LABEL cont_label,
                     body_stmt,
                     Tree.MOVE (Tree.TEMP loop_temp, Tree.BINOP (Tree.PLUS, Tree.TEMP loop_temp, Tree.CONST 1)),
