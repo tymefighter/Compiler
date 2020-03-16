@@ -205,6 +205,20 @@ structure Translate = struct
             in
                 Nx stmts
             end
+        | translateExp env (Ast.For of var * start_exp * end_exp * body_exp) = let
+                val loop_temp = Temp.newtemp ()
+                val new_env = Env.newEnv env [(var, loop_temp)]
+                val start_ex = unEx (translateExp new_env start_exp)
+                val end_ex = unEx (translateExp new_env end_exp)
+                val body_stmt = unNx (translateExp new_env body_exp)
+                val loop_label = Temp.newlabel ()
+                val stmts = seq [
+                    
+                ]
+            in
+                
+            end
+                
         | translateExp _ _ = Ex (Tree.CONST ~1)
 
     fun translateProg (Ast.Expression exp) = unEx (translateExp Env.emptyEnv exp)
