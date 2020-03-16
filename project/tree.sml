@@ -75,7 +75,8 @@ structure Env = struct
     structure IdMap = RedBlackMapFn (Ast.IdKey)
     type env = Temp.temp IdMap.map
     
-    fun newEnv env ((var, temp) :: var_temp_ls) = IdMap.insert (env, 
+    fun newEnv env ((var, temp) :: var_temp_ls) = newEnv (IdMap.insert (env, var, temp)) var_temp_ls
+        | newEnv env [] = env
 
 end
 
@@ -166,7 +167,7 @@ structure Translate = struct
                     Tree.LABEL false_label
                 ]
             in
-                Ex (Tree.ESEQ (stmts, Tree.CONST 0))
+                Nx stmts
             end
         | translateExp (Ast.IfThenElse (cond_ex, true_ex, false_ex)) = let
                 val cnd = unCx (translateExp cond_ex)
@@ -184,7 +185,7 @@ structure Translate = struct
                     Tree.LABEL continue_label
                 ]
             in
-                Ex (Tree.ESEQ (stmts, Tree.CONST 0))
+                Nx stmts
             end
         | translateExp (Ast.While (cond_exp, exp)) = let
                 val cnd = unCx (translateExp cond_exp)
@@ -200,7 +201,7 @@ structure Translate = struct
                     Tree.LABEL false_label
                 ]
             in
-                Ex (Tree.ESEQ (stmts, Tree.CONST 0))
+                Nx stmts
             end
         | translateExp _ = Ex (Tree.CONST ~1)
 
