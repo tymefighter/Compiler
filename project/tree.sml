@@ -73,10 +73,12 @@ end
 structure Env = struct
 
     structure IdMap = RedBlackMapFn (Ast.IdKey)
-    type env = Temp.temp IdMap.map
+    type environment = Temp.temp IdMap.map
     
     fun newEnv env ((var, temp) :: var_temp_ls) = newEnv (IdMap.insert (env, var, temp)) var_temp_ls
         | newEnv env [] = env
+    
+    val emptyEnv = IdMap.empty
 
 end
 
@@ -121,10 +123,10 @@ structure Translate = struct
         | unCx (Nx s) = raise NoReturnToConditional
         | unCx (Cx c) = c
    
-     fun translateExp (Ast.LiteralInt x) = Ex (Tree.CONST x)
-        | translateExp (Ast.Op (e1, bin_op, e2)) = let
-                val ex1 = unEx (translateExp e1)
-                val ex2 = unEx (translateExp e2)
+     fun translateExp env (Ast.LiteralInt x) = Ex (Tree.CONST x)
+        | translateExp env (Ast.Op (e1, bin_op, e2)) = let
+                val ex1 = unEx (translateExp env e1)
+                val ex2 = unEx (translateExp env e2)
                 val ex = case bin_op of
                     Ast.ADD => Tree.BINOP (Tree.PLUS, ex1, ex2)
                     | Ast.SUB => Tree.BINOP (Tree.MINUS, ex1, ex2)
@@ -141,8 +143,8 @@ structure Translate = struct
             in
                 Ex ex
             end
-        | translateExp (Ast.NegExp e) = Ex (Tree.BINOP (Tree.MINUS, Tree.CONST 0, unEx (translateExp e)))
-        | translateExp (Ast.Exprs exp_list) = let
+        | translateExp env (Ast.NegExp e) = Ex (Tree.BINOP (Tree.MINUS, Tree.CONST 0, unEx (translateExp env e)))
+        | translateExp env (Ast.Exprs exp_list) = let
                 fun seperateLastEle [] = raise EmptyExpressionList
                     | seperateLastEle [x] = ([], x)
                     | seperateLastEle (x :: xs) = let
@@ -153,42 +155,42 @@ structure Translate = struct
                 val (ls, last_ele) = seperateLastEle exp_list
             in
                 case ls of
-                    [] => translateExp last_ele
-                    | _ => Ex (Tree.ESEQ ((seq o map (unNx o translateExp)) ls, unEx (translateExp last_ele)))
+                    [] => translateExp env last_ele
+                    | _ => Ex (Tree.ESEQ ((seq o map (unNx o translateExp env)) ls, unEx (translateExp env last_ele)))
             end
-        | translateExp (Ast.IfThen (cond_ex, ex)) = let
-                val cnd = unCx (translateExp cond_ex)
+        | translateExp env (Ast.IfThen (cond_ex, ex)) = let
+                val cnd = unCx (translateExp env cond_ex)
                 val true_label = Temp.newlabel ()
                 val false_label = Temp.newlabel ()
                 val stmts = seq [
                     cnd (true_label, false_label),
                     Tree.LABEL true_label,
-                    Tree.EXP ((unEx o translateExp) ex),
+                    Tree.EXP ((unEx o (translateExp env)) ex),
                     Tree.LABEL false_label
                 ]
             in
                 Nx stmts
             end
-        | translateExp (Ast.IfThenElse (cond_ex, true_ex, false_ex)) = let
-                val cnd = unCx (translateExp cond_ex)
+        | translateExp env (Ast.IfThenElse (cond_ex, true_ex, false_ex)) = let
+                val cnd = unCx (translateExp env cond_ex)
                 val true_label = Temp.newlabel ()
                 val false_label = Temp.newlabel ()
                 val continue_label = Temp.newlabel ()
                 val stmts = seq [
                     cnd (true_label, false_label),
                     Tree.LABEL true_label,
-                    Tree.EXP ((unEx o translateExp) true_ex),
+                    Tree.EXP ((unEx o translateExp env) true_ex),
                     Tree.JUMP (Tree.NAME continue_label, [continue_label]),
                     Tree.LABEL false_label,
-                    Tree.EXP ((unEx o translateExp) false_ex),
+                    Tree.EXP ((unEx o translateExp env) false_ex),
                     Tree.JUMP (Tree.NAME continue_label, [continue_label]),
                     Tree.LABEL continue_label
                 ]
             in
                 Nx stmts
             end
-        | translateExp (Ast.While (cond_exp, exp)) = let
-                val cnd = unCx (translateExp cond_exp)
+        | translateExp env (Ast.While (cond_exp, exp)) = let
+                val cnd = unCx (translateExp env cond_exp)
                 val loop_label = Temp.newlabel ()
                 val true_label = Temp.newlabel ()
                 val false_label = Temp.newlabel ()
@@ -196,15 +198,15 @@ structure Translate = struct
                     Tree.LABEL loop_label,
                     cnd (true_label, false_label),
                     Tree.LABEL true_label,
-                    Tree.EXP ((unEx o translateExp) exp),
+                    Tree.EXP ((unEx o translateExp env) exp),
                     Tree.JUMP (Tree.NAME loop_label, [loop_label]),
                     Tree.LABEL false_label
                 ]
             in
                 Nx stmts
             end
-        | translateExp _ = Ex (Tree.CONST ~1)
+        | translateExp _ _ = Ex (Tree.CONST ~1)
 
-    fun translateProg (Ast.Expression exp) = unEx (translateExp exp)
+    fun translateProg (Ast.Expression exp) = unEx (translateExp Env.emptyEnv exp)
         | translateProg _ = (Tree.CONST ~1)
 end
