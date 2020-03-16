@@ -205,18 +205,29 @@ structure Translate = struct
             in
                 Nx stmts
             end
-        | translateExp env (Ast.For of var * start_exp * end_exp * body_exp) = let
+        | translateExp env (Ast.For (var, start_exp, end_exp, body_exp)) = let
                 val loop_temp = Temp.newtemp ()
                 val new_env = Env.newEnv env [(var, loop_temp)]
+                
                 val start_ex = unEx (translateExp new_env start_exp)
                 val end_ex = unEx (translateExp new_env end_exp)
                 val body_stmt = unNx (translateExp new_env body_exp)
                 val loop_label = Temp.newlabel ()
+                val cont_label = Temp.newlabel ()
+                val end_label = Temp.newlabel ()
+                
                 val stmts = seq [
-                    
+                    Tree.MOVE (Tree.TEMP loop_temp, start_ex),
+                    Tree.LABEL loop_label,
+                    Tree.CJUMP (Tree.NE, Tree.TEMP loop_temp, end_ex, cont_label, end_label),
+                    Tree.LABEL cont_label,
+                    body_stmt,
+                    Tree.MOVE (Tree.TEMP loop_temp, Tree.BINOP (Tree.PLUS, Tree.TEMP loop_temp, Tree.CONST 1)),
+                    Tree.JUMP (Tree.NAME loop_label, [loop_label]),
+                    Tree.LABEL end_label
                 ]
             in
-                
+                Nx stmts
             end
                 
         | translateExp _ _ = Ex (Tree.CONST ~1)
