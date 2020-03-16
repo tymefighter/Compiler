@@ -209,8 +209,8 @@ structure Translate = struct
                 val loop_temp = Temp.newtemp ()
                 val new_env = Env.newEnv env [(var, loop_temp)]
                 
-                val start_ex = unEx (translateExp new_env start_exp)
-                val end_ex = unEx (translateExp new_env end_exp)
+                val start_ex = unEx (translateExp env start_exp)
+                val end_ex = unEx (translateExp env end_exp)
                 val body_stmt = unNx (translateExp new_env body_exp)
                 val loop_label = Temp.newlabel ()
                 val cont_label = Temp.newlabel ()
