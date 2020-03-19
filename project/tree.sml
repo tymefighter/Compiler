@@ -270,6 +270,30 @@ structure Translate = struct
             end
         | translateExp _ _ = Ex (Tree.CONST ~1)
 
+    fun translateDec info (Ast.Vardec (var, var_type_opt, ex)) = let
+                val e = unEx (translateExp info ex)
+                val (Info (_, env)) = info
+                val new_var_temp = Temp.newtemp ()
+                val new_env = Env.newEnv env [(var, new_var_temp)]
+            in
+                (
+                    new_env,
+                    Nx (Tree.MOVE (Tree.TEMP new_var_temp, e))
+                )
+            end
+        | translateDec _ _ = (Env.emptyEnv, Ex (Tree.CONST ~1))
+
     fun translateProg (Ast.Expression exp) = unEx (translateExp (Info (NONE, Env.emptyEnv)) exp)
-        | translateProg _ = (Tree.CONST ~1)
+        | translateProg (Ast.Decs dec_list) = (let
+                fun addDec prev_info prev_stmts (dec :: dec_ls) = let
+                            val (new_env, stmt_nx) = translateDec prev_info dec
+                            val (Info (break_label_opt, _)) = prev_info
+                            val new_info = Info (break_label_opt, new_env)
+                        in
+                            addDec new_info (prev_stmts @ [unNx stmt_nx]) dec_ls
+                        end
+                    | addDec _ final_stmt_list [] = Nx (seq final_stmt_list)
+            in
+                unEx (addDec (Info (NONE, Env.emptyEnv)) [] dec_list)
+            end)
 end
