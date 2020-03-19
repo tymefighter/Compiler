@@ -79,6 +79,7 @@ structure Env = struct
         | newEnv env [] = env
     
     val emptyEnv = IdMap.empty
+    val findVar = IdMap.find
 
 end
 
@@ -89,6 +90,7 @@ structure Translate = struct
     exception ConditionalToNoReturn
     exception NoReturnToConditional
     exception BreakUsedIncorrectly
+    exception VariableUsedBeforeDec
 
     (* 
         Temp.label: This stores the end of loop label of the loop just above in hierarchy 
@@ -247,8 +249,15 @@ structure Translate = struct
         | translateExp (Info (break_label_opt, _)) Ast.Break = (
             case break_label_opt of
                 NONE => raise BreakUsedIncorrectly
-                | (SOME break_label) => Nx (Tree.JUMP (Tree.NAME break_label, [break_label]))
+                | SOME break_label => Nx (Tree.JUMP (Tree.NAME break_label, [break_label]))
         )
+        | translateExp (Info (_, env)) (Ast.Lval (Ast.Var var)) = let
+                val var_temp_opt = Env.findVar (env, var)
+            in
+                case var_temp_opt of
+                    NONE => raise VariableUsedBeforeDec
+                    | SOME var_temp => Ex (Tree.TEMP var_temp)
+            end
         | translateExp _ _ = Ex (Tree.CONST ~1)
 
     fun translateProg (Ast.Expression exp) = unEx (translateExp (Info (NONE, Env.emptyEnv)) exp)
