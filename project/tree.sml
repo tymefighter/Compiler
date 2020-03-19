@@ -35,8 +35,8 @@ structure Tree = struct
         | pprintRelop UGE = "UGE"
 
     fun pprintExp (CONST n) = Int.toString n
-        | pprintExp (NAME lab) = "NAME " ^ lab
-        | pprintExp (TEMP tmp) = "Temp " ^ tmp
+        | pprintExp (NAME lab) = "NAME " ^ Temp.labelToString lab
+        | pprintExp (TEMP tmp) = "Temp " ^ Temp.tempToString tmp
         | pprintExp (BINOP (bin_op, e1, e2)) = let
                 val bin_op_str = case bin_op of 
                     PLUS => "PLUS "
@@ -65,9 +65,9 @@ structure Tree = struct
     and pprintStm (MOVE (to, value)) = "MOVE (" ^ pprintExp to ^ ", " ^ pprintExp value ^ ")"
         | pprintStm (EXP ex) = "EXP (" ^ pprintExp ex ^ ")"
         | pprintStm (JUMP (loc, _)) = "JUMP (" ^ pprintExp loc ^ ")"
-        | pprintStm (CJUMP (rel_op, e1, e2, true_lab, false_lab)) = "CJUMP (" ^ pprintRelop rel_op ^ ", " ^ pprintExp e1 ^ ", " ^ pprintExp e2 ^ ", " ^ true_lab ^ ", " ^ false_lab ^ ")" 
+        | pprintStm (CJUMP (rel_op, e1, e2, true_lab, false_lab)) = "CJUMP (" ^ pprintRelop rel_op ^ ", " ^ pprintExp e1 ^ ", " ^ pprintExp e2 ^ ", " ^ Temp.labelToString true_lab ^ ", " ^ Temp.labelToString false_lab ^ ")" 
         | pprintStm (SEQ (st1, st2)) = "SEQ (" ^ pprintStm st1 ^ ", " ^ pprintStm st2 ^ ")"
-        | pprintStm (LABEL lab) = "Label (" ^ lab ^ ")"
+        | pprintStm (LABEL lab) = "Label (" ^ Temp.labelToString lab ^ ")"
 end
 
 structure Env = struct
@@ -257,6 +257,16 @@ structure Translate = struct
                 case var_temp_opt of
                     NONE => raise VariableUsedBeforeDec
                     | SOME var_temp => Ex (Tree.TEMP var_temp)
+            end
+        | translateExp info (Ast.Assignment (Ast.Var var, ex)) = let
+                val e = unEx (translateExp info ex)
+                val (Info (_, env)) = info
+                val var_temp_opt = Env.findVar (env, var)
+                val var_temp = case var_temp_opt of
+                    NONE => raise VariableUsedBeforeDec
+                    | SOME vt => vt
+            in
+                Nx (Tree.MOVE (Tree.TEMP var_temp, e))
             end
         | translateExp _ _ = Ex (Tree.CONST ~1)
 
