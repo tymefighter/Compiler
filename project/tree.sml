@@ -131,6 +131,14 @@ structure Translate = struct
     fun unCx (Ex e) = (fn (t, f) => Tree.CJUMP (Tree.NE, e, Tree.CONST 0, t, f))
         | unCx (Nx s) = raise NoReturnToConditional
         | unCx (Cx c) = c
+
+    fun seperateLastEle [] = raise EmptyExpressionList
+        | seperateLastEle [x] = ([], x)
+        | seperateLastEle (x :: xs) = let
+                val (ls, last_ele) = seperateLastEle xs
+            in
+                (x :: ls, last_ele)
+            end
    
      fun translateExp info (Ast.LiteralInt x) = Ex (Tree.CONST x)
         | translateExp info (Ast.Op (e1, bin_op, e2)) = let
@@ -154,13 +162,6 @@ structure Translate = struct
             end
         | translateExp info (Ast.NegExp e) = Ex (Tree.BINOP (Tree.MINUS, Tree.CONST 0, unEx (translateExp info e)))
         | translateExp info (Ast.Exprs exp_list) = let
-                fun seperateLastEle [] = raise EmptyExpressionList
-                    | seperateLastEle [x] = ([], x)
-                    | seperateLastEle (x :: xs) = let
-                            val (ls, last_ele) = seperateLastEle xs
-                        in
-                            (x :: ls, last_ele)
-                        end
                 val (ls, last_ele) = seperateLastEle exp_list
             in
                 case ls of
@@ -268,9 +269,18 @@ structure Translate = struct
             in
                 Nx (Tree.MOVE (Tree.TEMP var_temp, e))
             end
+        (* Empty Let block would give empty sequence error *)
+        | translateExp info (Ast.LetStmt (dec_list, exp_list)) = let 
+                val (new_info, stmt_nx) = addDec info [] dec_list
+                val stmt = unNx stmt_nx
+                val (ls, last_ele) = seperateLastEle exp_list
+                val new_stmt = seq (stmt :: map (unNx o translateExp new_info) ls)
+            in
+                Ex (Tree.ESEQ (new_stmt, unEx (translateExp new_info last_ele)))
+            end
         | translateExp _ _ = Ex (Tree.CONST ~1)
 
-    fun translateDec info (Ast.Vardec (var, var_type_opt, ex)) = let
+    and translateDec info (Ast.Vardec (var, var_type_opt, ex)) = let
                 val e = unEx (translateExp info ex)
                 val (Info (_, env)) = info
                 val new_var_temp = Temp.newtemp ()
@@ -283,17 +293,19 @@ structure Translate = struct
             end
         | translateDec _ _ = (Env.emptyEnv, Ex (Tree.CONST ~1))
 
+    and addDec prev_info prev_stmts (dec :: dec_ls) = let
+                val (new_env, stmt_nx) = translateDec prev_info dec
+                val (Info (break_label_opt, _)) = prev_info
+                val new_info = Info (break_label_opt, new_env)
+            in
+                addDec new_info (prev_stmts @ [unNx stmt_nx]) dec_ls
+            end
+        | addDec final_info final_stmt_list [] = (final_info, Nx (seq final_stmt_list))
+
     fun translateProg (Ast.Expression exp) = unEx (translateExp (Info (NONE, Env.emptyEnv)) exp)
         | translateProg (Ast.Decs dec_list) = (let
-                fun addDec prev_info prev_stmts (dec :: dec_ls) = let
-                            val (new_env, stmt_nx) = translateDec prev_info dec
-                            val (Info (break_label_opt, _)) = prev_info
-                            val new_info = Info (break_label_opt, new_env)
-                        in
-                            addDec new_info (prev_stmts @ [unNx stmt_nx]) dec_ls
-                        end
-                    | addDec _ final_stmt_list [] = Nx (seq final_stmt_list)
+                val (_, stmt_list) = addDec (Info (NONE, Env.emptyEnv)) [] dec_list
             in
-                unEx (addDec (Info (NONE, Env.emptyEnv)) [] dec_list)
+                unEx stmt_list
             end)
 end
