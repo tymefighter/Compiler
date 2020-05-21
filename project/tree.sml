@@ -91,6 +91,7 @@ structure Translate = struct
     exception NoReturnToConditional
     exception BreakUsedIncorrectly
     exception VariableUsedBeforeDec
+    exception Unimplemeneted
 
     (* 
         Temp.label: This stores the end of loop label of the loop just above in hierarchy 
@@ -278,7 +279,7 @@ structure Translate = struct
             in
                 Ex (Tree.ESEQ (new_stmt, unEx (translateExp new_info last_ele)))
             end
-        | translateExp _ _ = Ex (Tree.CONST ~1)
+        | translateExp _ _ = raise Unimplemeneted
 
     and translateDec info (Ast.Vardec (var, var_type_opt, ex)) = let
                 val e = unEx (translateExp info ex)
@@ -291,7 +292,7 @@ structure Translate = struct
                     Nx (Tree.MOVE (Tree.TEMP new_var_temp, e))
                 )
             end
-        | translateDec _ _ = (Env.emptyEnv, Ex (Tree.CONST ~1))
+        | translateDec _ _ = raise Unimplemeneted
 
     and addDec prev_info prev_stmts (dec :: dec_ls) = let
                 val (new_env, stmt_nx) = translateDec prev_info dec
