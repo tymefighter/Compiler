@@ -1,5 +1,12 @@
 structure Tree = struct
 
+    (* 
+        Very Important: -
+        For now, we would be doing as follows: -
+            - BINOP can take only temporaries as input
+            - MOVE can happen between mem and temp only (or temp and mem)
+    *)
+
     datatype exp = CONST of int
         | NAME of Temp.label
         | TEMP of Temp.temp
