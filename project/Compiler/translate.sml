@@ -107,8 +107,8 @@ structure Translate = struct
                     | Ast.L => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.LT, argTemp1, argTemp2, t, f)))
                     | Ast.GE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.GE, argTemp1, argTemp2, t, f)))
                     | Ast.LE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.LE, argTemp1, argTemp2, t, f)))
-                    | Ast.AND => Tree.BINOP (Tree.AND, ex1, argTemp2)
-                    | Ast.OR => Tree.BINOP (Tree.OR, ex1, argTemp2)
+                    | Ast.AND => Tree.BINOP (Tree.AND, argTemp1, argTemp2)
+                    | Ast.OR => Tree.BINOP (Tree.OR, argTemp1, argTemp2)
 
                 val computeAndMoveToTemp = seq [
                     getStmt ex1,
@@ -125,7 +125,8 @@ structure Translate = struct
                 val ex = unEx (translateExp info e)
                 val computeAndMoveToTemp = seq [
                     getStmt ex,
-                    Tree.MOVE (resultTemp, Tree.BINOP (Tree.MINUS, Tree.CONST 0, resultTemp))
+                    Tree.MOVE (argTemp1, Tree.CONST 0),
+                    Tree.MOVE (resultTemp, Tree.BINOP (Tree.MINUS, argTemp1, resultTemp))
                 ]
             in
                 Ex (Tree.ESEQ (computeAndMoveToTemp, resultTemp))
@@ -210,7 +211,8 @@ structure Translate = struct
                     Tree.LABEL loop_label,
                     getStmt ((unEx o translateExp info) body_exp),
                     moveTempToFrame varOffset resultTemp,
-                    Tree.MOVE(argTemp1, Tree.BINOP (Tree.PLUS, argTemp1, Tree.CONST 1)),
+                    Tree.MOVE (argTemp2, Tree.CONST 1),
+                    Tree.MOVE (argTemp1, Tree.BINOP (Tree.PLUS, argTemp1, argTemp2)),
                     moveTempToFrame varOffset argTemp1,
                     moveFrameToTemp argTemp2 endExpOffset,
                     Tree.CJUMP (Tree.EQ, argTemp1, argTemp2, continue_label, loop_label),
