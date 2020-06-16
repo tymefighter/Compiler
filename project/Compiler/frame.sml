@@ -1,12 +1,13 @@
 signature FRAME = sig
     type Offset
-    type frame
+    type Frame
     val wordSize : Offset
-    val allocVar : frame -> Ast.id -> frame
-    val getOffset : frame -> Ast.id -> int option
-    val emptyFrame : frame
+    val allocVar : Frame -> Ast.id -> Frame
+    val allocInternalVar : Frame -> Frame * int
+    val getOffset : Frame -> Ast.id -> int option
+    val emptyFrame : Frame
 
-    val newFuncFrame : Ast.id list -> frame
+    val newFuncFrame : Ast.id list -> Frame
 end	
 
 structure Frame :> FRAME = struct
@@ -34,13 +35,15 @@ structure Frame :> FRAME = struct
             Frame (newOffset, newMap)
         end
 
+    fun allocInternalVar (Frame (currOffset, varMap)) = (Frame (currOffset + wordSize, varMap), currOffset)
+
     fun getOffset (Frame (_, varMap)) var = IdMap.find (varMap, var)
 
-    val emptyFrame = (0, IdMap.empty)
+    val emptyFrame = Frame (0, IdMap.empty)
 
     fun newFuncFrame varList =
         let
-            fun helper (var :: varLs) frame = helper varLs (allocVar frame)
+            fun helper (var :: varLs) frame = helper varLs (allocVar frame var)
                 | helper _ frame = frame
         in
             helper varList emptyFrame

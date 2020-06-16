@@ -5,10 +5,11 @@ signature TEMP = sig
     val newlabel : unit -> label
 	val labelToString : label -> string
 	val tempToString : temp -> string
-    val temp_1 : temp
-    val temp_2 : temp
-    val frame_pointer : temp
-    val stack_pointer : temp
+    val argTemp1 : temp
+    val argTemp2 : temp
+    val resultTemp : temp
+    val framePointer : temp
+    val stackPointer : temp
 end	
 
 structure Temp :> TEMP = struct
@@ -69,6 +70,6 @@ structure Temp :> TEMP = struct
     val argTemp1 = "argTemp1"
     val argTemp2 = "argTemp2"
     val resultTemp = "resultTemp"
-    val frame_pointer = "frame_pointer"
-    val stack_pointer = "stack_pointer"
+    val framePointer = "framePointer"
+    val stackPointer = "stackPointer"
 end
