@@ -5,6 +5,10 @@ signature TEMP = sig
     val newlabel : unit -> label
 	val labelToString : label -> string
 	val tempToString : temp -> string
+    val temp_1 : temp
+    val temp_2 : temp
+    val frame_pointer : temp
+    val stack_pointer : temp
 end	
 
 structure Temp :> TEMP = struct
@@ -61,4 +65,9 @@ structure Temp :> TEMP = struct
 
 	fun labelToString lb = lb
 	fun tempToString tp = tp
+
+    val temp_1 = "temp_1"
+    val temp_2 = "temp_2"
+    val frame_pointer = "frame_pointer"
+    val stack_pointer = "stack_pointer"
 end
