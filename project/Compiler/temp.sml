@@ -66,8 +66,9 @@ structure Temp :> TEMP = struct
 	fun labelToString lb = lb
 	fun tempToString tp = tp
 
-    val temp_1 = "temp_1"
-    val temp_2 = "temp_2"
+    val temp1 = "temp1"
+    val temp2 = "temp2"
+    val temp3 = "temp3"
     val frame_pointer = "frame_pointer"
     val stack_pointer = "stack_pointer"
 end
