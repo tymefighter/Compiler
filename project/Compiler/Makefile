@@ -2,7 +2,7 @@
 
 .DEFAULT_GOAL := tiger
 
-tiger: tree.sml translate.sml frame.sml temp.sml tiger_driver.sml ast.sml tiger.lex.sml tiger.grm.sml tiger.mlb
+tiger: codeGen.sml tree.sml translate.sml frame.sml temp.sml tiger_driver.sml ast.sml tiger.lex.sml tiger.grm.sml tiger.mlb
 	mlton -output tiger tiger.mlb
 
 tc%: Test/test_case%

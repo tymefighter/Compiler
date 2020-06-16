@@ -10,4 +10,6 @@ temp.sml
 tree.sml
 frame.sml
 translate.sml
+target/mips.sml
+codeGen.sml
 tiger_driver.sml
