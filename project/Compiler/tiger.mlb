@@ -8,5 +8,6 @@ tiger.grm.sml
 tiger.lex.sml
 temp.sml
 tree.sml
+frame.sml
 translate.sml
 tiger_driver.sml
