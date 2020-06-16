@@ -3,6 +3,7 @@
 For now, we place the following restrictions on Tree IR: -
     - BINOP can take only temporaries as input
     - MOVE can happen between mem and temp only (or temp and mem)
+    - All expressions should be of the form Tree.ESEQ (stmt, resultTemp)
 
 For now, we place the following restrictions on tiger code: -
     - Tiger Code needs to have a top level **let - in** block
