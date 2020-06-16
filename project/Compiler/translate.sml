@@ -8,11 +8,17 @@ structure Translate = struct
     exception VariableUsedBeforeDec
     exception Unimplemeneted
 
-    (* 
-        Temp.label: This stores the end of loop label of the loop just above in hierarchy 
-        Env.environment: Variable to temporary mapping
+
+    (*
+        Function list: information about all previously declared functions
+        Each element -> (function name, function label, number of arguments)
     *)
-    datatype Info = Info of (Temp.label option) * Env.environment
+    type functionlist = (Ast.id * Temp.label * int) list
+    (*
+        Data Structure to store information which would be required while
+        translation
+    *)
+    datatype Info = Info of (Temp.label option) * Frame.Frame * functionlist
 
     datatype exp = Ex of Tree.exp
         | Nx of Tree.stm
