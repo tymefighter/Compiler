@@ -69,16 +69,3 @@ structure Tree = struct
         | pprintStm (SEQ (st1, st2)) = "SEQ (" ^ pprintStm st1 ^ ", " ^ pprintStm st2 ^ ")"
         | pprintStm (LABEL lab) = "Label (" ^ Temp.labelToString lab ^ ")"
 end
-
-structure Env = struct
-
-    structure IdMap = RedBlackMapFn (Ast.IdKey)
-    type environment = Temp.temp IdMap.map
-    
-    fun newEnv env ((var, temp) :: var_temp_ls) = newEnv (IdMap.insert (env, var, temp)) var_temp_ls
-        | newEnv env [] = env
-    
-    val emptyEnv = IdMap.empty
-    val findVar = IdMap.find
-
-end
