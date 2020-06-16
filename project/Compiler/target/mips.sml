@@ -155,7 +155,7 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyImm (String s) = s
 		| prettyImm (Float f) = Real.toString f
 
-	fun prettyAddr (RegAddr (off, reg)) = Int.toString off ^ "(" ^ prettyReg reg ^ ")"
+	fun prettyAddr (RegAddr (r_off, reg)) = Int.toString r_off ^ "(" ^ prettyReg reg ^ ")"
 		| prettyAddr (StringAddr addr) = addr
 	
 	fun prettyLoadStore (LoadAddress (reg, addr)) = "la " ^ prettyReg reg ^ ", " ^ prettyAddr addr
