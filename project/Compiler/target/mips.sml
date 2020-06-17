@@ -224,8 +224,8 @@ type ('l, 't) MIPSProg = (('l, 't) LabelInst) list
 		| prettyArithmeticLogic (ShiftRightArithmetic (rDest, rSource1, rSource2)) = "sra " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
 		| prettyArithmeticLogic (ShiftRightLogical (rDest, rSource1, rSource2)) = "srl " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
 		| prettyArithmeticLogic (ShiftRightLogicalVar (rDest, rSource1, rSource2)) = "srlv " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
-		| prettyArithmeticLogic (SubU (rDest, rSource1, rSource2)) = "sub " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
-		| prettyArithmeticLogic (Sub (rDest, rSource1, rSource2)) = "subu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (SubU (rDest, rSource1, rSource2)) = "subu " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
+		| prettyArithmeticLogic (Sub (rDest, rSource1, rSource2)) = "sub " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
 		| prettyArithmeticLogic (Xor (rDest, rSource1, rSource2)) = "xor " ^ prettyReg rDest ^ ", " ^ prettyReg rSource1 ^ ", " ^ prettyReg rSource2
 		| prettyArithmeticLogic (XorImm (rDest, rSource, imm)) = "xori " ^ prettyReg rDest ^ ", " ^ prettyReg rSource ^ ", " ^ prettyImm imm
 	
@@ -282,13 +282,10 @@ type ('l, 't) MIPSProg = (('l, 't) LabelInst) list
 		| prettyInst (BranchJump br_jmp_inst) = prettyBranchJump br_jmp_inst
 		| prettyInst (DataMove dt_mv_inst) = prettyDataMove dt_mv_inst
 
-	(* fun printProg ((label_opt, inst) :: pr_ls) = let
-            val str1 = case label_opt of
-                SOME lab => lab ^ ": "
-                | NONE => ""
-            val str2 = MIPS.prettyInst inst ^ "\n" ^ printProg pr_ls
-        in
-            str1 ^ str2
-        end
-    | printProg _ = "\n" *)
+	fun printLabelStmt (Label label) = label ^ ": "
+		| printLabelStmt (Instruction inst) = prettyInst inst
+		| printLabelStmt (LabelAndInst (label, inst)) = label ^ ": " ^ prettyInst inst
+
+	fun printProg (labelInst :: labelInstList) = printLabelStmt labelInst ^ "\n" ^ printProg labelInstList
+    	| printProg _ = "\n"
 end
