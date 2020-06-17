@@ -110,11 +110,17 @@ structure Translate = struct
                     | Ast.AND => Tree.BINOP (Tree.AND, argTemp1, argTemp2)
                     | Ast.OR => Tree.BINOP (Tree.OR, argTemp1, argTemp2)
 
+                val frame               = getFrame info
+                val (frame1, exOffset1) = Frame.allocInternalVar frame
+                val (frame2, exOffset2) = Frame.allocInternalVar frame1
+
                 val computeAndMoveToTemp = seq [
                     getStmt ex1,
-                    Tree.MOVE (argTemp1, resultTemp), (* ex1 and ex2 should actually be result temp*)
+                    moveTempToFrame exOffset1 resultTemp,
                     getStmt ex2,
-                    Tree.MOVE (argTemp2, resultTemp),
+                    moveTempToFrame exOffset2 resultTemp,
+                    moveFrameToTemp argTemp1 exOffset1,
+                    moveFrameToTemp argTemp2 exOffset2,
                     Tree.MOVE (resultTemp, ex)
                 ]
             in
