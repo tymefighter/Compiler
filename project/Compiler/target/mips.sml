@@ -137,7 +137,12 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 	| Comparison of ('l, 't) ComparisonInst
 	| BranchJump of ('l, 't) BranchJumpInst
 	| DataMove of ('l, 't) DataMoveInst
-	
+
+datatype ('l, 't) LabelInst = Label of 'l
+	| Instruction of ('l, 't) Inst
+	| LabelAndInst of 'l * (('l, 't) Inst)
+
+type ('l, 't) MIPSProg = (('l, 't) LabelInst) list
 	
 	fun prettyReg Zero = "$zero"
 		| prettyReg At = "$at"
@@ -276,4 +281,14 @@ datatype ('l, 't) Inst = LoadStore of ('l, 't) LoadStoreInst
 		| prettyInst (Comparison comp_inst) = prettyComparison comp_inst
 		| prettyInst (BranchJump br_jmp_inst) = prettyBranchJump br_jmp_inst
 		| prettyInst (DataMove dt_mv_inst) = prettyDataMove dt_mv_inst
+
+	(* fun printProg ((label_opt, inst) :: pr_ls) = let
+            val str1 = case label_opt of
+                SOME lab => lab ^ ": "
+                | NONE => ""
+            val str2 = MIPS.prettyInst inst ^ "\n" ^ printProg pr_ls
+        in
+            str1 ^ str2
+        end
+    | printProg _ = "\n" *)
 end
