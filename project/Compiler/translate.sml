@@ -74,7 +74,7 @@ structure Translate = struct
                 ], resultTemp)
             end
 
-    fun unNx (Ex e) = Tree.EXP e
+    fun unNx (Ex e) = getStmt e
         | unNx (Nx s) = s
         | unNx (Cx con) = raise ConditionalToNoReturn
     
@@ -139,10 +139,22 @@ structure Translate = struct
             end
         | translateExp info (Ast.Exprs exp_list) = let
                 val (ls, last_ele) = seperateLastEle exp_list
+                val ex = unEx (translateExp info last_ele)
             in
                 case ls of
-                    [] => translateExp info last_ele
-                    | _ => Ex (Tree.ESEQ ((seq o map (unNx o translateExp info)) ls, unEx (translateExp info last_ele)))
+                    [] => Ex ex
+                    | _ => 
+                        let
+                            val listStmts = (seq o map (unNx o (translateExp info))) ls
+                            val evalAndMoveStmt = getStmt ex
+                            val stmts = seq [
+                                listStmts,
+                                evalAndMoveStmt
+                            ]
+                        in
+                            Ex (Tree.ESEQ (stmts, resultTemp))
+                        end
+                    (* Ex (Tree.ESEQ ((seq o map (unNx o translateExp info)) ls, ) *)
             end
         | translateExp info (Ast.IfThen (cond_ex, ex)) = let
                 val cnd = unCx (translateExp info cond_ex)
