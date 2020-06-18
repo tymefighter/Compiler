@@ -1,9 +1,8 @@
 let
     var x := 10
     var y := 20
-    var z := x / y
-    var q := 4
 in
-    if(z < q)
-    then z
+    if(x < y)
+    then print (x)
+    else print (y)
 end

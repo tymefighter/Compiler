@@ -2,5 +2,9 @@ let
     var i := 1
 in
     for j := 0 to 4 do
-        i := i + 1
+        (
+            i := i + 1;
+            print (i);
+            print (j)
+        )
 end
