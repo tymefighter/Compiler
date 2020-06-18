@@ -63,14 +63,16 @@ structure Translate = struct
                 
                 val t = Temp.newlabel ()  (* True then jump here *)
                 val f = Temp.newlabel ()  (* False then jump here *)
-
+                val cont = Temp.newlabel ()
             in
                 Tree.ESEQ (seq [
-                    Tree.MOVE (resultTemp, Tree.CONST 1),
                     con (t, f),
+                    Tree.LABEL t,
+                    Tree.MOVE (resultTemp, Tree.CONST 1),
+                    Tree.JUMP (Tree.NAME cont, [cont]),
                     Tree.LABEL f,
                     Tree.MOVE (resultTemp, Tree.CONST 0),
-                    Tree.LABEL t
+                    Tree.LABEL cont
                 ], resultTemp)
             end
 
@@ -100,8 +102,11 @@ structure Translate = struct
             let
                 val (info1, transEx1) = translateExp info e1
                 val ex1 = unEx transEx1
-                val (info2, transEx2) = translateExp info1 e2
+                val (frame1, exOffset1, allocStmt1) = Frame.allocInternalVar (getFrame info1)
+
+                val (info2, transEx2) = translateExp (setFrame info1 frame1) e2
                 val ex2 = unEx transEx2
+                val (frame2, exOffset2, allocStmt2) = Frame.allocInternalVar (getFrame info2)
 
                 val ex = case bin_op of
                     Ast.ADD => Tree.BINOP (Tree.PLUS, argTemp1, argTemp2)
@@ -120,10 +125,6 @@ structure Translate = struct
                 val stmt = case ex of
                     Tree.ESEQ _ => getStmt ex
                     | _ => Tree.MOVE (resultTemp, ex)
-
-                val frame               = getFrame info2
-                val (frame1, exOffset1, allocStmt1) = Frame.allocInternalVar frame
-                val (frame2, exOffset2, allocStmt2) = Frame.allocInternalVar frame1
 
                 val computeAndMoveToTemp = seq [
                     getStmt ex1,

@@ -6,6 +6,7 @@ For now, we place the following restrictions on Tree IR: -
     - All expressions should be of the form Tree.ESEQ (stmt, resultTemp)
     - Call can only be used by the **print** function which is actually
     a systemcall
+    - Allocate statement should not use result temp
 
 For now, we place the following restrictions on tiger code: -
     - Tiger Code needs to have a top level **let - in** block

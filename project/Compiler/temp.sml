@@ -62,7 +62,7 @@ structure Temp :> TEMP = struct
 			val new_str = (String.concat o getNewString o String.explode) (!labelRef)
 			val _ = labelRef := new_str
 		in
-			new_str
+			"L_" ^ new_str
 		end
 
     fun stringToLabel str = str
