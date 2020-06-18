@@ -1,1 +1,9 @@
-if (3 | 4) then 10 + 20
+let
+    var x := 10
+    var y := 20
+    var z := x / y
+    var q := 4
+in
+    if(z < q)
+    then z
+end
