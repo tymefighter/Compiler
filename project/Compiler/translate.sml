@@ -296,7 +296,7 @@ structure Translate = struct
                 val frame = getFrame info
                 val newFrame = Frame.allocVar frame var
                 
-                val optVarOffset = Frame.getOffset frame var
+                val optVarOffset = Frame.getOffset newFrame var
                 val varOffset = case optVarOffset of
                     NONE => raise VariableUsedBeforeDec
                     | SOME var_offset => var_offset
