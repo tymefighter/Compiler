@@ -13,5 +13,5 @@ val (prog, _) = TigerParser.parse (0, lexer, print_error, ())
 
 val tree_code = Translate.translateProg prog
 (* val _ = print (Tree.pprintExp tree_code ^ "\n") *)
-val mips_code = CodeGen.generateEx tree_code
+val mips_code = CodeGen.generateProg tree_code
 val _ = print (MIPS.printProg mips_code)

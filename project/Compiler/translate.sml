@@ -120,10 +120,12 @@ structure Translate = struct
                     | _ => Tree.MOVE (resultTemp, ex)
 
                 val frame               = getFrame info
-                val (frame1, exOffset1) = Frame.allocInternalVar frame
-                val (frame2, exOffset2) = Frame.allocInternalVar frame1
+                val (frame1, exOffset1, allocStmt1) = Frame.allocInternalVar frame
+                val (frame2, exOffset2, allocStmt2) = Frame.allocInternalVar frame1
 
                 val computeAndMoveToTemp = seq [
+                    allocStmt1,
+                    allocStmt2,
                     getStmt ex1,
                     moveTempToFrame exOffset1 resultTemp,
                     getStmt ex2,
@@ -216,8 +218,8 @@ structure Translate = struct
         | translateExp info (Ast.For (var, start_exp, end_exp, body_exp)) = let
                 val initFrame = getFrame info
 
-                val nextFrame = Frame.allocVar initFrame var
-                val (finalFrame, endExpOffset) = Frame.allocInternalVar nextFrame
+                val (nextFrame, allocStmt1) = Frame.allocVar initFrame var
+                val (finalFrame, endExpOffset, allocStmt2) = Frame.allocInternalVar nextFrame
 
                 val varOffset = case Frame.getOffset finalFrame var of
                     NONE => raise VariableUsedBeforeDec
@@ -230,6 +232,8 @@ structure Translate = struct
                 val endExp = (unEx o translateExp info) end_exp
 
                 val stmts = seq [
+                    allocStmt1,
+                    allocStmt2,
                     getStmt startExp,
                     moveTempToFrame varOffset resultTemp,
                     getStmt endExp,
@@ -294,7 +298,7 @@ structure Translate = struct
     and translateDec info (Ast.Vardec (var, var_type_opt, e)) = let
                 val ex = unEx (translateExp info e)
                 val frame = getFrame info
-                val newFrame = Frame.allocVar frame var
+                val (newFrame, allocStmt) = Frame.allocVar frame var
                 
                 val optVarOffset = Frame.getOffset newFrame var
                 val varOffset = case optVarOffset of
@@ -302,6 +306,7 @@ structure Translate = struct
                     | SOME var_offset => var_offset
 
                 val stmts = seq [
+                    allocStmt,
                     getStmt ex,
                     moveTempToFrame varOffset resultTemp
                 ]

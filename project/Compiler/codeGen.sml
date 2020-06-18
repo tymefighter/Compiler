@@ -101,6 +101,7 @@ structure CodeGen = struct
         | generateStm _ = raise RestrictionFailedCodeGen
 
     (* generateEx : Tree.exp -> ((MIPS.Reg * MIPS.Addr) MIPS.Inst) list *)
-    fun generateEx (Tree.ESEQ (stm, ex)) = generateStm stm
-        | generateEx _ = raise RestrictionFailedCodeGen
+    fun generateProg (Tree.ESEQ (stm, ex)) = 
+           MIPS.Instruction (MIPS.DataMove (MIPS.Move (MIPS.Fp, MIPS.Sp))) :: generateStm stm
+        | generateProg _ = raise RestrictionFailedCodeGen
 end
