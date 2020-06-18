@@ -78,7 +78,12 @@ structure Translate = struct
         | unNx (Nx s) = s
         | unNx (Cx con) = raise ConditionalToNoReturn
     
-    fun unCx (Ex e) = (fn (t, f) => Tree.CJUMP (Tree.NE, e, Tree.CONST 0, t, f))
+    fun unCx (Ex e) = (fn (t, f) => seq [
+        getStmt e,
+        Tree.MOVE (argTemp1, resultTemp),
+        Tree.MOVE (argTemp2, Tree.CONST 0),
+        Tree.CJUMP (Tree.NE, argTemp1, argTemp2, t, f)
+    ])
         | unCx (Nx s) = raise NoReturnToConditional
         | unCx (Cx c) = c
 
@@ -110,6 +115,10 @@ structure Translate = struct
                     | Ast.AND => Tree.BINOP (Tree.AND, argTemp1, argTemp2)
                     | Ast.OR => Tree.BINOP (Tree.OR, argTemp1, argTemp2)
 
+                val stmt = case ex of
+                    Tree.ESEQ _ => getStmt ex
+                    | _ => Tree.MOVE (resultTemp, ex)
+
                 val frame               = getFrame info
                 val (frame1, exOffset1) = Frame.allocInternalVar frame
                 val (frame2, exOffset2) = Frame.allocInternalVar frame1
@@ -121,7 +130,7 @@ structure Translate = struct
                     moveTempToFrame exOffset2 resultTemp,
                     moveFrameToTemp argTemp1 exOffset1,
                     moveFrameToTemp argTemp2 exOffset2,
-                    Tree.MOVE (resultTemp, ex)
+                    stmt
                 ]
             in
                 Ex (Tree.ESEQ (computeAndMoveToTemp, resultTemp))
@@ -154,7 +163,6 @@ structure Translate = struct
                         in
                             Ex (Tree.ESEQ (stmts, resultTemp))
                         end
-                    (* Ex (Tree.ESEQ ((seq o map (unNx o translateExp info)) ls, ) *)
             end
         | translateExp info (Ast.IfThen (cond_ex, ex)) = let
                 val cnd = unCx (translateExp info cond_ex)
