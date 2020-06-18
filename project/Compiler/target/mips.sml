@@ -156,7 +156,7 @@ type ('l, 't) MIPSProg = (('l, 't) LabelInst) list
 		| prettyReg Fp = "$fp"
 		| prettyReg Ra = "$ra"
 	
-	fun prettyImm (Int n) = Int.toString n
+	fun prettyImm (Int n) = if(n >= 0 ) then Int.toString n else "-" ^ Int.toString (~n)
 		| prettyImm (String s) = s
 		| prettyImm (Float f) = Real.toString f
 
