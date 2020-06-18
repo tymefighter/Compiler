@@ -98,6 +98,20 @@ structure CodeGen = struct
             end
         | generateStm (Tree.SEQ (stm1, stm2)) = generateStm stm1 @ generateStm stm2
         | generateStm (Tree.LABEL label) = [MIPS.Label (Temp.labelToString label)]
+        | generateStm (Tree.EXP (Tree.CALL (Tree.NAME lab, [Tree.TEMP temp]))) =
+            let
+                val _ = case Temp.labelToString lab of
+                    "PRINT" => ()
+                    | _ => raise RestrictionFailedCodeGen
+                
+                val printReg = temp2reg temp
+            in
+                mapNoLabel [
+                    MIPS.ConstMapping (MIPS.LoadImm (MIPS.V 0, MIPS.Int 1)),
+                    MIPS.DataMove (MIPS.Move (MIPS.A 0, printReg)),
+                    MIPS.ExceptionTrap (MIPS.SystemCall)
+                ]
+            end
         | generateStm _ = raise RestrictionFailedCodeGen
 
     (* generateEx : Tree.exp -> ((MIPS.Reg * MIPS.Addr) MIPS.Inst) list *)

@@ -314,6 +314,23 @@ structure Translate = struct
             in
                 (info3, Ex (Tree.ESEQ (complete_stmt, resultTemp)))
             end
+        | translateExp info (Ast.FunCall (funcName, args)) =
+            (case funcName of
+                "print" => 
+                    let
+                        val exp = case args of
+                            [arg] => arg
+                            | _ => raise RestrictionFailed
+                        val (newInfo, transEx) = translateExp info exp
+                        val ex = unEx transEx
+                        val stmt = seq [
+                            getStmt ex,
+                            Tree.EXP (Tree.CALL (Tree.NAME (Temp.stringToLabel "PRINT"), [resultTemp]))
+                        ]
+                    in
+                        (newInfo, Nx stmt)
+                    end
+                | _ => raise Unimplemeneted)
         | translateExp _ _ = raise Unimplemeneted
 
     and translateDec info (Ast.Vardec (var, var_type_opt, e)) = 
