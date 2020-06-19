@@ -2,5 +2,5 @@ let
     var x := 1
     var y := 2
 in
-    x + y
+    println (x + y)
 end
