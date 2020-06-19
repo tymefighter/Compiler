@@ -254,7 +254,7 @@ structure Translate = struct
                     moveTempToFrame endExpOffset resultTemp,
                     Tree.LABEL loop_label,
                     getStmt bodyExp,
-                    moveTempToFrame varOffset resultTemp,
+                    moveFrameToTemp argTemp1 varOffset,
                     Tree.MOVE (argTemp2, Tree.CONST 1),
                     Tree.MOVE (argTemp1, Tree.BINOP (Tree.PLUS, argTemp1, argTemp2)),
                     moveTempToFrame varOffset argTemp1,
