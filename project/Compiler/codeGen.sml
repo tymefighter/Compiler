@@ -100,17 +100,23 @@ structure CodeGen = struct
         | generateStm (Tree.LABEL label) = [MIPS.Label (Temp.labelToString label)]
         | generateStm (Tree.EXP (Tree.CALL (Tree.NAME lab, [Tree.TEMP temp]))) =
             let
-                val _ = case Temp.labelToString lab of
-                    "PRINT" => ()
+                val funcName = Temp.labelToString lab
+                val printlnStmts = case funcName of
+                    "print" => []
+                    | "println" => [
+                            MIPS.ArithmeticLogic (MIPS.AddImm (MIPS.A 0, MIPS.Zero, MIPS.Int 10)),
+                            MIPS.ArithmeticLogic (MIPS.AddImm (MIPS.V 0, MIPS.Zero, MIPS.Int 11)),
+                            MIPS.ExceptionTrap (MIPS.SystemCall)
+                        ]
                     | _ => raise RestrictionFailedCodeGen
                 
                 val printReg = temp2reg temp
             in
-                mapNoLabel [
+                mapNoLabel ([
                     MIPS.ConstMapping (MIPS.LoadImm (MIPS.V 0, MIPS.Int 1)),
                     MIPS.DataMove (MIPS.Move (MIPS.A 0, printReg)),
                     MIPS.ExceptionTrap (MIPS.SystemCall)
-                ]
+                ] @ printlnStmts)
             end
         | generateStm _ = raise RestrictionFailedCodeGen
 

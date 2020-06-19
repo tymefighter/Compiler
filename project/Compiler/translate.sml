@@ -316,8 +316,8 @@ structure Translate = struct
                 (info3, Ex (Tree.ESEQ (complete_stmt, resultTemp)))
             end
         | translateExp info (Ast.FunCall (funcName, args)) =
-            (case funcName of
-                "print" => 
+            if(funcName = "print" orelse funcName = "println")
+                then
                     let
                         val exp = case args of
                             [arg] => arg
@@ -326,12 +326,12 @@ structure Translate = struct
                         val ex = unEx transEx
                         val stmt = seq [
                             getStmt ex,
-                            Tree.EXP (Tree.CALL (Tree.NAME (Temp.stringToLabel "PRINT"), [resultTemp]))
+                            Tree.EXP (Tree.CALL (Tree.NAME (Temp.stringToLabel funcName), [resultTemp]))
                         ]
                     in
                         (newInfo, Nx stmt)
                     end
-                | _ => raise Unimplemeneted)
+            else raise Unimplemeneted
         | translateExp _ _ = raise Unimplemeneted
 
     and translateDec info (Ast.Vardec (var, var_type_opt, e)) = 
