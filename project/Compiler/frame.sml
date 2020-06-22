@@ -19,15 +19,9 @@ structure Frame :> FRAME = struct
 
     val wordSize = 4
 
-    val argTemp = Tree.TEMP Temp.argTemp1
-    val stackTemp = Tree.TEMP Temp.stackPointer
-    val frameTemp = Tree.TEMP Temp.framePointer
-    val returnTemp = Tree.TEMP Temp.returnValue
-    val resultTemp = Tree.TEMP Temp.resultTemp
-
-    val stackAllocStmt = Tree.SEQ(
-        Tree.MOVE (argTemp, Tree.CONST (~wordSize)),
-        Tree.MOVE (stackTemp, Tree.BINOP (Tree.PLUS, stackTemp, argTemp))
+    val stackAllocStmt = Tree.SEQ (
+        Tree.MOVE (Tree.argTemp1, Tree.CONST (~wordSize)),
+        Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.argTemp1))
     )
 
     fun allocVar (Frame (currOffset, varMap)) var = 
@@ -52,27 +46,18 @@ structure Frame :> FRAME = struct
 
     val emptyFrame = Frame (0, IdMap.empty)
 
-    fun moveTempToFrame var_offset temp = Tree.MOVE (Tree.MEM (Tree.BINOP (Tree.PLUS, frameTemp, Tree.CONST var_offset)), temp)
-    fun moveFrameToTemp temp var_offset = Tree.MOVE (temp, Tree.MEM (Tree.BINOP (Tree.PLUS, frameTemp, Tree.CONST var_offset)))
-
-    exception EmptySeqFrame
-
-    fun seq [st] = st
-        | seq (st :: st_list) = Tree.SEQ (st, seq st_list)
-        | seq [] = raise EmptySeqFrame
-
     fun callFunction funcLabel currFrame listOffset =
         let
             val numParam = List.length listOffset + 2
             val Frame (currOffset, _) = currFrame
 
-            val storeFp = moveTempToFrame currOffset frameTemp
+            val storeFp = Tree.moveTempToFrame currOffset Tree.frameTemp
 
             fun foldFun (prevMemOffset, (currOffset, currStmtList)) =
                 let
                     val stmt = [
-                        moveFrameToTemp argTemp prevMemOffset,
-                        moveTempToFrame currOffset argTemp
+                        Tree.moveFrameToTemp Tree.argTemp1 prevMemOffset,
+                        Tree.moveTempToFrame currOffset Tree.argTemp1
                     ]
                 in
                     (currOffset + wordSize, currStmtList @ stmt)
@@ -80,24 +65,24 @@ structure Frame :> FRAME = struct
 
             val (_, storeArgStmtList) =  
                 foldl foldFun (currOffset + 2 * wordSize, []) listOffset
-            val storeArgStmt = seq storeArgStmtList 
+            val storeArgStmt = Tree.seq storeArgStmtList 
 
-            val updateFpSp = seq [
-                Tree.MOVE (frameTemp, stackTemp),
-                Tree.MOVE (stackTemp, Tree.BINOP (Tree.PLUS, stackTemp, Tree.CONST numParam))
+            val updateFpSp = Tree.seq [
+                Tree.MOVE (Tree.frameTemp, Tree.stackTemp),
+                Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.CONST numParam))
             ]
 
             val callFunc = Tree.EXP (Tree.CALL (Tree.NAME funcLabel, []))
 
-            val restoreFpSp = seq [
-                Tree.MOVE (stackTemp, frameTemp),
-                moveFrameToTemp frameTemp 0
+            val restoreFpSp = Tree.seq [
+                Tree.MOVE (Tree.stackTemp, Tree.frameTemp),
+                Tree.moveFrameToTemp Tree.frameTemp 0
             ]
 
-            val moveRetValToResult = Tree.MOVE (resultTemp, returnTemp)
+            val moveRetValToResult = Tree.MOVE (Tree.resultTemp, Tree.returnTemp)
 
         in
-            seq [
+            Tree.seq [
                 storeFp,            (* Store frame pointer *)
                 storeArgStmt,       (* Store arguments *)
                 updateFpSp,         (* Update FP, SP *)

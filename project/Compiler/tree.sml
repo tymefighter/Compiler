@@ -28,7 +28,21 @@ structure Tree = struct
     and relop = EQ | NE | LT | GT | LE | GE
         | ULT | ULE | UGT | UGE
     
-    exception Incomplete
+    val argTemp1 = TEMP Temp.argTemp1
+    val argTemp2 = TEMP Temp.argTemp2
+    val resultTemp = TEMP Temp.resultTemp
+    val frameTemp = TEMP Temp.framePointer
+    val stackTemp = TEMP Temp.stackPointer
+    val returnTemp = TEMP Temp.returnValue
+
+    fun moveTempToFrame var_offset temp = MOVE (MEM (BINOP (PLUS, frameTemp, CONST var_offset)), temp)
+    fun moveFrameToTemp temp var_offset = MOVE (temp, MEM (BINOP (PLUS, frameTemp, CONST var_offset)))
+
+    exception EmptySeq
+
+    fun seq [st] = st
+        | seq (st :: st_list) = SEQ (st, seq st_list)
+        | seq [] = raise EmptySeq
 
     fun pprintRelop EQ = "EQ"
         | pprintRelop NE = "NE"

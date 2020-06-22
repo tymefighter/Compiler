@@ -1,6 +1,5 @@
 structure Translate = struct
 
-    exception EmptySeq
     exception EmptyExpressionList
     exception ConditionalToNoReturn
     exception NoReturnToConditional
@@ -29,22 +28,10 @@ structure Translate = struct
     fun setFrame (Info (optLabel, _, funcList))  newFrame    = Info (optLabel, newFrame, funcList)
     fun setFuncList (Info (optLabel, frame, _))  newFuncList = Info (optLabel, frame, newFuncList)
 
-    val argTemp1 = Tree.TEMP Temp.argTemp1
-    val argTemp2 = Tree.TEMP Temp.argTemp2
-    val resultTemp = Tree.TEMP Temp.resultTemp
-    val frameTemp = Tree.TEMP Temp.framePointer
-    val stackTemp = Tree.TEMP Temp.stackPointer
-
-    fun moveTempToFrame var_offset temp = Tree.MOVE (Tree.MEM (Tree.BINOP (Tree.PLUS, frameTemp, Tree.CONST var_offset)), temp)
-    fun moveFrameToTemp temp var_offset = Tree.MOVE (temp, Tree.MEM (Tree.BINOP (Tree.PLUS, frameTemp, Tree.CONST var_offset)))
 
     datatype exp = Ex of Tree.exp
         | Nx of Tree.stm
         | Cx of Temp.label * Temp.label -> Tree.stm
-
-    fun seq [st] = st
-        | seq (st :: st_list) = Tree.SEQ (st, seq st_list)
-        | seq [] = raise EmptySeq
 
     fun getStmt (Tree.ESEQ (stmt, temp)) = stmt
         | getStmt _ = raise RestrictionFailed
@@ -52,12 +39,12 @@ structure Translate = struct
     fun unEx (Ex e) = e
         | unEx (Nx s) =
             let
-                val stmtAfterMoving = seq [
+                val stmtAfterMoving = Tree.seq [
                     s,
-                    Tree.MOVE (resultTemp, Tree.CONST 0)
+                    Tree.MOVE (Tree.resultTemp, Tree.CONST 0)
                 ]
             in
-                Tree.ESEQ (stmtAfterMoving, resultTemp)
+                Tree.ESEQ (stmtAfterMoving, Tree.resultTemp)
             end
         | unEx (Cx con) = let
                 
@@ -65,26 +52,26 @@ structure Translate = struct
                 val f = Temp.newlabel ()  (* False then jump here *)
                 val cont = Temp.newlabel ()
             in
-                Tree.ESEQ (seq [
+                Tree.ESEQ (Tree.seq [
                     con (t, f),
                     Tree.LABEL t,
-                    Tree.MOVE (resultTemp, Tree.CONST 1),
+                    Tree.MOVE (Tree.resultTemp, Tree.CONST 1),
                     Tree.JUMP (Tree.NAME cont, [cont]),
                     Tree.LABEL f,
-                    Tree.MOVE (resultTemp, Tree.CONST 0),
+                    Tree.MOVE (Tree.resultTemp, Tree.CONST 0),
                     Tree.LABEL cont
-                ], resultTemp)
+                ], Tree.resultTemp)
             end
 
     fun unNx (Ex e) = getStmt e
         | unNx (Nx s) = s
         | unNx (Cx con) = raise ConditionalToNoReturn
     
-    fun unCx (Ex e) = (fn (t, f) => seq [
+    fun unCx (Ex e) = (fn (t, f) => Tree.seq [
         getStmt e,
-        Tree.MOVE (argTemp1, resultTemp),
-        Tree.MOVE (argTemp2, Tree.CONST 0),
-        Tree.CJUMP (Tree.NE, argTemp1, argTemp2, t, f)
+        Tree.MOVE (Tree.argTemp1, Tree.resultTemp),
+        Tree.MOVE (Tree.argTemp2, Tree.CONST 0),
+        Tree.CJUMP (Tree.NE, Tree.argTemp1, Tree.argTemp2, t, f)
     ])
         | unCx (Nx s) = raise NoReturnToConditional
         | unCx (Cx c) = c
@@ -97,7 +84,7 @@ structure Translate = struct
                 (x :: ls, last_ele)
             end
    
-    fun translateExp info (Ast.LiteralInt x) = (info, Ex (Tree.ESEQ (Tree.MOVE (resultTemp, Tree.CONST x), resultTemp)))
+    fun translateExp info (Ast.LiteralInt x) = (info, Ex (Tree.ESEQ (Tree.MOVE (Tree.resultTemp, Tree.CONST x), Tree.resultTemp)))
         | translateExp info (Ast.Op (e1, bin_op, e2)) = 
             let
                 val (info1, transEx1) = translateExp info e1
@@ -109,48 +96,48 @@ structure Translate = struct
                 val (frame2, exOffset2, allocStmt2) = Frame.allocInternalVar (getFrame info2)
 
                 val ex = case bin_op of
-                    Ast.ADD => Tree.BINOP (Tree.PLUS, argTemp1, argTemp2)
-                    | Ast.SUB => Tree.BINOP (Tree.MINUS, argTemp1, argTemp2)
-                    | Ast.MUL => Tree.BINOP (Tree.MUL, argTemp1, argTemp2)
-                    | Ast.DIV => Tree.BINOP (Tree.DIV, argTemp1, argTemp2)
-                    | Ast.EQ => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.EQ, argTemp1, argTemp2, t, f)))
-                    | Ast.NE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.NE, argTemp1, argTemp2, t, f)))
-                    | Ast.G => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.GT, argTemp1, argTemp2, t, f)))
-                    | Ast.L => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.LT, argTemp1, argTemp2, t, f)))
-                    | Ast.GE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.GE, argTemp1, argTemp2, t, f)))
-                    | Ast.LE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.LE, argTemp1, argTemp2, t, f)))
-                    | Ast.AND => Tree.BINOP (Tree.AND, argTemp1, argTemp2)
-                    | Ast.OR => Tree.BINOP (Tree.OR, argTemp1, argTemp2)
+                    Ast.ADD => Tree.BINOP (Tree.PLUS, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.SUB => Tree.BINOP (Tree.MINUS, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.MUL => Tree.BINOP (Tree.MUL, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.DIV => Tree.BINOP (Tree.DIV, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.EQ => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.EQ, Tree.argTemp1, Tree.argTemp2, t, f)))
+                    | Ast.NE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.NE, Tree.argTemp1, Tree.argTemp2, t, f)))
+                    | Ast.G => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.GT, Tree.argTemp1, Tree.argTemp2, t, f)))
+                    | Ast.L => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.LT, Tree.argTemp1, Tree.argTemp2, t, f)))
+                    | Ast.GE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.GE, Tree.argTemp1, Tree.argTemp2, t, f)))
+                    | Ast.LE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.LE, Tree.argTemp1, Tree.argTemp2, t, f)))
+                    | Ast.AND => Tree.BINOP (Tree.AND, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.OR => Tree.BINOP (Tree.OR, Tree.argTemp1, Tree.argTemp2)
 
                 val stmt = case ex of
                     Tree.ESEQ _ => getStmt ex
-                    | _ => Tree.MOVE (resultTemp, ex)
+                    | _ => Tree.MOVE (Tree.resultTemp, ex)
 
-                val computeAndMoveToTemp = seq [
+                val computeAndMoveToTemp = Tree.seq [
                     getStmt ex1,
                     allocStmt1,
-                    moveTempToFrame exOffset1 resultTemp,
+                    Tree.moveTempToFrame exOffset1 Tree.resultTemp,
                     getStmt ex2,
                     allocStmt2,
-                    moveTempToFrame exOffset2 resultTemp,
-                    moveFrameToTemp argTemp1 exOffset1,
-                    moveFrameToTemp argTemp2 exOffset2,
+                    Tree.moveTempToFrame exOffset2 Tree.resultTemp,
+                    Tree.moveFrameToTemp Tree.argTemp1 exOffset1,
+                    Tree.moveFrameToTemp Tree.argTemp2 exOffset2,
                     stmt
                 ]
             in
-                (setFrame info2 frame2, Ex (Tree.ESEQ (computeAndMoveToTemp, resultTemp)))
+                (setFrame info2 frame2, Ex (Tree.ESEQ (computeAndMoveToTemp, Tree.resultTemp)))
             end
         | translateExp info (Ast.NegExp e) = 
             let
                 val (newInfo, transEx) = translateExp info e
                 val ex = unEx transEx
-                val computeAndMoveToTemp = seq [
+                val computeAndMoveToTemp = Tree.seq [
                     getStmt ex,
-                    Tree.MOVE (argTemp1, Tree.CONST 0),
-                    Tree.MOVE (resultTemp, Tree.BINOP (Tree.MINUS, argTemp1, resultTemp))
+                    Tree.MOVE (Tree.argTemp1, Tree.CONST 0),
+                    Tree.MOVE (Tree.resultTemp, Tree.BINOP (Tree.MINUS, Tree.argTemp1, Tree.resultTemp))
                 ]
             in
-                (newInfo, Ex (Tree.ESEQ (computeAndMoveToTemp, resultTemp)))
+                (newInfo, Ex (Tree.ESEQ (computeAndMoveToTemp, Tree.resultTemp)))
             end
         | translateExp info (Ast.Exprs exp_list) = let
                 val (ls, last_ele) = seperateLastEle exp_list
@@ -159,7 +146,7 @@ structure Translate = struct
                 val (info2, transEx) = translateExp info last_ele
                 val ex = unEx transEx
             in
-                (info2, Ex (Tree.ESEQ (seq (stmtList @ [getStmt ex]), resultTemp)))
+                (info2, Ex (Tree.ESEQ (Tree.seq (stmtList @ [getStmt ex]), Tree.resultTemp)))
             end
         | translateExp info (Ast.IfThen (cond_e, e)) = let
                 val (info1, transConEx) = translateExp info cond_e
@@ -169,7 +156,7 @@ structure Translate = struct
 
                 val true_label = Temp.newlabel ()
                 val false_label = Temp.newlabel ()
-                val stmts = seq [
+                val stmts = Tree.seq [
                     cnd (true_label, false_label),
                     Tree.LABEL true_label,
                     getStmt ex,
@@ -189,7 +176,7 @@ structure Translate = struct
                 val true_label = Temp.newlabel ()
                 val false_label = Temp.newlabel ()
                 val continue_label = Temp.newlabel ()
-                val stmts = seq [
+                val stmts = Tree.seq [
                     cnd (true_label, false_label),
                     Tree.LABEL true_label,
                     getStmt trueEx,
@@ -213,7 +200,7 @@ structure Translate = struct
                 val end_label = Temp.newlabel ()
 
                 val newInfo = setLoopLabel info (SOME end_label)
-                val stmts = seq [
+                val stmts = Tree.seq [
                     Tree.LABEL loop_label,
                     cnd (true_label, end_label),
                     Tree.LABEL true_label,
@@ -245,21 +232,21 @@ structure Translate = struct
                 val (info4, bodyEx) = translateExp info3 body_exp
                 val bodyExp = unEx bodyEx
 
-                val stmts = seq [
+                val stmts = Tree.seq [
                     allocStmt1,
                     allocStmt2,
                     getStmt startExp,
-                    moveTempToFrame varOffset resultTemp,
+                    Tree.moveTempToFrame varOffset Tree.resultTemp,
                     getStmt endExp,
-                    moveTempToFrame endExpOffset resultTemp,
+                    Tree.moveTempToFrame endExpOffset Tree.resultTemp,
                     Tree.LABEL loop_label,
                     getStmt bodyExp,
-                    moveFrameToTemp argTemp1 varOffset,
-                    Tree.MOVE (argTemp2, Tree.CONST 1),
-                    Tree.MOVE (argTemp1, Tree.BINOP (Tree.PLUS, argTemp1, argTemp2)),
-                    moveTempToFrame varOffset argTemp1,
-                    moveFrameToTemp argTemp2 endExpOffset,
-                    Tree.CJUMP (Tree.EQ, argTemp1, argTemp2, continue_label, loop_label),
+                    Tree.moveFrameToTemp Tree.argTemp1 varOffset,
+                    Tree.MOVE (Tree.argTemp2, Tree.CONST 1),
+                    Tree.MOVE (Tree.argTemp1, Tree.BINOP (Tree.PLUS, Tree.argTemp1, Tree.argTemp2)),
+                    Tree.moveTempToFrame varOffset Tree.argTemp1,
+                    Tree.moveFrameToTemp Tree.argTemp2 endExpOffset,
+                    Tree.CJUMP (Tree.EQ, Tree.argTemp1, Tree.argTemp2, continue_label, loop_label),
                     Tree.LABEL continue_label
                 ]
             in
@@ -277,7 +264,7 @@ structure Translate = struct
                     | SOME var_offset => var_offset
 
             in
-                (info, Ex (Tree.ESEQ (moveFrameToTemp resultTemp varOffset, resultTemp)))
+                (info, Ex (Tree.ESEQ (Tree.moveFrameToTemp Tree.resultTemp varOffset, Tree.resultTemp)))
             end
         | translateExp info (Ast.Assignment (Ast.Var var, e)) = let
                 val (info1, transEx) = translateExp info e
@@ -289,9 +276,9 @@ structure Translate = struct
                     NONE => raise VariableUsedBeforeDec
                     | SOME var_offset => var_offset
 
-                val stmt = seq [
+                val stmt = Tree.seq [
                     getStmt ex,
-                    moveTempToFrame varOffset resultTemp
+                    Tree.moveTempToFrame varOffset Tree.resultTemp
                 ]
             in
                 (info1, Nx stmt)
@@ -303,17 +290,17 @@ structure Translate = struct
 
                 val (ls, last_ele) = seperateLastEle exp_list
                 val (info2, stmtExpList) = translateList info1 ls
-                val new_stmt = seq (stmtLet :: stmtExpList)
+                val new_stmt = Tree.seq (stmtLet :: stmtExpList)
 
                 val (info3, transEx) = translateExp info2 last_ele
                 val ex = unEx transEx
 
-                val complete_stmt = seq [
+                val complete_stmt = Tree.seq [
                     new_stmt,
                     getStmt ex
                 ]
             in
-                (info3, Ex (Tree.ESEQ (complete_stmt, resultTemp)))
+                (info3, Ex (Tree.ESEQ (complete_stmt, Tree.resultTemp)))
             end
         | translateExp info (Ast.FunCall (funcName, args)) =
             if(funcName = "print" orelse funcName = "println")
@@ -324,9 +311,9 @@ structure Translate = struct
                             | _ => raise RestrictionFailed
                         val (newInfo, transEx) = translateExp info exp
                         val ex = unEx transEx
-                        val stmt = seq [
+                        val stmt = Tree.seq [
                             getStmt ex,
-                            Tree.EXP (Tree.CALL (Tree.NAME (Temp.stringToLabel funcName), [resultTemp]))
+                            Tree.EXP (Tree.CALL (Tree.NAME (Temp.stringToLabel funcName), [Tree.resultTemp]))
                         ]
                     in
                         (newInfo, Nx stmt)
@@ -347,10 +334,10 @@ structure Translate = struct
                 val (newInfo, transEx) = translateExp (setFrame info newFrame) e
                 val ex = unEx transEx
 
-                val stmts = seq [
+                val stmts = Tree.seq [
                     allocStmt,
                     getStmt ex,
-                    moveTempToFrame varOffset resultTemp
+                    Tree.moveTempToFrame varOffset Tree.resultTemp
                 ]
             in
                 (
@@ -379,7 +366,7 @@ structure Translate = struct
             in
                 addDec newInfo (prev_stmts @ [unNx stmt_nx]) dec_ls
             end
-        | addDec finalInfo final_stmt_list [] = (finalInfo, Nx (seq final_stmt_list))
+        | addDec finalInfo final_stmt_list [] = (finalInfo, Nx (Tree.seq final_stmt_list))
 
     fun translateProg (Ast.Expression exp) = 
             let
