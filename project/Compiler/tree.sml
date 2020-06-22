@@ -34,6 +34,7 @@ structure Tree = struct
     val frameTemp = TEMP Temp.framePointer
     val stackTemp = TEMP Temp.stackPointer
     val returnTemp = TEMP Temp.returnValue
+    val returnAddrTemp = TEMP Temp.returnAddr
 
     fun moveTempToFrame var_offset temp = MOVE (MEM (BINOP (PLUS, frameTemp, CONST var_offset)), temp)
     fun moveFrameToTemp temp var_offset = MOVE (temp, MEM (BINOP (PLUS, frameTemp, CONST var_offset)))

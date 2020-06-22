@@ -18,15 +18,13 @@ structure Translate = struct
         Data Structure to store information which would be required while
         translation
     *)
-    datatype Info = Info of (Temp.label option) * Frame.Frame * functionlist
+    datatype Info = Info of (Temp.label option) * Frame.Frame
 
-    fun getLoopLabel (Info (optLabel, _, _)) = optLabel
-    fun getFrame (Info (_, frame, _))        = frame
-    fun getFuncList (Info (_, _, funcList))  = funcList
+    fun getLoopLabel (Info (optLabel, _)) = optLabel
+    fun getFrame (Info (_, frame))        = frame
 
-    fun setLoopLabel (Info (_, frame, funcList)) newOptLabel = Info (newOptLabel, frame, funcList)
-    fun setFrame (Info (optLabel, _, funcList))  newFrame    = Info (optLabel, newFrame, funcList)
-    fun setFuncList (Info (optLabel, frame, _))  newFuncList = Info (optLabel, frame, newFuncList)
+    fun setLoopLabel (Info (_, frame)) newOptLabel = Info (newOptLabel, frame)
+    fun setFrame (Info (optLabel, _))  newFrame    = Info (optLabel, newFrame)
 
 
     datatype exp = Ex of Tree.exp
@@ -345,6 +343,15 @@ structure Translate = struct
                     Nx stmts
                 )
             end
+        (* | translateDec info (Ast.FuncDec (funcName, argAndTypeList, funcType, funcExp)) = 
+            let
+                val returnValOffset = 2
+                val saveReturnAddr = (* Save return address *)
+                    Tree.moveTempToFrame returnValOffset Tree.returnAddrTemp
+                
+
+            in
+            end *)
         | translateDec _ _ = raise Unimplemeneted
 
     and translateList info astExpList = 
@@ -370,14 +377,14 @@ structure Translate = struct
 
     fun translateProg (Ast.Expression exp) = 
             let
-                val (_, transEx) = translateExp (Info (NONE, Frame.emptyFrame, [])) exp
+                val (_, transEx) = translateExp (Info (NONE, Frame.emptyFrame)) exp
             in
                 unEx transEx
             end
         
         | translateProg (Ast.Decs dec_list) = 
             let
-                val (_, stmt_list) = addDec (Info (NONE, Frame.emptyFrame, [])) [] dec_list
+                val (_, stmt_list) = addDec (Info (NONE, Frame.emptyFrame)) [] dec_list
             in
                 unEx stmt_list
             end
