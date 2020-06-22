@@ -316,7 +316,40 @@ structure Translate = struct
                     in
                         (newInfo, Nx stmt)
                     end
-            else raise Unimplemeneted
+            else
+                let
+                    fun placeSingleEval (e, (currOffsetList, currStmtList, currInfo)) =
+                        let
+                            val (info1, transEx) = translateExp currInfo e
+                            val expStmt = getStmt (unEx transEx) (* Evaluate expression *)
+                            val frame1 = getFrame info1
+
+                            val (frame2, newOffset, allocStmt) = Frame.allocInternalVar frame1 (* Allocate space *)
+
+                            val moveEvalToStack = Tree.moveTempToFrame newOffset Tree.resultTemp
+                             (* Move evaluated value to allocated space *)
+                        in
+                            (
+                                currOffsetList @ [newOffset],
+                                currStmtList @ [
+                                    expStmt,
+                                    allocStmt,
+                                    moveEvalToStack
+                                ],
+                                setFrame info1 frame2
+                            )
+                        end
+
+                    val (argOffsetList, placeStmtList, newInfo)
+                        = foldl placeSingleEval ([], [], info) args
+                    
+                    val funcLabel = Temp.stringToLabel funcName
+                    
+                    val funcCallStmt =
+                        Frame.callFunction funcLabel (getFrame newInfo) argOffsetList
+                in
+                    (newInfo, Ex (Tree.ESEQ (funcCallStmt, Tree.resultTemp)))
+                end
         | translateExp _ _ = raise Unimplemeneted
 
     and translateDec info (Ast.Vardec (var, var_type_opt, e)) = 

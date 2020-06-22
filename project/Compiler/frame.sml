@@ -82,7 +82,8 @@ structure Frame :> FRAME = struct
 
             val updateFpSp = Tree.seq [
                 Tree.MOVE (Tree.frameTemp, Tree.stackTemp),
-                Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.CONST numParam))
+                Tree.MOVE (Tree.argTemp1, Tree.CONST numParam),
+                Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.argTemp1))
             ]
 
             val callFunc = Tree.EXP (Tree.CALL (Tree.NAME funcLabel, []))
