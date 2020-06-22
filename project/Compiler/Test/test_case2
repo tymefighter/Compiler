@@ -1,8 +1,11 @@
 let
-    var x := 0
 in
-    (
-        x := 3;
-        print (x)
-    )
+    let
+        var x := 0
+    in
+        (
+            x := 3;
+            print (x)
+        )
+    end
 end

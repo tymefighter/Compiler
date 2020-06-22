@@ -1,1 +1,5 @@
-print (-3 + 4 + 5 - 2 * 2)
+let
+    function mainFunc () = print (-3 + 4 + 5 - 2 * 2)
+in
+    mainFunc ()
+end
