@@ -9,6 +9,7 @@ signature FRAME = sig
     
     val funcDecl : Ast.id list -> Frame
     val callFunction :  Temp.label -> Frame -> int list -> Tree.stm
+    val getWordSize : int
 end	
 
 structure Frame :> FRAME = struct
@@ -36,12 +37,12 @@ structure Frame :> FRAME = struct
                         IdMap.insert (mapAfterRemove, var, currOffset)
                     end
 
-            val newOffset = currOffset + wordSize
+            val newOffset = currOffset - wordSize
         in
             (Frame (newOffset, newMap), stackAllocStmt)
         end
 
-    fun allocInternalVar (Frame (currOffset, varMap)) = (Frame (currOffset + wordSize, varMap), currOffset, stackAllocStmt)
+    fun allocInternalVar (Frame (currOffset, varMap)) = (Frame (currOffset - wordSize, varMap), currOffset, stackAllocStmt)
 
     fun getOffset (Frame (_, varMap)) var = IdMap.find (varMap, var)
 
@@ -53,10 +54,10 @@ structure Frame :> FRAME = struct
                 let
                     val Frame (currOffset, currMap) = currFrame
                 in
-                    Frame (currOffset + wordSize, IdMap.insert (currMap, argName, currOffset))
+                    Frame (currOffset - wordSize, IdMap.insert (currMap, argName, currOffset))
                 end
         in
-            foldl placeVarInMap emptyFrame argNameList
+            foldl placeVarInMap (Frame (~2 * wordSize, IdMap.empty)) argNameList
         end
 
     fun callFunction funcLabel currFrame listOffset =
@@ -66,23 +67,23 @@ structure Frame :> FRAME = struct
 
             val storeFp = Tree.moveTempToFrame currOffset Tree.frameTemp
 
-            fun foldFun (prevMemOffset, (currOffset, currStmtList)) =
+            fun foldFun (prevMemOffset, (curr_offset, currStmtList)) =
                 let
                     val stmt = [
                         Tree.moveFrameToTemp Tree.argTemp1 prevMemOffset,
-                        Tree.moveTempToFrame currOffset Tree.argTemp1
+                        Tree.moveTempToFrame curr_offset Tree.argTemp1
                     ]
                 in
-                    (currOffset + wordSize, currStmtList @ stmt)
+                    (curr_offset - wordSize, currStmtList @ stmt)
                 end
 
             val (_, storeArgStmtList) =  
-                foldl foldFun (currOffset + 2 * wordSize, []) listOffset
+                foldl foldFun (currOffset - 2 * wordSize, []) listOffset
             val storeArgStmt = Tree.seq storeArgStmtList 
 
             val updateFpSp = Tree.seq [
                 Tree.MOVE (Tree.frameTemp, Tree.stackTemp),
-                Tree.MOVE (Tree.argTemp1, Tree.CONST numParam),
+                Tree.MOVE (Tree.argTemp1, Tree.CONST (~numParam * wordSize)),
                 Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.argTemp1))
             ]
 
@@ -105,4 +106,6 @@ structure Frame :> FRAME = struct
                 moveRetValToResult  (* Get return value in result *)
             ]
         end
+
+        val getWordSize = wordSize
 end

@@ -347,8 +347,10 @@ structure Translate = struct
                     
                     val funcCallStmt =
                         Frame.callFunction funcLabel (getFrame newInfo) argOffsetList
+
+                    val stmt = Tree.seq (placeStmtList @ [funcCallStmt])
                 in
-                    (newInfo, Ex (Tree.ESEQ (funcCallStmt, Tree.resultTemp)))
+                    (newInfo, Ex (Tree.ESEQ (stmt, Tree.resultTemp)))
                 end
         | translateExp _ _ = raise Unimplemeneted
 
@@ -386,7 +388,7 @@ structure Translate = struct
 
                 val info = Info (NONE, Frame.funcDecl argNameList)
 
-                val returnAddrOffset = 2
+                val returnAddrOffset = ~Frame.getWordSize
                 val saveReturnAddr =
                     Tree.moveTempToFrame returnAddrOffset Tree.returnAddrTemp
                 
@@ -408,7 +410,7 @@ structure Translate = struct
                 ]
             in
                 (
-                    newInfo,
+                    Info (NONE, Frame.emptyFrame),
                     Nx stmt
                 )
             end
