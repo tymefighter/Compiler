@@ -23,7 +23,9 @@ For now, we place the following restrictions on Tree IR: -
                     |     ....      |
                     |   Local var   |
     Stack pointer-->|     ....      |
+    
     - We can return the return values in the return value register
+    - We have a major assumption - **no errors in the code**
 
 For now, we place the following restrictions on tiger code: -
     - Tiger Code needs to have a top level **let - in** block
