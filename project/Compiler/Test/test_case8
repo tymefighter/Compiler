@@ -1,0 +1,5 @@
+let
+    function addFun (x : int) = x
+in
+    println (addFun(1))
+end
