@@ -11,6 +11,8 @@ signature TEMP = sig
     val resultTemp : temp
     val framePointer : temp
     val stackPointer : temp
+    val returnAddr : temp
+    val returnValue : temp
 end	
 
 structure Temp :> TEMP = struct
@@ -75,4 +77,6 @@ structure Temp :> TEMP = struct
     val resultTemp = "resultTemp"
     val framePointer = "framePointer"
     val stackPointer = "stackPointer"
+    val returnAddr = "returnAddr"
+    val returnValue = "returnValue"
 end
