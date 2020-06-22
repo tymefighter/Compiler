@@ -98,26 +98,36 @@ structure CodeGen = struct
             end
         | generateStm (Tree.SEQ (stm1, stm2)) = generateStm stm1 @ generateStm stm2
         | generateStm (Tree.LABEL label) = [MIPS.Label (Temp.labelToString label)]
-        | generateStm (Tree.EXP (Tree.CALL (Tree.NAME lab, [Tree.TEMP temp]))) =
-            let
-                val funcName = Temp.labelToString lab
-                val printlnStmts = case funcName of
-                    "print" => []
-                    | "println" => [
-                            MIPS.ArithmeticLogic (MIPS.AddImm (MIPS.A 0, MIPS.Zero, MIPS.Int 10)),
-                            MIPS.ArithmeticLogic (MIPS.AddImm (MIPS.V 0, MIPS.Zero, MIPS.Int 11)),
+        | generateStm (Tree.EXP (Tree.CALL (Tree.NAME lab, argList))) =
+            (case argList of
+                [Tree.TEMP temp] =>
+                    let
+                        val funcName = Temp.labelToString lab
+                        val printlnStmts = case funcName of
+                            "print" => []
+                            | "println" => [
+                                    MIPS.ArithmeticLogic (MIPS.AddImm (MIPS.A 0, MIPS.Zero, MIPS.Int 10)),
+                                    MIPS.ArithmeticLogic (MIPS.AddImm (MIPS.V 0, MIPS.Zero, MIPS.Int 11)),
+                                    MIPS.ExceptionTrap (MIPS.SystemCall)
+                                ]
+                            | _ => raise RestrictionFailedCodeGen
+                        
+                        val printReg = temp2reg temp
+                    in
+                        mapNoLabel ([
+                            MIPS.ConstMapping (MIPS.LoadImm (MIPS.V 0, MIPS.Int 1)),
+                            MIPS.DataMove (MIPS.Move (MIPS.A 0, printReg)),
                             MIPS.ExceptionTrap (MIPS.SystemCall)
-                        ]
-                    | _ => raise RestrictionFailedCodeGen
-                
-                val printReg = temp2reg temp
-            in
-                mapNoLabel ([
-                    MIPS.ConstMapping (MIPS.LoadImm (MIPS.V 0, MIPS.Int 1)),
-                    MIPS.DataMove (MIPS.Move (MIPS.A 0, printReg)),
-                    MIPS.ExceptionTrap (MIPS.SystemCall)
-                ] @ printlnStmts)
-            end
+                        ] @ printlnStmts)
+                    end
+                | [] =>
+                    let
+                        val funcName = Temp.labelToString lab
+                        val mipsStmt = MIPS.BranchJump (MIPS.JumpLink funcName)
+                    in
+                        mapNoLabel [mipsStmt]
+                    end
+                | _ => raise RestrictionFailedCodeGen)
         | generateStm _ = raise RestrictionFailedCodeGen
 
     (* generateEx : Tree.exp -> ((MIPS.Reg * MIPS.Addr) MIPS.Inst) list *)
