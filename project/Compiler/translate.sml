@@ -343,15 +343,42 @@ structure Translate = struct
                     Nx stmts
                 )
             end
-        (* | translateDec info (Ast.FuncDec (funcName, argAndTypeList, funcType, funcExp)) = 
+        | translateDec _ (Ast.FuncDec (funcName, argAndTypeList, funcType, funcExp)) = 
             let
-                val returnValOffset = 2
-                val saveReturnAddr = (* Save return address *)
-                    Tree.moveTempToFrame returnValOffset Tree.returnAddrTemp
-                
 
+                val placeLabel = Tree.LABEL (Temp.stringToLabel funcName)
+
+                fun getName (argName, _) = argName
+                val argNameList = map getName argAndTypeList
+
+                val info = Info (NONE, Frame.funcDecl argNameList)
+
+                val returnAddrOffset = 2
+                val saveReturnAddr =
+                    Tree.moveTempToFrame returnAddrOffset Tree.returnAddrTemp
+                
+                val (newInfo, transFunEx) = translateExp info funcExp
+                val funcStmt = getStmt (unEx transFunEx)
+                val placeRetValue = Tree.MOVE (Tree.returnTemp, Tree.resultTemp)
+
+                val moveReturnAddr = Tree.moveFrameToTemp Tree.returnAddrTemp returnAddrOffset
+
+                val jumpToCaller = Tree.JUMP (Tree.returnAddrTemp, [])
+
+                val stmt = Tree.seq [
+                    placeLabel,     (* Place function label *)
+                    saveReturnAddr, (* Save return address *)
+                    funcStmt,       (* Function body *)
+                    placeRetValue,  (* Place return value *)
+                    moveReturnAddr, (* Move return address to return address temp*)
+                    jumpToCaller    (* Return back to caller *)
+                ]
             in
-            end *)
+                (
+                    newInfo,
+                    Nx stmt
+                )
+            end
         | translateDec _ _ = raise Unimplemeneted
 
     and translateList info astExpList = 

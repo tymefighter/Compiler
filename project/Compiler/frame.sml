@@ -6,7 +6,8 @@ signature FRAME = sig
     val allocInternalVar : Frame -> Frame * int * Tree.stm
     val getOffset : Frame -> Ast.id -> int option
     val emptyFrame : Frame
-
+    
+    val funcDecl : Ast.id list -> Frame
     val callFunction :  Temp.label -> Frame -> int list -> Tree.stm
 end	
 
@@ -45,6 +46,18 @@ structure Frame :> FRAME = struct
     fun getOffset (Frame (_, varMap)) var = IdMap.find (varMap, var)
 
     val emptyFrame = Frame (0, IdMap.empty)
+
+    fun funcDecl argNameList =
+        let
+            fun placeVarInMap (argName, currFrame) = 
+                let
+                    val Frame (currOffset, currMap) = currFrame
+                in
+                    Frame (currOffset + wordSize, IdMap.insert (currMap, argName, currOffset))
+                end
+        in
+            foldl placeVarInMap emptyFrame argNameList
+        end
 
     fun callFunction funcLabel currFrame listOffset =
         let

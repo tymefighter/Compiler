@@ -9,6 +9,8 @@ structure CodeGen = struct
         | "resultTemp" => MIPS.T 0
         | "framePointer" => MIPS.Fp
         | "stackPointer" => MIPS.Sp
+        | "returnAddr" => MIPS.Ra
+        | "returnValue" => MIPS.V 0 (* Return value register *)
         | _ => raise RestrictionFailedCodeGen
 
     fun mapNoLabel instList = map (fn inst => MIPS.Instruction inst) instList
@@ -65,11 +67,12 @@ structure CodeGen = struct
         end
         | generateStm (Tree.JUMP (jumpExp, labelList)) = 
             let
-                val jumpLabelStr = case jumpExp of
-                    (Tree.NAME label) => Temp.labelToString label
+                val mipsJumpStmt = case jumpExp of
+                    Tree.NAME label => MIPS.Jump (Temp.labelToString label)
+                    | Tree.TEMP temp => MIPS.JumpReg (temp2reg temp)
                     | _ => raise RestrictionFailedCodeGen
             in
-                mapNoLabel [MIPS.BranchJump (MIPS.Jump jumpLabelStr)]
+                mapNoLabel [MIPS.BranchJump mipsJumpStmt]
             end
         | generateStm (Tree.CJUMP (relOp, Tree.TEMP argTemp1, Tree.TEMP argTemp2, trueLabel, falseLabel)) =
             let
