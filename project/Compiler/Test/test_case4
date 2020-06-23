@@ -1,4 +1,9 @@
-(
-    println ((2 + 3) < 5);
-    println ((2 + 3) = 5)
-)
+
+let
+    function tempFunc () = 0
+in
+    (
+        println ((2 + 3) < 5);
+        println ((2 + 3) = 5)
+    )
+end

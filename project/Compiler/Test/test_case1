@@ -1,5 +1,5 @@
 let
-    function mainFunc () = print (-3 + 4 + 5 - 2 * 2)
+    function pracFunc () = print (-3 + 4 + 5 - 2 * 2)
 in
-    mainFunc ()
+    pracFunc ()
 end

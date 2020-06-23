@@ -1,5 +1,5 @@
 let
-    function addFun (x : int) = x
+    function addFun (x : int, y : int) = x + y
 in
-    println (addFun(1))
+    println (addFun(2, 3))
 end

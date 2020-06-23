@@ -1,4 +1,5 @@
 let
+    function tempFunc () = 0
 in
     let
         var x := 0

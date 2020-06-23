@@ -28,9 +28,14 @@ val main_mips_code =
     :: MIPS.Instruction (MIPS.DataMove (MIPS.Move (MIPS.Fp, MIPS.Sp)))
     :: CodeGen.generateProg main_tree_code
 
-val mips_code = case opt_func_dec of
-    NONE => main_mips_code
-    | SOME (dec_tree_code) =>
-        CodeGen.generateProg (Translate.translateProg dec_tree_code) @ main_mips_code
+val mips_code = 
+    case opt_func_dec of
+        NONE => main_mips_code
+        | SOME (dec_tree_code) =>
+            (MIPS.Instruction (MIPS.BranchJump (MIPS.Jump "main")))
+            :: (
+                CodeGen.generateProg (Translate.translateProg dec_tree_code)
+                @ main_mips_code
+            )
 
 val _ = print (MIPS.printProg mips_code)

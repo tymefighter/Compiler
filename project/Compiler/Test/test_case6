@@ -1,6 +1,6 @@
 let
-    var x := 1
-    var y := 2
+    function tempFunc () = 0
 in
-    println (x + y)
+    for j := 0 to 4 do
+        println (j)
 end

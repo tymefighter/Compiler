@@ -1,2 +1,5 @@
-for j := 0 to 4 do
-    println (j)
+let
+    function retFunc (x : int) = x
+in
+    println (retFunc(1))
+end

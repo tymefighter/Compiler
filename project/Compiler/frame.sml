@@ -77,9 +77,16 @@ structure Frame :> FRAME = struct
                     (curr_offset - wordSize, currStmtList @ stmt)
                 end
 
-            val (_, storeArgStmtList) =  
-                foldl foldFun (currOffset - 2 * wordSize, []) listOffset
-            val storeArgStmt = Tree.seq storeArgStmtList 
+            
+            val optStoreArgStmt = case listOffset of
+                [] => NONE
+                | list_offset =>
+                    let
+                        val (_, storeArgStmtList) =  
+                            foldl foldFun (currOffset - 2 * wordSize, []) list_offset
+                    in
+                        SOME (Tree.seq storeArgStmtList)
+                    end
 
             val updateFpSp = Tree.seq [
                 Tree.MOVE (Tree.frameTemp, Tree.stackTemp),
@@ -97,14 +104,24 @@ structure Frame :> FRAME = struct
             val moveRetValToResult = Tree.MOVE (Tree.resultTemp, Tree.returnTemp)
 
         in
-            Tree.seq [
-                storeFp,            (* Store frame pointer *)
-                storeArgStmt,       (* Store arguments *)
-                updateFpSp,         (* Update FP, SP *)
-                callFunc,           (* Call function *)
-                restoreFpSp,        (* Restore FP, SP *)
-                moveRetValToResult  (* Get return value in result *)
-            ]
+            case optStoreArgStmt of
+                SOME storeArgStmt =>
+                    Tree.seq [
+                        storeFp,            (* Store frame pointer *)
+                        storeArgStmt,       (* Store arguments *)
+                        updateFpSp,         (* Update FP, SP *)
+                        callFunc,           (* Call function *)
+                        restoreFpSp,        (* Restore FP, SP *)
+                        moveRetValToResult  (* Get return value in result *)
+                    ]
+                | NONE =>
+                    Tree.seq [
+                        storeFp,            (* Store frame pointer *)
+                        updateFpSp,         (* Update FP, SP *)
+                        callFunc,           (* Call function *)
+                        restoreFpSp,        (* Restore FP, SP *)
+                        moveRetValToResult  (* Get return value in result *)
+                    ]
         end
 
         val getWordSize = wordSize
