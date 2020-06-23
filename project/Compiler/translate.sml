@@ -8,7 +8,6 @@ structure Translate = struct
     exception Unimplemeneted
     exception RestrictionFailed
 
-
     (*
         Function list: information about all previously declared functions
         Each element -> (function name, function label, number of arguments)
@@ -19,6 +18,8 @@ structure Translate = struct
         translation
     *)
     datatype Info = Info of (Temp.label option) * Frame.Frame
+
+    val emptyInfo = Info (NONE, Frame.emptyFrame)
 
     fun getLoopLabel (Info (optLabel, _)) = optLabel
     fun getFrame (Info (_, frame))        = frame
@@ -410,7 +411,7 @@ structure Translate = struct
                 ]
             in
                 (
-                    Info (NONE, Frame.emptyFrame),
+                    emptyInfo,
                     Nx stmt
                 )
             end
@@ -439,14 +440,14 @@ structure Translate = struct
 
     fun translateProg (Ast.Expression exp) = 
             let
-                val (_, transEx) = translateExp (Info (NONE, Frame.emptyFrame)) exp
+                val (_, transEx) = translateExp emptyInfo exp
             in
                 unEx transEx
             end
         
         | translateProg (Ast.Decs dec_list) = 
             let
-                val (_, stmt_list) = addDec (Info (NONE, Frame.emptyFrame)) [] dec_list
+                val (_, stmt_list) = addDec emptyInfo [] dec_list
             in
                 unEx stmt_list
             end
