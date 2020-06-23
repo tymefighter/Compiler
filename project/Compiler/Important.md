@@ -29,6 +29,8 @@ For now, we place the following restrictions on Tree IR: -
 
 For now, we place the following restrictions on tiger code: -
     - Tiger Code needs to have a top level **let - in** block
-    - The let block must contain all function declarations
+    - The let block must contain all function declarations (and only function
+    declarations).
+    - We do not support nested functions as of now.
     - The in block would be the "main" code of the program where the execution begins
     - There is no short-circuiting in if-statements
