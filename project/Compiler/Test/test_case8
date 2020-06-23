@@ -1,5 +1,17 @@
 let
-    function addFun (x : int, y : int) = x + y
+    function printA (n : int) =
+        (
+            println (n);
+            if (n > 0) then
+                printB (n - 1)
+        )
+
+    function printB (n : int) =
+        (
+            println (n);
+            if (n > 0) then
+                printA (n - 1)
+        )
 in
-    println (addFun(2, 3))
+    printA (10)
 end

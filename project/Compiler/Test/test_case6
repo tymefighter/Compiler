@@ -1,6 +1,7 @@
 let
-    function tempFunc () = 0
+    function forLoopFunc (n : int) = 
+        for j := 0 to 4 do
+            println (j)
 in
-    for j := 0 to 4 do
-        println (j)
+    forLoopFunc (4)
 end

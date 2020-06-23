@@ -343,7 +343,7 @@ structure Translate = struct
                     val (argOffsetList, placeStmtList, newInfo)
                         = foldl placeSingleEval ([], [], info) args
                     
-                    val funcLabel = Temp.stringToLabel funcName
+                    val funcLabel = Temp.buildFuncLabel funcName
                     
                     val funcCallStmt =
                         Frame.callFunction funcLabel (getFrame newInfo) argOffsetList
@@ -381,7 +381,7 @@ structure Translate = struct
         | translateDec _ (Ast.FuncDec (funcName, argAndTypeList, funcType, funcExp)) = 
             let
 
-                val placeLabel = Tree.LABEL (Temp.stringToLabel funcName)
+                val placeLabel = Tree.LABEL (Temp.buildFuncLabel funcName)
 
                 fun getName (argName, _) = argName
                 val argNameList = map getName argAndTypeList

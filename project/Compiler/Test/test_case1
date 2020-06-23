@@ -1,5 +1,12 @@
 let
-    function pracFunc () = print (-3 + 4 + 5 - 2 * 2)
+    function add (x : int, y : int) = x + y
+    function sub (x : int, y : int) = x - y
+    function pracFunc (x : int, y : int) = add(x, y) * sub(x, y)
 in
-    pracFunc ()
+    let
+        var a := 3
+        var b := 1
+    in
+        println (pracFunc (a, b))
+    end
 end

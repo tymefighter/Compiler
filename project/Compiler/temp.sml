@@ -3,6 +3,7 @@ signature TEMP = sig
     type label
 	val newtemp  : unit -> temp
     val newlabel : unit -> label
+    val buildFuncLabel : string -> label
     val stringToLabel : string -> label
 	val labelToString : label -> string
 	val tempToString : temp -> string
@@ -66,6 +67,8 @@ structure Temp :> TEMP = struct
 		in
 			"L_" ^ new_str
 		end
+
+    fun buildFuncLabel str = "F_" ^ str
 
     fun stringToLabel str = str
 

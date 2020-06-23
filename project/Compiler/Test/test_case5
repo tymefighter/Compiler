@@ -1,13 +1,14 @@
 let
-    function tempFunc () = 0
-in
-    let
-        var i := 0
-    in
-        while i < 10 do
+    function loopAndPrint (n : int) = 
+        let
+            var i := 0
+        in
+            while i < n do
             (
                 i := i + 1;
                 println (i)
             )
-    end
+        end
+in
+    loopAndPrint (10)
 end

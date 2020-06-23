@@ -1,12 +1,23 @@
 let
-    function tempFunc () = 0
+    function max (x : int, y : int) =
+        let
+            var maxVal := 0
+        in
+            (
+                (
+                    if(x > y) then
+                        maxVal := x
+                    else
+                        maxVal := y
+                );
+                maxVal
+            )
+        end
 in
     let
         var x := 10
         var y := 20
     in
-        if(x < y)
-        then print (x)
-        else print (y)
+        println (max (x, y))
     end
 end

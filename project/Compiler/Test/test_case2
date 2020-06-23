@@ -1,12 +1,18 @@
 let
-    function tempFunc () = 0
+    function computePow (x : int, n : int) = 
+        let
+            var powVal := 1
+        in
+            (
+                for i := 0 to n do
+                    powVal := powVal * x;
+                powVal
+            )
+        end
 in
-    let
-        var x := 0
-    in
-        (
-            x := 3;
-            print (x)
-        )
-    end
+    (
+        println (computePow (3, 2));
+        println (computePow (2, 3));
+        println (computePow (5, 3))
+    )
 end
