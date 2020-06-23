@@ -8,6 +8,7 @@ tiger.grm.sml
 tiger.lex.sml
 temp.sml
 tree.sml
+func.sml
 frame.sml
 translate.sml
 target/mips.sml

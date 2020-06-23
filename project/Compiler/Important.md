@@ -35,3 +35,4 @@ For now, we place the following restrictions on tiger code: -
     - We do not support nested functions as of now.
     - The in block would be the "main" code of the program where the execution begins
     - There is no short-circuiting in if-statements
+    - In the entire code, a function name must occur exactly once.
