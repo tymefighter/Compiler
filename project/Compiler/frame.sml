@@ -57,12 +57,12 @@ structure Frame :> FRAME = struct
                     Frame (currOffset - wordSize, IdMap.insert (currMap, argName, currOffset))
                 end
         in
-            foldl placeVarInMap (Frame (~2 * wordSize, IdMap.empty)) argNameList
+            foldl placeVarInMap (Frame (~3 * wordSize, IdMap.empty)) argNameList
         end
 
     fun callFunction funcLabel currFrame listOffset =
         let
-            val numParam = List.length listOffset + 2
+            val numParam = List.length listOffset + 3
             val Frame (currOffset, _) = currFrame
 
             val storeFp = Tree.moveTempToFrame currOffset Tree.frameTemp
@@ -83,7 +83,7 @@ structure Frame :> FRAME = struct
                 | list_offset =>
                     let
                         val (_, storeArgStmtList) =  
-                            foldl foldFun (currOffset - 2 * wordSize, []) list_offset
+                            foldl foldFun (currOffset - 3 * wordSize, []) list_offset
                     in
                         SOME (Tree.seq storeArgStmtList)
                     end

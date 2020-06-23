@@ -13,10 +13,11 @@ For now, we place the following restrictions on Tree IR: -
     frame pointer value which is stored in the stack, the next location
     contains the return address and the next few locations contain the local
     variables. The stack frame is organized as follows: -
-
+ 
                     |---------------|
-    Frame pointer-->|  prev fp val  | 
-                    |  return addr  | 
+    Frame pointer-->|  prev fp val  |
+                    |  return addr  |
+                    |  static link  |
                     |     arg1      |
                     |     arg2      |
                     |     arg3      |
