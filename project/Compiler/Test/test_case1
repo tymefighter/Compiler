@@ -1,7 +1,11 @@
 let
-    function add (x : int, y : int) = x + y
-    function sub (x : int, y : int) = x - y
-    function pracFunc (x : int, y : int) = add(x, y) * sub(x, y)
+    function pracFunc (x : int, y : int) =
+        let
+            function add (x : int, y : int) = x + y
+            function sub (x : int, y : int) = x - y
+        in
+            add(x, y) * sub(x, y)
+        end
 in
     let
         var a := 3

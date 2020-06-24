@@ -446,7 +446,7 @@ structure Translate = struct
                 
                 val funcMap = getFuncMap prevInfo
                 val prevFrame = getFrame prevInfo
-                val info = Info (NONE, Frame.funcDecl prevFrame argNameList funcName, getFuncMap prevInfo, funcName)
+                val info = Info (NONE, Frame.funcDecl prevFrame argNameList funcName, funcMap, funcName)
 
                 val returnAddrOffset = ~Frame.getWordSize
                 val saveReturnAddr =

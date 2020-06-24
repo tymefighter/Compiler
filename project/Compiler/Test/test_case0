@@ -1,6 +1,12 @@
 let
-    var x := 1
-    function retVal () = x
+    var x := 50
+    function retVal () = 
+        let
+            function pracFun1 () = x + 1
+            function pracFun2 () = x - 1
+        in
+            pracFun1 () * pracFun2 ()
+        end
 in
-    retVal ()
+    println (retVal ())
 end
