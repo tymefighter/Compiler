@@ -1,0 +1,6 @@
+let
+    var x := 1
+    function retVal () = x
+in
+    retVal ()
+end

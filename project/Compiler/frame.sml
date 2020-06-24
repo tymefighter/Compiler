@@ -8,7 +8,7 @@ signature FRAME = sig
     val emptyFrame : Frame
 
     val getFramePointer : Func.FuncMap -> Ast.id -> Ast.id -> Tree.stm
-    val funcDecl : Ast.id list -> Ast.id -> Frame
+    val funcDecl : Frame -> Ast.id list -> Ast.id -> Frame
     val callFunction :  Func.FuncMap -> Ast.id -> Ast.id -> Temp.label -> Frame -> int list -> Tree.stm
     val getWordSize : int
 end	
@@ -113,7 +113,7 @@ structure Frame :> FRAME = struct
             searchAncestor funcMap caller calleeParent
         end
 
-    fun funcDecl argNameList funcName =
+    fun funcDecl prevFrame argNameList funcName =
         let
             fun placeVarInMap (argName, currFrame) = 
                 let
@@ -121,8 +121,9 @@ structure Frame :> FRAME = struct
                 in
                     Frame (currOffset - wordSize, IdMap.insert (currMap, argName, (funcName, currOffset)))
                 end
+            val Frame (_, prevMap) = prevFrame
         in
-            foldl placeVarInMap (Frame (~3 * wordSize, IdMap.empty)) argNameList
+            foldl placeVarInMap (Frame (~3 * wordSize, prevMap)) argNameList
         end
 
     fun callFunction funcMap caller callee funcLabel currFrame listOffset =
@@ -134,7 +135,7 @@ structure Frame :> FRAME = struct
 
             val storeStaticLink = Tree.seq [
                 getStaticLink funcMap caller callee,
-                Tree.moveTempToFrame (~2 * wordSize) Tree.resultTemp
+                Tree.moveTempToFrame (currOffset - 2 * wordSize) Tree.resultTemp
             ]
 
             fun foldFun (prevMemOffset, (curr_offset, currStmtList)) =
