@@ -65,7 +65,7 @@ structure CodeGen = struct
         in
             mapNoLabel [mipsStmt]
         end
-        | generateStm (Tree.JUMP (jumpExp, labelList)) = 
+        | generateStm (Tree.JUMP (jumpExp, _)) = 
             let
                 val mipsJumpStmt = case jumpExp of
                     Tree.NAME label => MIPS.Jump (Temp.labelToString label)
@@ -134,6 +134,8 @@ structure CodeGen = struct
         | generateStm _ = raise RestrictionFailedCodeGen
 
     (* generateEx : Tree.exp -> ((MIPS.Reg * MIPS.Addr) MIPS.Inst) list *)
-    fun generateProg (Tree.ESEQ (stm, ex)) = generateStm stm
+    fun generateProg (Tree.ESEQ (stm, ex)) =
+                MIPS.Instruction (MIPS.DataMove (MIPS.Move (MIPS.Fp, MIPS.Sp)))
+                :: generateStm stm
         | generateProg _ = raise RestrictionFailedCodeGen
 end
