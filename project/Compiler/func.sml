@@ -1,24 +1,21 @@
 signature FUNC = sig
     type FuncMap
     val emptyMap : FuncMap
+    val insert : FuncMap * Ast.id * Ast.id -> FuncMap
+    val find : FuncMap * Ast.id -> Ast.id option
     val constructFuncMap : Ast.Prog -> FuncMap
-    val getStaticLink : (* Would raise FunctionNotInScope exception if callee is not in scope *)
-    FuncMap (* Program function map *)
-    ->  Ast.id (* Caller *)
-    ->  Ast.id (* Callee *)
-    ->  Tree.stm
-    (* Statements to place static link into resultTemp *)
 end
 
 structure Func :> FUNC = struct
 
     exception RepeatedFuncNameUsage
-    exception FunctionNotInScope
 
     structure IdMap = RedBlackMapFn (Ast.IdKey)
     type FuncMap = Ast.id IdMap.map
 
     val emptyMap = IdMap.empty
+    val insert = IdMap.insert
+    val find = IdMap.find
 
     fun foldFuncMapExpList parentFunc initFuncMap expList = 
         let
@@ -58,20 +55,14 @@ structure Func :> FUNC = struct
     and constrFromDec parentFunc (funcMap : FuncMap) (dec : Ast.Dec) : FuncMap = case dec of
         (Ast.FuncDec (funcName, _, _, funcExp)) =>
             let
-                val funcMap1 = case parentFunc of
-                    NONE => funcMap
-                    | SOME parentFuncName =>
-                        IdMap.insert (funcMap, funcName, parentFuncName)
-                val funcMap2 = constrFromExp (SOME funcName) funcMap1 funcExp
+                val funcMap1 = insert (funcMap, funcName, parentFunc)
+                val funcMap2 = constrFromExp funcName funcMap1 funcExp
             in
                 funcMap2
             end
         | _ => funcMap
 
-    fun constructFuncMap (Ast.Expression exp) = constrFromExp NONE emptyMap exp
-        | constructFuncMap (Ast.Decs decList) = foldFuncMapDecList NONE emptyMap decList
-
-    (* fun getStaticLink (funcMap : FuncMap) (caller : Ast.id) (callee : Ast.id) =  *)
-
+    fun constructFuncMap (Ast.Expression exp) = constrFromExp "main" emptyMap exp
+        | constructFuncMap (Ast.Decs decList) = foldFuncMapDecList "main" emptyMap decList
 
 end

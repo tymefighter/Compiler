@@ -48,6 +48,60 @@ structure Frame :> FRAME = struct
 
     val emptyFrame = Frame (0, IdMap.empty)
 
+    exception FunctionNotInScope
+
+    fun getStaticLink 
+        (funcMap : Func.FuncMap)
+        (caller : Ast.id)
+        (callee : Ast.id) : Tree.stm = 
+        
+        let
+            val callerParent = case Func.find (funcMap, caller) of
+                SOME func => func
+                | NONE => raise FunctionNotInScope
+
+            val calleeParent = case Func.find (funcMap, callee) of
+                SOME func => func
+                | NONE => raise FunctionNotInScope
+
+            (*
+                Search ancestors of caller to check if parent of callee is found,
+                at the start of each step in recursion, resultTemp contains frame
+                pointer value of func (i.e. static link of any child of func),
+                we stop when parent of callee matches func
+            *)
+            fun searchAncestor prevStmList func =
+                if (func = calleeParent) then
+                    Tree.seq prevStmList
+                else
+                    let
+                        val parentOfFunc = case Func.find (funcMap, func) of
+                            SOME fnc => fnc
+                            | NONE => raise FunctionNotInScope
+                        
+                        val newStmList = prevStmList
+                            @ [
+                                Tree.MOVE (
+                                    Tree.resultTemp,
+                                    Tree.MEM (
+                                        Tree.BINOP (
+                                            Tree.PLUS,
+                                            Tree.resultTemp,
+                                            Tree.CONST (~2 * wordSize)
+                                        )
+                                    )
+                                )
+                            ]
+                    in
+                        searchAncestor newStmList parentOfFunc
+                    end
+        in
+            if (calleeParent = caller) then
+                Tree.MOVE (Tree.resultTemp, Tree.frameTemp)
+            else
+                searchAncestor [] caller
+        end
+
     fun funcDecl argNameList =
         let
             fun placeVarInMap (argName, currFrame) = 
