@@ -15,6 +15,8 @@
     | SUB
     | MUL
     | DIV
+    | LSHIFT
+    | RSHIFT
     | EQ
     | NE
     | G
@@ -78,6 +80,7 @@
 %left OR
 %left AND
 %nonassoc EQ NE G L GE LE
+%left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV
 
@@ -99,6 +102,8 @@ EXP : NIL (Ast.LiteralNil)
     | EXP SUB EXP (Ast.Op (EXP1, Ast.SUB, EXP2))
     | EXP MUL EXP (Ast.Op (EXP1, Ast.MUL, EXP2))
     | EXP DIV EXP (Ast.Op (EXP1, Ast.DIV, EXP2))
+    | EXP LSHIFT EXP (Ast.Op (EXP1, Ast.LSHIFT, EXP2))
+    | EXP RSHIFT EXP (Ast.Op (EXP1, Ast.RSHIFT, EXP2))
     | EXP EQ EXP (Ast.Op (EXP1, Ast.EQ, EXP2))
     | EXP NE EXP (Ast.Op (EXP1, Ast.NE, EXP2))
     | EXP G EXP (Ast.Op (EXP1, Ast.G, EXP2))

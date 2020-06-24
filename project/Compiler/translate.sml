@@ -103,6 +103,8 @@ structure Translate = struct
                     | Ast.SUB => Tree.BINOP (Tree.MINUS, Tree.argTemp1, Tree.argTemp2)
                     | Ast.MUL => Tree.BINOP (Tree.MUL, Tree.argTemp1, Tree.argTemp2)
                     | Ast.DIV => Tree.BINOP (Tree.DIV, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.LSHIFT => Tree.BINOP (Tree.LSHIFT, Tree.argTemp1, Tree.argTemp2)
+                    | Ast.RSHIFT => Tree.BINOP (Tree.RSHIFT, Tree.argTemp1, Tree.argTemp2)
                     | Ast.EQ => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.EQ, Tree.argTemp1, Tree.argTemp2, t, f)))
                     | Ast.NE => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.NE, Tree.argTemp1, Tree.argTemp2, t, f)))
                     | Ast.G => unEx (Cx (fn (t, f) => Tree.CJUMP (Tree.GT, Tree.argTemp1, Tree.argTemp2, t, f)))

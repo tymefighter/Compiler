@@ -37,3 +37,7 @@ For now, we place the following restrictions on tiger code: -
     - There is no short-circuiting in if-statements
     - In the entire code, a function name must occur exactly once.
     - 'main' is not allowed for a function name
+
+V.IMP: There are errors now
+    - check frame.sml line 123
+    - test case 10 fails

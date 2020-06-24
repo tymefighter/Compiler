@@ -1,0 +1,15 @@
+let
+    function a (n : int) = 
+        let
+            var j := 0
+            function b (u : int) = u
+        in
+            while (j < n) do
+            (
+                b (j);
+                j := j + 1
+            )
+        end
+in
+    a (2)
+end

@@ -279,6 +279,18 @@ tabspace = [\t];
         Tokens.DIV (!lineNo, !posInLine)
     end);
 
+<INITIAL> "<<" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.LSHIFT (!lineNo, !posInLine)
+    end);
+
+<INITIAL> ">>" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.RSHIFT (!lineNo, !posInLine)
+    end);
+
 <INITIAL> "=" => (let
         val _ = inc_n posInLine (size yytext)
     in
