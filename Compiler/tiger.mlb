@@ -11,6 +11,6 @@ tree.sml
 func.sml
 frame.sml
 translate.sml
-target/mips.sml
+mips.sml
 codeGen.sml
 tiger_driver.sml
