@@ -209,7 +209,7 @@ structure Translate = struct
                     Tree.LABEL loop_label,
                     cnd (true_label, end_label),
                     Tree.LABEL true_label,
-                    getStmt ex,
+                    getStmt ex, (* Repeated allocating statements are occurring here, we must not do this !!!!! *)
                     Tree.JUMP (Tree.NAME loop_label, [loop_label]),
                     Tree.LABEL end_label
                 ]

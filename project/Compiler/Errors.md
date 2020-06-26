@@ -1,0 +1,2 @@
+- Repeated allocating statements are occurring in loops
+- Not updating a same named variable in frame map which is in an outer scope
