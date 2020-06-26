@@ -2,8 +2,9 @@ signature FRAME = sig
     type Offset
     type Frame
     val wordSize : Offset
-    val allocVar : Ast.id -> Frame -> Ast.id -> Frame * Tree.stm
-    val allocInternalVar : Frame -> Frame * int * Tree.stm
+    val stackAllocStmt : int -> Tree.stm
+    val allocVar : Ast.id -> Frame -> Ast.id -> Frame
+    val allocInternalVar : Frame -> Frame * int
     val getOffset : Frame -> Ast.id -> (Ast.id * int) option
     val emptyFrame : Frame
 
@@ -24,8 +25,8 @@ structure Frame :> FRAME = struct
 
     val wordSize = 4
 
-    val stackAllocStmt = Tree.SEQ (
-        Tree.MOVE (Tree.argTemp1, Tree.CONST (~wordSize)),
+    fun stackAllocStmt numAllocs = Tree.SEQ (
+        Tree.MOVE (Tree.argTemp1, Tree.CONST (~wordSize * numAllocs)),
         Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.argTemp1))
     )
 
@@ -42,10 +43,10 @@ structure Frame :> FRAME = struct
 
             val newOffset = currOffset - wordSize
         in
-            (Frame (newOffset, newMap), stackAllocStmt)
+            Frame (newOffset, newMap)
         end
 
-    fun allocInternalVar (Frame (currOffset, varMap)) = (Frame (currOffset - wordSize, varMap), currOffset, stackAllocStmt)
+    fun allocInternalVar (Frame (currOffset, varMap)) = (Frame (currOffset - wordSize, varMap), currOffset)
 
     fun getOffset (Frame (_, varMap)) var = IdMap.find (varMap, var)
 

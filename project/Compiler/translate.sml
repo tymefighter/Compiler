@@ -18,19 +18,28 @@ structure Translate = struct
         Data Structure to store information which would be required while
         translation
     *)
-    datatype Info = Info of (Temp.label option) * Frame.Frame * Func.FuncMap * Ast.id
+    datatype Info = Info of (Temp.label option) * Frame.Frame * Func.FuncMap * Ast.id * int
+    (*
+        Loop label, current frame, function map, current function, number of allocs
+    *)
 
-    fun emptyInfo funcMap = Info (NONE, Frame.emptyFrame, funcMap, "main")
+    fun emptyInfo funcMap = Info (NONE, Frame.emptyFrame, funcMap, "main", 0)
 
-    fun getLoopLabel (Info (optLabel, _, _, _)) = optLabel
-    fun getFrame (Info (_, frame, _, _))        = frame
-    fun getFuncMap (Info (_, _, funcMap, _))    = funcMap
-    fun getCurrFunc (Info (_, _, _, currFunc))  = currFunc
+    fun getLoopLabel (Info (optLabel, _, _, _, _)) = optLabel
+    fun getFrame (Info (_, frame, _, _, _))        = frame
+    fun getFuncMap (Info (_, _, funcMap, _, _))    = funcMap
+    fun getCurrFunc (Info (_, _, _, currFunc, _))  = currFunc
+    fun getNumAlloc (Info (_, _, _, _, numAlloc))  = numAlloc
 
-    fun setLoopLabel (Info (_, frame, funcMap, currFunc)) newOptLabel   = Info (newOptLabel, frame, funcMap, currFunc)
-    fun setFrame (Info (optLabel, _, funcMap, currFunc)) newFrame       = Info (optLabel, newFrame, funcMap, currFunc)
-    fun setFuncMap (Info (optLabel, frame, _, currFunc)) newFuncMap     = Info (optLabel, frame, newFuncMap, currFunc)
-    fun setCurrFunc (Info (optLabel, frame, funcMap, _)) newCurrFunc    = Info (optLabel, frame, funcMap, newCurrFunc)
+    fun setLoopLabel (Info (_, frame, funcMap, currFunc, numAlloc)) newOptLabel   = Info (newOptLabel, frame, funcMap, currFunc, numAlloc)
+    fun setFrame (Info (optLabel, _, funcMap, currFunc, numAlloc)) newFrame       = Info (optLabel, newFrame, funcMap, currFunc, numAlloc)
+    fun setFuncMap (Info (optLabel, frame, _, currFunc, numAlloc)) newFuncMap     = Info (optLabel, frame, newFuncMap, currFunc, numAlloc)
+    fun setCurrFunc (Info (optLabel, frame, funcMap, _, numAlloc)) newCurrFunc    = Info (optLabel, frame, funcMap, newCurrFunc, numAlloc)
+
+    fun updateNumAlloc (Info (optLabel, frame, funcMap, currFunc, numAlloc)) ct
+        = Info (optLabel, frame, funcMap, currFunc, numAlloc + ct)
+    fun resetNumAlloc (Info (optLabel, frame, funcMap, currFunc, numAlloc)) ct
+        = Info (optLabel, frame, funcMap, currFunc, 0)
 
     datatype exp = Ex of Tree.exp
         | Nx of Tree.stm
@@ -92,11 +101,11 @@ structure Translate = struct
             let
                 val (info1, transEx1) = translateExp info e1
                 val ex1 = unEx transEx1
-                val (frame1, exOffset1, allocStmt1) = Frame.allocInternalVar (getFrame info1)
+                val (frame1, exOffset1) = Frame.allocInternalVar (getFrame info1)
 
                 val (info2, transEx2) = translateExp (setFrame info1 frame1) e2
                 val ex2 = unEx transEx2
-                val (frame2, exOffset2, allocStmt2) = Frame.allocInternalVar (getFrame info2)
+                val (frame2, exOffset2) = Frame.allocInternalVar (getFrame info2)
 
                 val ex = case bin_op of
                     Ast.ADD => Tree.BINOP (Tree.PLUS, Tree.argTemp1, Tree.argTemp2)
@@ -120,17 +129,18 @@ structure Translate = struct
 
                 val computeAndMoveToTemp = Tree.seq [
                     getStmt ex1,
-                    allocStmt1,
                     Tree.moveTempToFrame exOffset1 Tree.resultTemp,
                     getStmt ex2,
-                    allocStmt2,
                     Tree.moveTempToFrame exOffset2 Tree.resultTemp,
                     Tree.moveFrameToTemp Tree.argTemp1 exOffset1,
                     Tree.moveFrameToTemp Tree.argTemp2 exOffset2,
                     stmt
                 ]
+
+                val info3 = setFrame info2 frame2
+                val info4 = updateNumAlloc info3 2
             in
-                (setFrame info2 frame2, Ex (Tree.ESEQ (computeAndMoveToTemp, Tree.resultTemp)))
+                (info4, Ex (Tree.ESEQ (computeAndMoveToTemp, Tree.resultTemp)))
             end
         | translateExp info (Ast.NegExp e) = 
             let
@@ -220,8 +230,8 @@ structure Translate = struct
                 val initFrame = getFrame info
 
                 val currFunc = getCurrFunc info
-                val (nextFrame, allocStmt1) = Frame.allocVar currFunc initFrame var
-                val (finalFrame, endExpOffset, allocStmt2) = Frame.allocInternalVar nextFrame
+                val nextFrame = Frame.allocVar currFunc initFrame var
+                val (finalFrame, endExpOffset) = Frame.allocInternalVar nextFrame
                 val info1 = setFrame info finalFrame
 
                 val varOffset = case Frame.getOffset finalFrame var of
@@ -243,8 +253,6 @@ structure Translate = struct
                 val bodyExp = unEx bodyEx
 
                 val stmts = Tree.seq [
-                    allocStmt1,
-                    allocStmt2,
                     getStmt startExp,
                     Tree.moveTempToFrame varOffset Tree.resultTemp,
                     getStmt endExp,
@@ -259,8 +267,10 @@ structure Translate = struct
                     Tree.CJUMP (Tree.EQ, Tree.argTemp1, Tree.argTemp2, continue_label, loop_label),
                     Tree.LABEL continue_label
                 ]
+                
+                val info5 = updateNumAlloc info4 2
             in
-                (info4, Nx stmts)
+                (info5, Nx stmts)
             end
         | translateExp info Ast.Break = (case getLoopLabel info of
             NONE => raise BreakUsedIncorrectly
@@ -297,7 +307,7 @@ structure Translate = struct
                 val ex = unEx transEx
                 val frame1 = getFrame info1
 
-                val (frame2, storeOffset, allocStmt) = Frame.allocInternalVar frame1
+                val (frame2, storeOffset) = Frame.allocInternalVar frame1
 
                 val info2 = setFrame info1 frame2
 
@@ -325,8 +335,10 @@ structure Translate = struct
                         Tree.argTemp1
                     )
                 ]
+
+                val info3 = updateNumAlloc info2 1
             in
-                (info2, Nx stmt)
+                (info3, Nx stmt)
             end
         (* Empty Let block would give empty sequence error *)
         | translateExp info (Ast.LetStmt (dec_list, exp_list)) = let
@@ -371,19 +383,21 @@ structure Translate = struct
                             val expStmt = getStmt (unEx transEx) (* Evaluate expression *)
                             val frame1 = getFrame info1
 
-                            val (frame2, newOffset, allocStmt) = Frame.allocInternalVar frame1 (* Allocate space *)
+                            val (frame2, newOffset) = Frame.allocInternalVar frame1 (* Allocate space *)
 
                             val moveEvalToStack = Tree.moveTempToFrame newOffset Tree.resultTemp
                              (* Move evaluated value to allocated space *)
+
+                            val info2 = setFrame info1 frame2
+                            val info3 = updateNumAlloc info2 1
                         in
                             (
                                 currOffsetList @ [newOffset],
                                 currStmtList @ [
                                     expStmt,
-                                    allocStmt,
                                     moveEvalToStack
                                 ],
-                                setFrame info1 frame2
+                                info3
                             )
                         end
 
@@ -411,7 +425,7 @@ structure Translate = struct
             let
                 val frame = getFrame info
                 val currFunc = getCurrFunc info
-                val (newFrame, allocStmt) = Frame.allocVar currFunc frame var
+                val newFrame = Frame.allocVar currFunc frame var
                 
                 val optVarOffset = Frame.getOffset newFrame var
                 val varOffset = case Frame.getOffset newFrame var of
@@ -422,17 +436,18 @@ structure Translate = struct
                         else
                             raise ImplementationError
 
-                val (newInfo, transEx) = translateExp (setFrame info newFrame) e
+                val (info1, transEx) = translateExp (setFrame info newFrame) e
                 val ex = unEx transEx
 
                 val stmts = Tree.seq [
-                    allocStmt,
                     getStmt ex,
                     Tree.moveTempToFrame varOffset Tree.resultTemp
                 ]
+
+                val info2 = updateNumAlloc info1 1
             in
                 (
-                    newInfo,
+                    info2,
                     Nx stmts
                 )
             end
@@ -448,7 +463,7 @@ structure Translate = struct
                 
                 val funcMap = getFuncMap prevInfo
                 val prevFrame = getFrame prevInfo
-                val info = Info (NONE, Frame.funcDecl prevFrame argNameList funcName, funcMap, funcName)
+                val info = Info (NONE, Frame.funcDecl prevFrame argNameList funcName, funcMap, funcName, 0)
 
                 val returnAddrOffset = ~Frame.getWordSize
                 val saveReturnAddr =
@@ -456,6 +471,12 @@ structure Translate = struct
                 
                 val (newInfo, transFunEx) = translateExp info funcExp
                 val funcStmt = getStmt (unEx transFunEx)
+                val numAllocs = getNumAlloc newInfo
+
+                val optAllocStmt = case numAllocs of
+                    0 => NONE
+                    | _ => SOME (Frame.stackAllocStmt numAllocs)
+
                 val placeRetValue = Tree.MOVE (Tree.returnTemp, Tree.resultTemp)
 
                 val moveReturnAddr = Tree.moveFrameToTemp Tree.returnAddrTemp returnAddrOffset
@@ -464,16 +485,30 @@ structure Translate = struct
 
                 val placeFuncEndLabel = Tree.LABEL (funcEndLabel)
 
-                val stmt = Tree.seq [
-                    jumpToEndLabel, (* Jump to end label since we may not want to exec func *)
-                    placeLabel,     (* Place function label *)
-                    saveReturnAddr, (* Save return address *)
-                    funcStmt,       (* Function body *)
-                    placeRetValue,  (* Place return value *)
-                    moveReturnAddr, (* Move return address to return address temp*)
-                    jumpToCaller,   (* Return back to caller *)
-                    placeFuncEndLabel   (* Place label to indicate function end*)
-                ]
+                val stmt = case optAllocStmt of
+                    NONE =>
+                        Tree.seq [
+                            jumpToEndLabel, (* Jump to end label since we may not want to exec func *)
+                            placeLabel,     (* Place function label *)
+                            saveReturnAddr, (* Save return address *)
+                            funcStmt,       (* Function body *)
+                            placeRetValue,  (* Place return value *)
+                            moveReturnAddr, (* Move return address to return address temp*)
+                            jumpToCaller,   (* Return back to caller *)
+                            placeFuncEndLabel   (* Place label to indicate function end*)
+                        ]
+                    | SOME allocStmt =>
+                        Tree.seq [
+                            jumpToEndLabel, (* Jump to end label since we may not want to exec func *)
+                            placeLabel,     (* Place function label *)
+                            saveReturnAddr, (* Save return address *)
+                            allocStmt,      (* Allocate space for all local variables *)
+                            funcStmt,       (* Function body *)
+                            placeRetValue,  (* Place return value *)
+                            moveReturnAddr, (* Move return address to return address temp*)
+                            jumpToCaller,   (* Return back to caller *)
+                            placeFuncEndLabel   (* Place label to indicate function end*)
+                        ]
             in
                 (
                     prevInfo,
@@ -505,15 +540,29 @@ structure Translate = struct
 
     fun translateProg funcMap (Ast.Expression exp) = 
             let
-                val (_, transEx) = translateExp (emptyInfo funcMap) exp
+                val (info, transEx) = translateExp (emptyInfo funcMap) exp
+                val numAllocs = getNumAlloc info
+                val optAllocStmt = case numAllocs of
+                    0 => NONE
+                    | _ => SOME (Frame.stackAllocStmt numAllocs)
+                val exp = unNx transEx
             in
-                unEx transEx
+                case optAllocStmt of
+                    NONE => exp
+                    | SOME allocStmt => Tree.SEQ (allocStmt, exp)
             end
         
         | translateProg funcMap (Ast.Decs dec_list) = 
             let
-                val (_, stmt_list) = addDec (emptyInfo funcMap) [] dec_list
+                val (info, stmt_list) = addDec (emptyInfo funcMap) [] dec_list
+                val numAllocs = getNumAlloc info
+                val optAllocStmt = case numAllocs of
+                    0 => NONE
+                    | _ => SOME (Frame.stackAllocStmt numAllocs)
+                val exp = unNx stmt_list
             in
-                unEx stmt_list
+                case optAllocStmt of
+                    NONE => exp
+                    | SOME allocStmt => Tree.SEQ (allocStmt, exp)
             end
 end
