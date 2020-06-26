@@ -38,7 +38,7 @@ You may raise issues here: https://github.com/tymefighter/Compiler/issues
 
 ## Design
 
-Given in `Compiler/DESIGN.md`
+Given in `Compiler/README.md`
 
 ## Author
 
