@@ -125,12 +125,12 @@ structure Frame :> FRAME = struct
                 end
             val Frame (_, prevMap) = prevFrame
         in
-            foldl placeVarInMap (Frame (~3 * wordSize, prevMap)) argNameList
+            foldl placeVarInMap (Frame (~4 * wordSize, prevMap)) argNameList
         end
 
     fun callFunction funcMap caller callee funcLabel currFrame listOffset =
         let
-            val numParam = List.length listOffset + 3
+            val numParam = List.length listOffset + 4
             val Frame (currOffset, _) = currFrame
 
             val storeFp = Tree.moveTempToFrame currOffset Tree.frameTemp
@@ -139,6 +139,8 @@ structure Frame :> FRAME = struct
                 getStaticLink funcMap caller callee,
                 Tree.moveTempToFrame (currOffset - 2 * wordSize) Tree.resultTemp
             ]
+
+            val storeSp = Tree.moveTempToFrame (currOffset - 3 * wordSize) Tree.frameTemp
 
             fun foldFun (prevMemOffset, (curr_offset, currStmtList)) =
                 let
@@ -156,21 +158,22 @@ structure Frame :> FRAME = struct
                 | list_offset =>
                     let
                         val (_, storeArgStmtList) =  
-                            foldl foldFun (currOffset - 3 * wordSize, []) list_offset
+                            foldl foldFun (currOffset - 4 * wordSize, []) list_offset
                     in
                         SOME (Tree.seq storeArgStmtList)
                     end
 
             val updateFpSp = Tree.seq [
-                Tree.MOVE (Tree.frameTemp, Tree.stackTemp),
+                Tree.MOVE (Tree.argTemp1, Tree.CONST currOffset),
+                Tree.MOVE (Tree.frameTemp, Tree.BINOP (Tree.PLUS, Tree.frameTemp, Tree.argTemp1)),
                 Tree.MOVE (Tree.argTemp1, Tree.CONST (~numParam * wordSize)),
-                Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.stackTemp, Tree.argTemp1))
+                Tree.MOVE (Tree.stackTemp, Tree.BINOP (Tree.PLUS, Tree.frameTemp, Tree.argTemp1))
             ]
 
             val callFunc = Tree.EXP (Tree.CALL (Tree.NAME funcLabel, []))
 
             val restoreFpSp = Tree.seq [
-                Tree.MOVE (Tree.stackTemp, Tree.frameTemp),
+                Tree.moveFrameToTemp Tree.stackTemp (~3 * wordSize),
                 Tree.moveFrameToTemp Tree.frameTemp 0
             ]
 
@@ -182,6 +185,7 @@ structure Frame :> FRAME = struct
                     Tree.seq [
                         storeFp,            (* Store frame pointer *)
                         storeStaticLink,    (* Store static link *)
+                        storeSp,
                         storeArgStmt,       (* Store arguments *)
                         updateFpSp,         (* Update FP, SP *)
                         callFunc,           (* Call function *)
@@ -192,6 +196,7 @@ structure Frame :> FRAME = struct
                     Tree.seq [
                         storeFp,            (* Store frame pointer *)
                         storeStaticLink,    (* Store static link *)
+                        storeSp,
                         updateFpSp,         (* Update FP, SP *)
                         callFunc,           (* Call function *)
                         restoreFpSp,        (* Restore FP, SP *)

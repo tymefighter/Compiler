@@ -6,10 +6,10 @@ let
         in
             while (j < n) do
             (
-                b (j);
+                println (b (j));
                 j := j + 1
             )
         end
 in
-    a (2)
+    a (3)
 end

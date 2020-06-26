@@ -11,9 +11,7 @@ fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int
 
 val (prog, _) = TigerParser.parse (0, lexer, print_error, ())
 
-exception RestrictionFailedDriver
-
 val funcMap = Func.constructFuncMap prog
 val treeCode = Translate.translateProg funcMap prog
-val mips_code = CodeGen.generateProg treeCode
-val _ = print (MIPS.printProg mips_code)
+val mipsCode = CodeGen.generateProg treeCode
+val _ = print (MIPS.printProg mipsCode)

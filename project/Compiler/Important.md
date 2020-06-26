@@ -18,6 +18,7 @@ For now, we place the following restrictions on Tree IR: -
     Frame pointer-->|  prev fp val  |
                     |  return addr  |
                     |  static link  |
+                    |  prev sp val  |
                     |     arg1      |
                     |     arg2      |
                     |     arg3      |
