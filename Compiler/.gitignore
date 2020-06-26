@@ -4,3 +4,4 @@ tiger
 *.grm.sml
 *.grm.sig
 *.grm.desc
+prog.s
