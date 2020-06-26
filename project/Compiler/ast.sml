@@ -7,7 +7,7 @@ structure IdKey = struct
     val compare = String.compare
 end
 
-datatype BinOp = ADD | SUB | MUL | DIV | LSHIFT 
+datatype BinOp = ADD | SUB | MUL | DIV | MOD | LSHIFT 
     | RSHIFT | EQ | NE | G | L | GE | LE | AND | OR
 
 datatype Lvalue = Var of id

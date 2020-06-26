@@ -22,7 +22,7 @@ structure Tree = struct
         | SEQ of stm * stm
         | LABEL of Temp.label
 
-    and binop = PLUS | MINUS | MUL | DIV
+    and binop = PLUS | MINUS | MUL | DIV | MOD
         | AND | OR | LSHIFT | RSHIFT | ARSHIFT | XOR
     
     and relop = EQ | NE | LT | GT | LE | GE
@@ -65,6 +65,7 @@ structure Tree = struct
                     | MINUS => "MINUS "
                     | MUL => "MUL "
                     | DIV => "DIV "
+                    | MOD => "MOD "
                     | AND => "AND "
                     | OR => "OR "
                     | LSHIFT => "LSHIFT "

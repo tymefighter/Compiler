@@ -279,6 +279,12 @@ tabspace = [\t];
         Tokens.DIV (!lineNo, !posInLine)
     end);
 
+<INITIAL> "%" => (let
+        val _ = inc_n posInLine (size yytext)
+    in
+        Tokens.MOD (!lineNo, !posInLine)
+    end);
+
 <INITIAL> "<<" => (let
         val _ = inc_n posInLine (size yytext)
     in

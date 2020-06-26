@@ -18,28 +18,32 @@ structure CodeGen = struct
     (* generateStm : Tree.stm -> ((MIPS.Reg * MIPS.Addr) MIPS.Inst) list *)
     fun generateStm (Tree.MOVE moveExp) =
         let
-            val mipsStmt = case moveExp of
-                (Tree.TEMP temp1, Tree.TEMP temp2) => MIPS.DataMove (MIPS.Move (temp2reg temp1, temp2reg temp2))
-                | (Tree.TEMP temp, Tree.CONST c)   => MIPS.ConstMapping (MIPS.LoadImm (temp2reg temp, MIPS.Int c))
+            val mipsStmts = case moveExp of
+                (Tree.TEMP temp1, Tree.TEMP temp2) => [MIPS.DataMove (MIPS.Move (temp2reg temp1, temp2reg temp2))]
+                | (Tree.TEMP temp, Tree.CONST c)   => [MIPS.ConstMapping (MIPS.LoadImm (temp2reg temp, MIPS.Int c))]
                 | (Tree.TEMP resTemp, Tree.BINOP (bin_op, Tree.TEMP argTemp1, Tree.TEMP argTemp2)) =>
                     let
                         val arg1      = temp2reg argTemp1
                         val arg2      = temp2reg argTemp2
                         val resultReg = temp2reg resTemp
 
-                        val instConstructor = case bin_op of
-                            Tree.PLUS      => MIPS.Add
-                            | Tree.MINUS   => MIPS.Sub
-                            | Tree.MUL     => MIPS.Mul
-                            | Tree.DIV     => MIPS.DivideQuo
-                            | Tree.AND     => MIPS.And
-                            | Tree.OR      => MIPS.Or
-                            | Tree.LSHIFT  => MIPS.ShiftLeftLogical
-                            | Tree.RSHIFT  => MIPS.ShiftRightLogical
-                            | Tree.ARSHIFT => MIPS.ShiftRightArithmetic
-                            | Tree.XOR     => MIPS.Xor
-                    in
-                        MIPS.ArithmeticLogic (instConstructor (resultReg, arg1, arg2))
+                        val instr = case bin_op of
+                            Tree.PLUS      => MIPS.Add                  (resultReg, arg1, arg2)
+                            | Tree.MINUS   => MIPS.Sub                  (resultReg, arg1, arg2)
+                            | Tree.MUL     => MIPS.Mul                  (resultReg, arg1, arg2)
+                            | Tree.DIV     => MIPS.DivideQuo            (resultReg, arg1, arg2)
+                            | Tree.MOD     => MIPS.Divide               (arg1, arg2)
+                            | Tree.AND     => MIPS.And                  (resultReg, arg1, arg2)
+                            | Tree.OR      => MIPS.Or                   (resultReg, arg1, arg2)
+                            | Tree.LSHIFT  => MIPS.ShiftLeftLogical     (resultReg, arg1, arg2)
+                            | Tree.RSHIFT  => MIPS.ShiftRightLogical    (resultReg, arg1, arg2)
+                            | Tree.ARSHIFT => MIPS.ShiftRightArithmetic (resultReg, arg1, arg2)
+                            | Tree.XOR     => MIPS.Xor                  (resultReg, arg1, arg2)
+                    in 
+                        MIPS.ArithmeticLogic instr
+                        :: (case bin_op of
+                                Tree.MOD => [MIPS.DataMove (MIPS.MoveFormHI (resultReg))]
+                                | _ => [])
                     end
                 | (Tree.TEMP resTemp, Tree.MEM mem) =>
                     let
@@ -49,7 +53,7 @@ structure CodeGen = struct
 
                         val resReg = temp2reg resTemp
                     in
-                        MIPS.LoadStore (MIPS.LoadWord (resReg, MIPS.RegAddr (r_offset, reg)))
+                        [MIPS.LoadStore (MIPS.LoadWord (resReg, MIPS.RegAddr (r_offset, reg)))]
                     end
                 | (Tree.MEM mem, Tree.TEMP tempFrom) =>
                     let
@@ -59,11 +63,11 @@ structure CodeGen = struct
 
                         val regFrom = temp2reg tempFrom
                     in
-                        MIPS.LoadStore (MIPS.StoreWord (regFrom, MIPS.RegAddr (r_offset, reg)))
+                        [MIPS.LoadStore (MIPS.StoreWord (regFrom, MIPS.RegAddr (r_offset, reg)))]
                     end
                 | _ => raise RestrictionFailedCodeGen
         in
-            mapNoLabel [mipsStmt]
+            mapNoLabel mipsStmts
         end
         | generateStm (Tree.JUMP (jumpExp, _)) = 
             let

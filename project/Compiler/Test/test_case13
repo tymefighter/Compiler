@@ -1,0 +1,22 @@
+let
+    function binaryExp (x : int, n : int) = 
+        let
+            var result := 0
+        in
+            if n = 0 then
+                result := 1
+            else (
+                if n % 2 = 1 then
+                    result := binaryExp (x, n - 1) * x
+                else
+                    let
+                        var temp := binaryExp (x, n / 2)
+                    in
+                        result := temp * temp
+                    end
+            );
+            result
+        end
+in
+    println (binaryExp (2, 4))
+end
