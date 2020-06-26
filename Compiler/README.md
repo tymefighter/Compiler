@@ -1,1 +1,1 @@
-# Design of the SubTiger© Compiler
+# Design of the SubTiger Compiler

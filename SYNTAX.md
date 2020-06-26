@@ -1,4 +1,4 @@
-# Syntax of the SubTiger© Language
+# Syntax of the SubTiger Language
 
 Everything in SubTiger is actually an expression, and hence always evaluates
 to some value. Now, we may look some sample code to understand the syntax
@@ -92,7 +92,7 @@ to be in the let-in block of the let statement, for example
 
 Please refer to the example programs in the directory `Compiler/Test`
 
-# Grammer of the SubTiger© Language
+# Grammer of the SubTiger Language
 
 - [,] stands for zero or once, eg: ['1'] could be '', or '1'
 - {,} stands for zero or more, eg: {'1'} could be '', '1', '11', '111', ...

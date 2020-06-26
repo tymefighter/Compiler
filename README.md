@@ -1,6 +1,6 @@
-# Compiler for SubTiger© Language
+# Compiler for SubTiger Language
 
-The SubTiger© language is the subset of the Tiger language
+The SubTiger language is the subset of the Tiger language
 (https://www.lrde.epita.fr/~tiger/tiger.html), it supports
 features like nested functions, while loops, for loops,
 control statements like if-then, if-then-else. It is adds

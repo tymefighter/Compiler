@@ -1,4 +1,4 @@
-# Installing the SubTiger© compiler provided in this repository
+# Installing the SubTiger compiler provided in this repository
 
 The source of the compiler is written in Standard ML, hence
 if you want to build the compiler, you need to have `mlton`
