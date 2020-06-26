@@ -139,6 +139,12 @@ structure CodeGen = struct
 
     (* generateEx : Tree.exp -> ((MIPS.Reg * MIPS.Addr) MIPS.Inst) list *)
     fun generateProg stm =
-                MIPS.Instruction (MIPS.DataMove (MIPS.Move (MIPS.Fp, MIPS.Sp)))
-                :: generateStm stm
+                (MIPS.Instruction (MIPS.DataMove (MIPS.Move (MIPS.Fp, MIPS.Sp)))
+                :: generateStm stm)
+                @
+                [
+                    MIPS.Instruction (MIPS.ConstMapping (MIPS.LoadImm (MIPS.V 0, MIPS.Int 10))),
+                    MIPS.Instruction (MIPS.ExceptionTrap (MIPS.SystemCall))
+                ]
+
 end
