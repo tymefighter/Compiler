@@ -34,7 +34,7 @@ You may run the compiler on an input tiger source as follows:
 
 ## Raising Issues
 
-You may raise issues here:
+You may raise issues here: https://github.com/tymefighter/Compiler/issues
 
 ## Design
 

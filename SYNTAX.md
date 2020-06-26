@@ -1,6 +1,10 @@
 # Syntax of the SubTiger© Language
 
 
+# Example Programs
+
+Please refer to the example programs in the directory `Compiler/Test`
+
 # Grammer of the SubTiger© Language
 
 - [,] stands for zero or once, eg: ['1'] could be '', or '1'
