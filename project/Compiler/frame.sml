@@ -119,9 +119,16 @@ structure Frame :> FRAME = struct
             fun placeVarInMap (argName, currFrame) = 
                 let
                     val Frame (currOffset, currMap) = currFrame
+                    val removeMap = case IdMap.find (currMap, argName) of
+                        NONE => currMap
+                        | SOME _ =>
+                            let
+                                val (remove_map, _) = IdMap.remove (currMap, argName)
+                            in
+                                remove_map
+                            end
                 in
-                    Frame (currOffset - wordSize, IdMap.insert (currMap, argName, (funcName, currOffset)))
-                    (* ERROR, we have to remove previous value |||||||||||||||||||||||||||||||||||||*)
+                    Frame (currOffset - wordSize, IdMap.insert (removeMap, argName, (funcName, currOffset)))
                 end
             val Frame (_, prevMap) = prevFrame
         in

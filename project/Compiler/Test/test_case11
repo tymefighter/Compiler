@@ -1,0 +1,15 @@
+let
+    function printReverseBinary (n : int) = 
+        while (n > 0) do
+        (
+            (
+                if (n & 1) then
+                    print (1)
+                else
+                    print (0)
+            );
+            n := n >> 1
+        )
+in
+    printReverseBinary (14)
+end

@@ -1,10 +1,11 @@
 let
+    var outer := 10
     function pracFunc (x : int, y : int) =
         let
             function add (x : int, y : int) = x + y
             function sub (x : int, y : int) = x - y
         in
-            add(x, y) * sub(x, y)
+            add(x, y) * sub(x, y) * outer
         end
 in
     let
