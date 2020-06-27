@@ -5,10 +5,8 @@
 tiger: mips.sml codeGen.sml tree.sml translate.sml frame.sml func.sml temp.sml tiger_driver.sml ast.sml tiger.lex.sml tiger.grm.sml tiger.mlb
 	mlton -output tiger tiger.mlb
 
-tc%: Test/test_case%
-	@echo "\nTest Case $*"
-	@echo "-------------"
-	@./tiger < Test/test_case$*
+tc%: Test/test_case%.tig
+	@./tiger Test/test_case$*.tig
 
 test: tiger tc0 tc1 tc2 tc3 tc4 tc5 tc6 tc7 tc8 tc9 tc10 tc11 tc12 tc13
 

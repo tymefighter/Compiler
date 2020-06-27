@@ -17,6 +17,8 @@ parsing the tiger source code to Tree IR
 contains helper functions to output the generated MIPS code in the form
 of a string.
 - codeGen.sml       : Generates MIPS assembly code from the Tree IR
+- arg.sml   : Contains function to get input, output and IR file names
+from command line arguments
 - tiger_driver.sml  : The main code where the execution begins, this
 uses the lexer-parser, translator and code generator to generate
 MIPS assembly from tiger source code
