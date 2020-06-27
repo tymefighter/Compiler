@@ -27,7 +27,7 @@ Now, you may compile a test program as follows (please remain
 in the Compiler directory): -
 
 ```
-    ./tiger < Test/test_case0 > testOut.s
+    ./tiger Test/test_case0.tig
 ```
 
 Now, you may run the generated mips assembly code `testOut.s` in your
