@@ -88,6 +88,8 @@ to be in the let-in block of the let statement, for example
     end
 ```
 
+**Imp:** A function name must occur exaclty once in the entire code
+
 # Example Programs
 
 Please refer to the example programs in the directory `Compiler/Test`
