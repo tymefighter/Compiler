@@ -15,7 +15,7 @@ val outputHandle = case optOutputFile of
         in
             TextIO.openOut (String.substring (inputFile, 0, lenInp - lenExt) ^ ".s")
         end
-val optIrHandle = case optOutputFile of
+val optIrHandle = case optIrFile of
     SOME irFile => SOME (TextIO.openOut irFile)
     | NONE => NONE
 
