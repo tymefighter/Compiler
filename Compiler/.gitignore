@@ -5,3 +5,4 @@ tiger
 *.grm.sig
 *.grm.desc
 prog.s
+prog.i
